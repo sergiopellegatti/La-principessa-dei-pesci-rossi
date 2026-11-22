@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>La Principessa dei Pesci Rossi</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#120c2a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pesci Rossi">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -132,7 +140,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
       <div class="hero" data-h="1" role="button" tabindex="0" aria-label="Eroina dai capelli viola"><canvas id="hc1"></canvas><input id="n2" maxlength="14" value="Viola" autocomplete="off" aria-label="Nome dell'eroina dai capelli viola"></div>
     </div>
     <div class="seg modes" id="modes"><button data-m="solo" class="sel">Da solo</button><button data-m="coop">In due<small>2 telefoni</small></button><button data-m="hot">In due<small>a turno</small></button></div>
-    <div class="row"><button class="big" id="bPlay">Gioca!</button><button class="ok" id="bCont" hidden>Continua</button><button id="bHelp2">Aiuto</button></div>
+    <div class="row"><button class="big" id="bPlay">Gioca!</button><button class="ok" id="bCont" hidden>Continua</button><button id="bHelp2">Aiuto</button><button id="bInst" hidden>Installa</button></div>
     <p class="hint" id="menuHint"></p>
   </div>
 </div>
@@ -226,6 +234,10 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <li>In ogni negozio c'è una <b>cassa</b>: fermatevi davanti e si apre <b>Tutto a Tutti Pure i Tetti</b>, dove le monete servono per potenziare le armi e comprare munizioni, pappa e acqua per il pesce, pozioni, merende e vite. Mentre comprate i mostri non vi toccano.</li>
     <li>La barretta sopra ogni eroe è la sua energia. Avete 3 vite. In due contemporaneamente, se un eroe cade, l'altro lo rialza restandogli accanto per 2 secondi.</li>
     <li>Si salva alla fontana della hall; dal menu, <b>Continua</b> riparte dall'ultimo salvataggio. In due contemporaneamente salva chi ha creato la partita.</li></ul>
+    <h3>Installare il gioco sul telefono</h3>
+    <ul><li><b>Android (Chrome)</b>: nel menu iniziale tocca <b>Installa</b>, oppure dal menu ⋮ del browser scegli «Installa app» / «Aggiungi a schermata Home».</li>
+    <li><b>iPhone (Safari)</b>: tocca il pulsante Condividi e poi «Aggiungi alla schermata Home».</li>
+    <li>Dopo l'installazione il gioco si apre a tutto schermo dalla sua icona e funziona anche senza internet (per giocare in due serve comunque la stessa rete Wi-Fi).</li></ul>
     <h3>Musica</h3>
     <p>Ogni negozio ha la sua musica in stile videogiochi anni '80, con i suoni di lanci, colpi, monete ed esplosioni. Si spegne con l'altoparlante in alto a destra.</p>
     <div class="row"><button class="big" id="bHelpOk">Ho capito!</button></div>
@@ -1396,6 +1408,12 @@ $("bNetX").onclick=()=>{closePeer();netMark(null);role=null;$("ovNet").hidden=tr
 (()=>{const h=location.hash;if(h.startsWith("#join=")){CFG.join=h.slice(6).replace(/~$/,".");CFG.mode="coop";try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}
  let mk=null;try{mk=sessionStorage.getItem("ppr-net")}catch(e){}if(mk&&!CFG.join){netMark(null);CFG.reloaded=true}})();
 
+/* ---------- app installabile (PWA) ---------- */
+let instEvt=null;
+addEventListener("beforeinstallprompt",ev=>{ev.preventDefault();instEvt=ev;$("bInst").hidden=false});
+addEventListener("appinstalled",()=>{instEvt=null;$("bInst").hidden=true;showToast("Gioco installato! Lo trovi tra le app")});
+$("bInst").onclick=async()=>{if(!instEvt)return;instEvt.prompt();try{await instEvt.userChoice}catch(e){}instEvt=null;$("bInst").hidden=true};
+if("serviceWorker"in navigator&&/^https:|^http:\/\/localhost/.test(location.href))addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{})});
 /* ---------- avvio ---------- */
 muteIcons();wIcons();refreshMenu();resize();ringHome();requestAnimationFrame(frame);
 

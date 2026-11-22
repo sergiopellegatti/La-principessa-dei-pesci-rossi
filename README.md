@@ -4,6 +4,8 @@ Avventura d'azione in 5 livelli nei negozi di un centro commerciale: liberate la
 
 **Gioca:** https://sergiopellegatti.github.io/la-principessa-dei-pesci-rossi/
 
+**Installala come app**: su Android tocca «Installa» nel menu del gioco (o «Installa app» dal menu di Chrome); su iPhone, in Safari, Condividi → «Aggiungi alla schermata Home». Si apre a tutto schermo e funziona anche senza internet.
+
 - **Modalità**: da soli, in due contemporaneamente (due telefoni sulla stessa rete Wi-Fi: chi crea la partita mostra un QR, l'altro lo inquadra con la fotocamera e il gioco si apre pronto per unirsi; poi si inquadra il QR di risposta) e in due a turno sullo stesso telefono.
 - **La hall**: si parte dalla piazza del centro commerciale, con la fontana del grande pesce rosso (dove si salva la partita), le vetrine e le porte dei 5 negozi, e tanti clienti da scansare (con l'asciugamano si spostano).
 - **Negozi**: Moda & Stile, Pizzeria da Gennaro, Pasticceria Dolce Vita, Zoo Planet (liberare le 10 coppie dell'Arca di Noè con le chiavi dei commessi travestiti, tra pappagalli che sporcano e gatti golosi) e Sushi Samurai. Si entra e si esce quando si vuole: ogni negozio ricorda la missione da dove l'avete lasciata.
