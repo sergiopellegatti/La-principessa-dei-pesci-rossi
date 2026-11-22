@@ -94,7 +94,10 @@ button:hover{background:rgba(255,255,255,.14)}button:focus-visible{outline:3px s
 .help{text-align:left}.help h3{color:var(--mint);font-size:17px;margin:16px 0 6px}.help ul{margin:0;padding-left:20px}.help li{margin:4px 0;color:#d9d3f2}
 .help table{width:100%;border-collapse:collapse;font-size:14.5px}.help td,.help th{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}.help th{color:var(--dim);font-size:13px}
 kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;padding:1px 6px;white-space:nowrap}
-.qr{display:block;margin:8px auto;width:min(240px,70vw);height:auto;image-rendering:pixelated;border-radius:10px;background:#fff}
+.qr{display:block;margin:8px auto;width:min(330px,84vw);height:auto;image-rendering:pixelated;border-radius:10px;background:#fff;cursor:zoom-in}
+.qrbig{position:fixed;inset:0;z-index:20;background:#fff;display:grid;place-items:center;align-content:center;gap:8px;padding:10px}.qrbig[hidden]{display:none}.qrbig canvas{width:min(96vw,86vh);height:auto;image-rendering:pixelated}.qrbig p{color:#333;font:600 15px var(--fd);margin:0}
+.net .status{position:sticky;top:-20px;z-index:2;margin:10px -6px 0;padding:6px 10px;border-radius:12px;background:#1d1546}.net .status:empty{display:none}
+.scan p{margin:0;color:#fff;font-weight:700;text-align:center}
 .scan{position:absolute;inset:0;z-index:3;background:rgba(10,6,24,.96);border-radius:24px;display:grid;place-items:center;align-content:center;gap:10px;padding:16px}.scan video{width:100%;max-width:360px;border-radius:14px;background:#000}.scan[hidden]{display:none}
 .net textarea{width:100%;height:80px;resize:vertical;font:12px/1.35 ui-monospace,monospace;color:var(--ink);background:rgba(255,255,255,.06);border:0;border-radius:12px;padding:10px;box-shadow:inset 0 0 0 1px var(--line);word-break:break-all}
 .net h3{font-size:16px;text-align:left;margin:14px 0 6px;color:var(--mint)}
@@ -143,10 +146,11 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <button class="x" id="bNetX" aria-label="Annulla">✕</button>
     <h2 id="netT">In due contemporaneamente</h2>
     <div class="seg" id="netRole"><button data-r="host" class="sel">Creo io la partita</button><button data-r="guest">Mi unisco</button></div>
+    <p class="status" id="netS"></p>
     <p class="hint">I due telefoni devono essere sulla stessa rete Wi-Fi. Tenete questa pagina aperta finché non siete collegati.</p>
     <div id="netHost">
       <h3>1 · Fai inquadrare questo QR all'altro telefono</h3>
-      <p class="hint">Con la fotocamera si apre il gioco già pronto per unirsi. In alternativa mandate il codice con WhatsApp.</p>
+      <p class="hint">Con la fotocamera si apre il gioco già pronto per unirsi. <b>Tocca il QR per ingrandirlo.</b> In alternativa mandate il codice con WhatsApp.</p>
       <canvas class="qr" id="qrOut" hidden></canvas>
       <textarea id="codeOut" readonly aria-label="Codice partita"></textarea>
       <div class="row"><button id="cpOut">Copia</button><button id="shOut">Condividi</button><button id="bRedo">Ricrea</button></div>
@@ -163,14 +167,15 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
       <textarea id="gIn" placeholder="Incolla il codice della partita (inizia con PESCE2)" aria-label="Codice partita"></textarea>
       <div class="row"><button class="ok" id="bAnswer">Crea la risposta</button></div>
       <h3>2 · Fai inquadrare la risposta a chi ha creato la partita</h3>
+      <p class="hint">Tocca il QR per ingrandirlo.</p>
       <canvas class="qr" id="qrG" hidden></canvas>
       <textarea id="gOut" readonly aria-label="Codice di risposta"></textarea>
       <div class="row"><button id="cpG">Copia</button><button id="shG2">Condividi</button></div>
     </div>
-    <p class="status" id="netS"></p>
-    <div class="scan" id="scanBox" hidden><video id="scanV" playsinline muted></video><p>Inquadra il QR dell'altro telefono</p><button id="bScanX">Annulla</button></div>
+    <div class="scan" id="scanBox" hidden><video id="scanV" playsinline muted autoplay></video><p id="scanS">Inquadra il QR dell'altro telefono</p><button id="bScanX">Annulla</button></div>
   </div>
 </div>
+<div class="qrbig" id="qrBig" hidden><canvas id="qrBigC"></canvas><p>Tocca per chiudere</p></div>
 <div class="overlay" id="ovHelp" hidden>
   <div class="modal help" role="dialog" aria-label="Come si gioca">
     <h2>Come si gioca</h2>
@@ -1312,13 +1317,13 @@ const slimSdp=sdp=>sdp.split("\r\n").filter(l=>!/^a=(extmap-allow-mixed|msid-sem
 async function pack(o,extra){const s=JSON.stringify({type:o.type,sdp:slimSdp(o.sdp),...extra});
  if(window.CompressionStream){try{const buf=await new Response(new Blob([s]).stream().pipeThrough(new CompressionStream("deflate-raw"))).arrayBuffer();return"PESCE2Z"+b64e(new Uint8Array(buf))+"."}catch(e){}}return"PESCE2J"+b64e(new TextEncoder().encode(s))+"."}
 async function unpack(txt){txt=String(txt||"");try{txt=decodeURIComponent(txt)}catch(e){}
- const m=txt.match(/PESCE[12]\s*([ZJ])([A-Za-z0-9+\/_=\s-]+)(\.?)/);if(!m)throw new Error("nocode");if(!m[3]&&/PESCE2/.test(txt))throw new Error("cut");m[2]=m[2].replace(/\s+/g,"");
+ const m=txt.match(/PESCE[12]\s*([ZJ])([A-Za-z0-9+\/_=\s-]+)([.~]?)/);if(!m)throw new Error("nocode");if(!m[3]&&/PESCE2/.test(txt))throw new Error("cut");m[2]=m[2].replace(/\s+/g,"");
  let s;try{const u=b64d(m[2]);if(m[1]==="Z"){if(!window.DecompressionStream)throw new Error("old");s=await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text()}else s=new TextDecoder().decode(u)}
  catch(e){throw new Error(e.message==="old"?"old":"broken")}
  let o;try{o=JSON.parse(s)}catch(e){throw new Error("broken")}if(!o||!o.type||!o.sdp)throw new Error("broken");return o}
 const codeErr=e=>e.message==="cut"?"Il codice è tagliato: manca la parte finale (termina con un punto). Fallo ricopiare per intero oppure usate il QR.":e.message==="nocode"?"Non trovo il codice: incolla tutto il messaggio ricevuto (il codice inizia con PESCE2).":e.message==="old"?"Questo browser è troppo vecchio per leggere il codice: aggiornalo o usa Chrome.":"Il codice è incompleto o rovinato: fallo ricopiare per intero oppure usate il QR.";
 function waitIce(p){return new Promise(r=>{if(p.iceGatheringState==="complete")return r();const tm=setTimeout(r,4000);p.addEventListener("icegatheringstatechange",()=>{if(p.iceGatheringState==="complete"){clearTimeout(tm);r()}})})}
-function netStatus(t,cls){const e=$("netS");e.textContent=t;e.className="status "+(cls||"")}
+function netStatus(t,cls){const e=$("netS");e.textContent=t;e.className="status "+(cls||"");if(t&&!$("ovNet").hidden)try{e.scrollIntoView({block:"nearest",behavior:"smooth"})}catch(_){}}
 function netMark(v){try{v?sessionStorage.setItem("ppr-net",v):sessionStorage.removeItem("ppr-net")}catch(e){}}
 function closePeer(){stopScan();try{dc&&dc.close()}catch(e){}try{pc&&pc.close()}catch(e){}dc=null;pc=null;netLost=false}
 function wirePc(){pc.onconnectionstatechange=()=>{const s=pc&&pc.connectionState;if(s==="failed"){netStatus("Collegamento non riuscito: controllate di essere sulla stessa rete Wi-Fi e riprovate.","bad");if(S)netLost=true}else if(s==="disconnected"&&S)netLost=true}}
@@ -1359,16 +1364,26 @@ function openNet(r,code){$("ovNet").hidden=false;document.querySelectorAll("#net
 document.querySelectorAll("#netRole button").forEach(b=>b.onclick=()=>openNet(b.dataset.r));
 /* scanner QR con la fotocamera */
 let scanStream=null,scanRAF=0;
-async function startScan(onCode){const box=$("scanBox"),v=$("scanV");if(typeof jsQR!=="function"||!navigator.mediaDevices)return netStatus("Su questo dispositivo non posso usare la fotocamera: incolla il codice.","bad");
- box.hidden=false;try{scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});v.srcObject=scanStream;await v.play()}
- catch(e){box.hidden=true;scanStream=null;return netStatus("Non riesco ad aprire la fotocamera (permesso negato?): incolla il codice a mano.","bad")}
- const cn=document.createElement("canvas"),c2=cn.getContext("2d",{willReadFrequently:true});
- const loop=()=>{if(!scanStream)return;if(v.readyState>=2&&v.videoWidth){const s=Math.min(1,720/Math.max(v.videoWidth,v.videoHeight));cn.width=v.videoWidth*s|0;cn.height=v.videoHeight*s|0;c2.drawImage(v,0,0,cn.width,cn.height);
-   const r=jsQR(c2.getImageData(0,0,cn.width,cn.height).data,cn.width,cn.height,{inversionAttempts:"dontInvert"});if(r&&/PESCE[12]/.test(r.data)){stopScan();sfx("pick");onCode(r.data);return}}scanRAF=requestAnimationFrame(loop)};loop()}
+async function startScan(onCode){const box=$("scanBox"),v=$("scanV"),st=$("scanS");if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return netStatus("Su questo dispositivo non posso usare la fotocamera: incolla il codice.","bad");
+ box.hidden=false;st.textContent="Apro la fotocamera…";
+ try{scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1920},height:{ideal:1080}},audio:false});v.srcObject=scanStream;await v.play()}
+ catch(e){box.hidden=true;scanStream=null;return netStatus("Non riesco ad aprire la fotocamera (permesso negato?): consenti la fotocamera nelle impostazioni del browser oppure incolla il codice.","bad")}
+ st.textContent="Inquadra il QR dell'altro telefono, a 15-25 cm";
+ let det=null;try{if("BarcodeDetector"in window&&(await BarcodeDetector.getSupportedFormats()).includes("qr_code"))det=new BarcodeDetector({formats:["qr_code"]})}catch(e){}
+ const cn=document.createElement("canvas"),c2=cn.getContext("2d",{willReadFrequently:true}),t0=performance.now();let n=0,busy=false,seen=false;
+ const done=txt=>{if(!/PESCE[12]/.test(txt)){if(!seen){seen=true;st.textContent="Questo QR non è della Principessa dei Pesci Rossi: inquadra quello mostrato dall'altro telefono."}return false}stopScan();sfx("pick");onCode(txt);return true};
+ const loop=async()=>{if(!scanStream)return;scanRAF=requestAnimationFrame(loop);if(busy||v.readyState<2||!v.videoWidth)return;busy=true;n++;
+  try{if(det){const r=await det.detect(v);if(r&&r.length&&done(r[0].rawValue))return}
+   if(typeof jsQR==="function"){const vw=v.videoWidth,vh=v.videoHeight,crop=n%2===0,sd=crop?Math.min(vw,vh)*.8:Math.max(vw,vh),sx=crop?(vw-sd)/2:0,sy=crop?(vh-sd)/2:0,sw=crop?sd:vw,sh=crop?sd:vh,k=Math.min(1,1000/Math.max(sw,sh));
+    cn.width=sw*k|0;cn.height=sh*k|0;c2.drawImage(v,sx,sy,sw,sh,0,0,cn.width,cn.height);const r=jsQR(c2.getImageData(0,0,cn.width,cn.height).data,cn.width,cn.height,{inversionAttempts:n%6===0?"attemptBoth":"dontInvert"});if(r&&done(r.data))return}}catch(e){}
+  if(!seen&&performance.now()-t0>7000)st.textContent="Non lo trovo ancora: avvicina o allontana il telefono, alza la luminosità dell'altro schermo e tocca il suo QR per ingrandirlo.";
+  busy=false};loop()}
 function stopScan(){cancelAnimationFrame(scanRAF);if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null}const b=$("scanBox");if(b)b.hidden=true}
 $("bScanH").onclick=()=>startScan(code=>{$("codeIn").value=code;hostLink()});
 $("bScanG").onclick=()=>startScan(code=>{$("gIn").value=code;guestAnswer()});
-$("bScanX").onclick=stopScan;$("bRedo").onclick=()=>hostStart(true);
+$("bScanX").onclick=stopScan;
+for(const id of["qrOut","qrG"])$(id).addEventListener("click",()=>{const src=$(id),big=$("qrBigC");big.width=src.width;big.height=src.height;big.getContext("2d").drawImage(src,0,0);$("qrBig").hidden=false});
+$("qrBig").onclick=()=>{$("qrBig").hidden=true};$("bRedo").onclick=()=>hostStart(true);
 async function copyText(id,btn){const v=$(id).value;if(!v)return;let ok=false;try{await navigator.clipboard.writeText(v);ok=true}catch(e){const ta=$(id);ta.focus();ta.select();try{ok=document.execCommand("copy")}catch(_){}}
  btn.textContent=ok?"Copiato!":"Selezionato";setTimeout(()=>btn.textContent="Copia",1800)}
 async function shareText(id,cb){const v=$(id).value;if(!v)return;const text=id==="codeOut"&&/^https?:/.test(location.protocol)?"Unisciti alla mia partita della Principessa dei Pesci Rossi: "+joinURL(v):v;
