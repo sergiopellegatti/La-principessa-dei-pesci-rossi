@@ -41,7 +41,21 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 .wb[data-w="0"]{right:calc(14px + env(safe-area-inset-right));bottom:calc(112px + env(safe-area-inset-bottom))}
 .wb[data-w="1"]{right:calc(78px + env(safe-area-inset-right));bottom:calc(78px + env(safe-area-inset-bottom))}
 .wb[data-w="2"]{right:calc(112px + env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom))}
-.modal.stat{text-align:left}.modal.stat h2{text-align:center}.stat h3{color:var(--mint);font-size:17px;margin:14px 0 6px}
+.modal.modal{position:relative}
+.x{position:absolute;top:10px;right:10px;width:42px;height:42px;min-height:42px;padding:0;border-radius:50%;font-size:18px;background:rgba(255,255,255,.12);z-index:2}
+.menu{padding:16px 16px 14px;max-width:480px}.menu h2{font-size:clamp(22px,6vw,30px);margin:0}.menu .sub{margin:4px 0 10px;font-size:14px}
+.heroes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hero{border-radius:18px;padding:8px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 2px rgba(255,255,255,.08);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.hero canvas{display:block;width:100%;height:min(24svh,170px);pointer-events:none}
+.hero input{width:100%;font:600 16px var(--fd);padding:8px 10px;border-radius:12px;border:0;box-shadow:inset 0 0 0 1px var(--line);background:rgba(0,0,0,.25);color:var(--ink);text-align:center;margin-top:4px}
+.hero.sel{box-shadow:inset 0 0 0 3px var(--pink),0 0 20px rgba(255,111,174,.35);background:rgba(255,111,174,.12)}
+.hero:not(.sel){opacity:.62}
+.modes{margin-top:10px}.modes button{min-height:48px;line-height:1.05}.modes small{display:block;font:600 11.5px Nunito;color:var(--dim)}
+.menu .row{margin-top:10px}.menu .hint{margin:6px 0 0}
+.shop{max-width:600px}.shelves{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px;margin-top:12px}
+.shelf{display:grid;justify-items:center;gap:2px;padding:6px 4px 8px;min-height:84px;border-radius:12px;background:linear-gradient(180deg,rgba(185,132,84,.35),rgba(138,90,43,.35));box-shadow:inset 0 -6px 0 rgba(90,55,25,.6),inset 0 0 0 1px rgba(255,255,255,.08);font:600 13px/1.1 var(--fd);color:var(--ink)}
+.shelf canvas{width:40px;height:40px}.shelf.sel{box-shadow:inset 0 -6px 0 rgba(90,55,25,.6),inset 0 0 0 3px var(--gold)}
+.stat{text-align:left}.modal.stat h2{text-align:center}.stat h3{color:var(--mint);font-size:17px;margin:14px 0 6px}
 .sr{display:grid;grid-template-columns:96px minmax(0,1fr) 44px;gap:8px;align-items:center;margin:5px 0;font-size:14.5px}.sr span:last-child{text-align:right;font:600 14px var(--fd)}
 .sb{height:10px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden}.sb i{display:block;height:100%;border-radius:9px}
 .tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:rgba(255,255,255,.07);border-radius:99px;padding:3px 10px;font:600 13.5px var(--fd);white-space:nowrap}
@@ -105,29 +119,21 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
 </div>
 
 <div class="overlay" id="ovMenu">
-  <div class="modal">
-    <canvas class="poster" id="poster"></canvas>
+  <div class="modal menu">
     <h2>La Principessa dei Pesci Rossi</h2>
-    <p>Il terribile Cuoco del Sushi ha rapito la principessa dei pesci rossi e vuole cucinarla! Attraversate i negozi del centro commerciale, guadagnate monete e ritrovate i 4 pezzi del volantino del ristorante sushi.</p>
-    <div class="modes" id="modes">
-      <button class="mode sel" data-m="solo"><svg viewBox="0 0 40 40"><circle cx="20" cy="14" r="7" fill="#ffc93c"/><path d="M8 34c2-8 7-11 12-11s10 3 12 11z" fill="#ffc93c"/></svg><span>Gioca da solo<small>Un eroe, ritmo tuo</small></span></button>
-      <button class="mode" data-m="coop"><svg viewBox="0 0 40 40"><rect x="3" y="8" width="14" height="24" rx="3" fill="#5ab8ff"/><rect x="23" y="8" width="14" height="24" rx="3" fill="#ff6fae"/><path d="M17 20h6" stroke="#fff" stroke-width="2.4" stroke-dasharray="2 2"/></svg><span>In due contemporaneamente<small>Due telefoni sulla stessa rete Wi-Fi</small></span></button>
-      <button class="mode" data-m="hot"><svg viewBox="0 0 40 40"><rect x="12" y="5" width="16" height="30" rx="3" fill="#4fe3b5"/><path d="M4 14a10 10 0 0 1 8-6M36 26a10 10 0 0 1-8 6" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg><span>In due a turno<small>Stesso telefono, ci si passa il cellulare</small></span></button>
+    <p class="sub" id="menuSub">Tocca il tuo personaggio e scrivi il nome</p>
+    <div class="heroes">
+      <div class="hero sel" data-h="0" role="button" tabindex="0" aria-label="Eroe con la felpa"><canvas id="hc0"></canvas><input id="n1" maxlength="14" value="Tommy" autocomplete="off" aria-label="Nome dell'eroe con la felpa"></div>
+      <div class="hero" data-h="1" role="button" tabindex="0" aria-label="Eroina dai capelli viola"><canvas id="hc1"></canvas><input id="n2" maxlength="14" value="Viola" autocomplete="off" aria-label="Nome dell'eroina dai capelli viola"></div>
     </div>
-    <div class="names">
-      <div id="n1box"><label for="n1">Eroe con la felpa</label><input id="n1" maxlength="14" value="Tommy" autocomplete="off"><div class="seg" id="look"><button data-l="boy" class="sel">Ragazzo</button><button data-l="girl">Ragazza</button></div></div>
-      <div id="n2box"><label for="n2">Eroina dai capelli viola</label><input id="n2" maxlength="14" value="Viola" autocomplete="off"></div>
-    </div>
-    <div id="soloPick" class="seg" style="margin-top:10px"><button data-h="0" class="sel">Gioco con la felpa</button><button data-h="1">Gioco coi capelli viola</button></div>
-    <div class="row"><button class="big" id="bPlay">Inizia l'avventura</button><button id="bCont" hidden>Continua</button><button id="bHelp2">Come si gioca</button></div>
+    <div class="seg modes" id="modes"><button data-m="solo" class="sel">Da solo</button><button data-m="coop">In due<small>2 telefoni</small></button><button data-m="hot">In due<small>a turno</small></button></div>
+    <div class="row"><button class="big" id="bPlay">Gioca!</button><button class="ok" id="bCont" hidden>Continua</button><button id="bHelp2">Aiuto</button></div>
     <p class="hint" id="menuHint"></p>
   </div>
 </div>
-
-<div class="overlay" id="ovIntro" hidden><div class="modal"><h2 id="inT"></h2><p id="inP"></p><div class="flyer" id="inF"></div><div class="row"><button class="big" id="bGo">Via!</button></div><p class="hint" id="inH"></p></div></div>
-<div class="overlay" id="ovDone" hidden><div class="modal"><h2 id="dnT"></h2><p id="dnP"></p><div class="flyer" id="dnF"></div><div class="row"><button class="big" id="bNext"></button></div></div></div>
-<div class="overlay" id="ovStat" hidden><div class="modal stat"><h2>Stato della squadra</h2><div id="stB"></div><div class="row"><button id="bMute2"></button><button class="big" id="bStatX">Torna a giocare</button></div><p class="hint">Il gioco è in pausa mentre questa finestra è aperta (in due contemporaneamente il tuo eroe è al sicuro).</p></div></div>
-<div class="overlay" id="ovShop" hidden><div class="modal"><h2 id="shT">Tutto a Tutti Pure i Tetti</h2><p id="shP"></p><div class="wallet" id="shW"></div><div class="flyer" id="shF"></div><div class="shopgrid" id="shG"></div><div class="row"><button class="big" id="bShopX">Chiudi</button></div><p class="hint" id="shH"></p></div></div>
+<div class="overlay" id="ovStat" hidden><div class="modal stat"><button class="x" id="bStatX" aria-label="Chiudi">✕</button><h2>Stato della squadra</h2><div id="stB"></div><div class="row"><button id="bMute2"></button></div><p class="hint">Il gioco è in pausa mentre questa finestra è aperta (in due contemporaneamente il tuo eroe è al sicuro).</p></div></div>
+<div class="overlay" id="ovSave" hidden><div class="modal"><button class="x" id="bSaveX" aria-label="Chiudi">✕</button><h2>Fontana dei Desideri</h2><p>Getta una monetina immaginaria e salva la partita: dal menu potrai ripartire da qui con <b>Continua</b>.</p><div class="wallet" id="svW"></div><div class="flyer" id="svF"></div><div class="row"><button class="big" id="bSave">Salva la partita</button></div><p class="hint" id="svH"></p></div></div>
+<div class="overlay" id="ovShop" hidden><div class="modal shop"><button class="x" id="bShopX" aria-label="Chiudi il negozio">✕</button><h2 id="shT">Tutto a Tutti Pure i Tetti</h2><div class="wallet" id="shW"></div><div class="shelves" id="shC"></div><div class="shopgrid" id="shG"></div><p class="hint" id="shH"></p></div></div>
 <div class="overlay" id="ovTurn" hidden><div class="modal"><h2 id="tuT"></h2><p id="tuP"></p><div class="row"><button class="big" id="bTurn">Sono pronto/a!</button></div></div></div>
 <div class="overlay" id="ovEnd" hidden><div class="modal"><canvas class="poster" id="poster2"></canvas><h2 id="enT"></h2><p id="enP"></p><div class="row"><button class="big" id="bEnd"></button><button id="bMenu">Menu</button></div><p class="hint" id="enH"></p></div></div>
 <div class="overlay" id="ovNet" hidden>
@@ -158,14 +164,20 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
 <div class="overlay" id="ovHelp" hidden>
   <div class="modal help" role="dialog" aria-label="Come si gioca">
     <h2>Come si gioca</h2>
-    <p>Il Cuoco del Sushi vuole cucinare la principessa dei pesci rossi. Superate 4 negozi, completate le missioni e ritrovate i 4 pezzi del volantino: insieme aprono il ristorante sushi, il quinto livello.</p>
+    <p>Il Cuoco del Sushi vuole cucinare la principessa dei pesci rossi. Completate le missioni di 4 negozi e ritrovate i 4 pezzi del volantino: insieme aprono il ristorante Sushi Samurai.</p>
+    <h3>La hall del centro commerciale</h3>
+    <ul><li>Si parte dalla <b>hall</b>: al centro c'è la fontana con il grande pesce, tutto intorno le vetrine e le porte dei 5 negozi.</li>
+    <li>Per entrare in un negozio camminate sulla sua porta; per tornare nella hall usate la porta <b>HALL</b> del negozio. Si può uscire e rientrare quando si vuole: ogni negozio ricorda la missione da dove l'avete lasciata.</li>
+    <li>I negozi si possono fare nell'ordine che preferite, ma il Sushi Samurai resta chiuso finché non avete i 4 pezzi del volantino. Sulle porte dei negozi completati compare una spunta verde.</li>
+    <li>Nella hall e nei negozi passeggiano i <b>clienti</b>: non tolgono energia ma bisogna girarci intorno. Una frustata d'asciugamano li sposta.</li>
+    <li>Fermatevi davanti alla <b>fontana</b> per salvare la partita.</li></ul>
     <h3>Modalità</h3>
     <ul><li><b>Da solo</b>: un eroe a scelta.</li><li><b>In due contemporaneamente</b>: due telefoni sulla stessa Wi-Fi, uno crea la partita e l'altro si unisce scambiando due codici.</li><li><b>In due a turno</b>: stesso telefono, ogni turno dura 75 secondi, poi ci si passa il cellulare. Monete e oggetti sono della squadra.</li></ul>
     <h3>Comandi sul telefono</h3>
     <ul><li><b>Muoversi</b>: appoggia il dito nella metà sinistra dello schermo e trascinalo, compare il joystick.</li>
     <li><b>Attaccare</b>: le tre icone a semicerchio in basso a destra sono le armi. Tocca l'arma che vuoi per lanciarla, tieni premuto per continuare. La mira va da sola sul nemico più vicino.</li>
     <li><b>Il pesce</b>: tocca la boccia per vedere lo stato di pesce ed eroi.</li>
-    <li><b>Negozio</b>: fermati davanti a una cassa e si apre da solo.</li>
+    <li><b>Negozio</b>: fermati davanti a una cassa e si apre da solo. I prodotti sono divisi in scaffali: tocca uno scaffale per vederne i prodotti, la ✕ in alto a destra chiude.</li>
     <li><b>Pausa</b>: il punto di domanda in alto a destra apre questo aiuto e mette in pausa; l'altoparlante accende o spegne musica ed effetti.</li></ul>
     <h3>Comandi da tastiera</h3>
     <table><tr><th>Azione</th><th>Tasti</th></tr>
@@ -193,12 +205,12 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <tr><td>3 · Pasticceria Dolce Vita</td><td>Raccogli 20 pasticcini; occhio alle bucce di banana</td><td>La pasticcera lancia torte che rallentano</td></tr>
     <tr><td>4 · Zoo Planet</td><td>Compra il Kit del Pesce Rosso alla cassa e scaccia 8 gatti</td><td>I gatti rubano cibo e acqua al pesce</td></tr>
     <tr><td>5 · Sushi Samurai</td><td>Sconfiggi il Cuoco del Sushi e libera la principessa</td><td>Camerieri ninja e il cuoco coi coltelli</td></tr></table>
-    <p>Finita la missione compare il <b>pezzo del volantino</b>: prendetelo e la porta d'uscita si apre. In ogni negozio ci sono anche <b>la guardia col manganello, la vecchietta col bastone e il bambino nel carrello</b>: colpiteli finché non finisce la loro energia.</p>
+    <p>Finita la missione compare il <b>pezzo del volantino</b>: prendetelo e tornate nella hall. In ogni negozio ci sono anche <b>la guardia col manganello, la vecchietta col bastone e il bambino nel carrello</b>: colpiteli finché non finisce la loro energia.</p>
     <h3>Monete, negozio, vite ed energia</h3>
     <ul><li>Le monete si trovano a terra, cadono dai mostri sconfitti e sono nascoste dentro piante, scaffali, appendiabiti e acquari: colpiteli per farle uscire.</li>
     <li>In ogni negozio c'è una <b>cassa</b>: fermatevi davanti e si apre <b>Tutto a Tutti Pure i Tetti</b>, dove le monete servono per potenziare le armi, comprare munizioni, pozioni, merende e vite. Mentre comprate i mostri non vi toccano.</li>
     <li>La barretta sopra ogni eroe è la sua energia. Avete 3 vite. In due contemporaneamente, se un eroe cade, l'altro lo rialza restandogli accanto per 2 secondi.</li>
-    <li>Il gioco salva all'inizio di ogni livello: dal menu si può continuare.</li></ul>
+    <li>Si salva alla fontana della hall; dal menu, <b>Continua</b> riparte dall'ultimo salvataggio. In due contemporaneamente salva chi ha creato la partita.</li></ul>
     <h3>Musica</h3>
     <p>Ogni negozio ha la sua musica in stile videogiochi anni '80, con i suoni di lanci, colpi, monete ed esplosioni. Si spegne con l'altoparlante in alto a destra.</p>
     <div class="row"><button class="big" id="bHelpOk">Ho capito!</button></div>
@@ -208,7 +220,9 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
 {
 const MAPS=[["##############################","#@...m......P....m......R....#","#.....1111.......2222........#","#..m.................m....m..#","#.....................c......#","#..R....###....###.......R...#","#.......#.......#...m........#","#..m....#.......#.....$......#","#.......#..f....#....3333....#","#..4444.#.......#............#","#.......####.####...m....m...#","#..m.....................b...#","#....v.........g.............#","#.......m..R.......m.....g...#","#..R.....................P...#","#....$........c.......$......#","#.......2222.....1111......m.#","#..K.......m.....3333...4444.#","#....$.................m....E#","##############################"],["##############################","#.......OO........OO.........#","#..z.................z.......#","#.....$......................#","#CCCCCC..CCCCCCCCCC..CCCCCCCC#","#............................#","#..TT.....TT.....TT.....TT...#","#..TT.....TT.....TT.....TT...#","#............................#","#.....P.........g.......P....#","#..TT.....TT.....TT.....TT...#","#..TT.....TT.....TT.....TT...#","#.........................v..#","#...b........v...........$...#","#..$.....P..........P........#","#....TT.........TT......f....#","#....TT.........TT......g....#","#.@........K.................#","#.....................$.....E#","##############################"],["##############################","#@..p....x....p.....p....x...#","#.......CCCCCC....CCCCCC.....#","#..p.......t.........p.......#","#....x.........p.........p...#","#..CC....p.........x.....CC..#","#..CC.........P..........CC..#","#.......x.....P.....p....b...#","#..p.......CCCCCCCC......x...#","#.....b.................p....#","#..x....p......g.....x.......#","#.......CCCC.......CCCC..p...#","#..p.........v.........g.....#","#.....x.....p.......t....x...#","#..CC...........p.........CC.#","#..CC..p...x.........p....CC.#","#.......$.......f.....$......#","#..K....x...p........x...p...#","#....$......v...........$...E#","##############################"],["##############################","#@.......AAAA.....AAAA.......#","#..k.....................k...#","#....P.................P.....#","#..AA....###.....###....AA...#","#..AA....#.........#....AA...#","#........#....$....#.........#","#..k.....#.........#.....k...#","#........###.....###.........#","#....g...................v...#","#..AA.......AAAAAA.......AA..#","#..AA.....$........$.....AA..#","#.....b..........g...........#","#..k...........P.........k...#","#.......CCCCC.......P....b...#","#.......CCKCC.....f..........#","#..P.......................$.#","#....$.....v.....k...........#","#......................$....E#","##############################"],["##############################","#@.....L.......L.......L.....#","#..........................n.#","#..======================....#","#............................#","#..n.......TT......TT........#","#..........TT......TT.....$..#","#....P.....................P.#","#.......g...........v....b...#","####.#########..#########.####","#............................#","#..L......................L..#","#.......n.....g......n.......#","#....b.......................#","#.......CCCCCCCCCCCCC....v...#","#............B...............#","#..K.........................#","#.............F..............#","#.$......................$...#","##############################"]];
 
-const TS=40,PI=Math.PI,SOLID="#SRPCOTALK=F1234";
+const HALL=["##############################","#VVVVQVVVV#VVVVUVVVV#VVVVYVVV#","#............................#","#..h.....P..........P.....h..#","#............................#","#.....P..............P.......#","#.....g......................#","#............................#","#...h......WWWWWW......h.....#","#..........WWWWWW............#","#..........WWWWWW............#","#..........WWWWWW............#","#............................#","#.....P..............P.......#","#.............@.........b....#","#..h.....P..........P.....h..#","#............................#","#............................#","#VVVVVVZVVVVVVV#VVVVVVXVVVVVV#","##############################"];
+
+const TS=40,PI=Math.PI,SOLID="#SRPCOTALK=F1234VWh",DOORS={Q:1,U:2,Y:3,Z:4,X:5};
 const $=id=>document.getElementById(id);
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const rnd=(a,b)=>a+Math.random()*(b-a);
@@ -217,7 +231,7 @@ const dist=(a,b,x,y)=>Math.hypot(a-x,b-y);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function hash(x,y){let h=(x*374761393+y*668265263)|0;h=Math.imul(h^(h>>>13),1274126177);return((h^(h>>>16))>>>0)/4294967295}
 
-const LV=[null,
+const LV=[{name:"Hall del centro commerciale",kind:"hall",floor:["#efe9df","#e4ddd0"],wall:"#4b5170",top:"#7c83a3",acc:"#ffc93c",intro:""},
  {name:"Moda & Stile",kind:"shelves",floor:["#f4e6ef","#ead6e3"],wall:"#7a4a6e",top:"#b67aa5",acc:"#ff6fae",
   intro:"Il negozio di vestiti è un disastro! Riporta ogni capo sullo scaffale del suo colore. La commessa ti insegue: se ti prende resti stordito e perdi il vestito. Colpiscila e resterà stordita per qualche secondo."},
  {name:"Pizzeria da Gennaro",kind:"pizza",floor:["#f1d9b5","#e6c89c"],wall:"#8a3b22",top:"#c8673e",acc:"#e63946",
@@ -241,6 +255,9 @@ const EN={
  n:{name:"Cameriere ninja",type:"ninja",hp:55,spd:2.8,dmg:12,cd:2.2,aggro:10,coins:[4,7],proj:"chop",r:.32},
  B:{name:"Cuoco del Sushi",type:"boss",hp:650,spd:2.0,dmg:15,cd:1.6,aggro:30,coins:[0,0],r:.55}};
 
+/* Scaffali del negozio Tutto a Tutti Pure i Tetti */
+const CAT=[{id:"armi",name:"Armi",icon:"towel",ids:["towel","lav","mega"]},{id:"mun",name:"Munizioni",icon:"soap",ids:["soap","gum"]},{id:"poz",name:"Pozioni",icon:"pr",ids:["pr","pb","pg","po"]},
+ {id:"ris",name:"Ristoro e vite",icon:"heart",ids:["snack","heart","shoes"]},{id:"spe",name:"Per il pesce",icon:"kit",ids:["kit"],only:4}];
 /* Shop */
 const SHOP=[
  {id:"pr",name:"Pozione rossa",desc:"Spruzzo bollente, danno doppio per 60 s",price:10,icon:"pr"},
@@ -297,6 +314,21 @@ function drawKid(c,t,o){
  eyes(c,hy+2,4.2);el(c,-7,hy+5,2,1.2,"rgba(255,110,90,.3)");el(c,7,hy+5,2,1.2,"rgba(255,110,90,.3)");
  c.strokeStyle="#8a4b3a";c.lineWidth=1.2;c.beginPath();c.arc(0,hy+5,2.4,.3,PI-.3);c.stroke();
 }
+/* Passanti e acquirenti */
+const SHIRTS=["#ff6f61","#5ab8ff","#ffc93c","#7bd389","#c77dff","#ff9cc6","#4fe3b5","#f4a261","#8d99ae"],HAIRS=["#2a1d16","#5b3a1f","#c98a3a","#e8d27a","#1b1b1b","#cfcfd8","#a0522d"],SKINS=["#f6cfae","#e8b48f","#c68c64","#8d5a3b","#f2c29b"];
+function drawShopper(c,t,o){const b=Math.sin(t/330)*.5;shadow(c,11);legs(c,o.walk||0,o.pants,"#2a2a33");
+ if(o.bag){c.fillStyle=o.bag;rr(c,-17,2+b,7,9,1.5);c.fill();c.strokeStyle="rgba(0,0,0,.3)";c.lineWidth=1;c.beginPath();c.arc(-13.5,2+b,2.6,PI,0);c.stroke()}
+ c.fillStyle=lg(c,0,-4,0,11,o.shirt,shadeS(o.shirt));rr(c,-10,-4+b,20,14,5);c.fill();
+ c.fillStyle=shadeS(o.shirt);rr(c,-13.5,-2+b,4.5,10,2.2);c.fill();rr(c,9,-2+b,4.5,10,2.2);c.fill();
+ el(c,-11.2,8.5+b,2.4,2.4,o.skin);el(c,11.2,8.5+b,2.4,2.4,o.skin);
+ const hy=-14+b;c.beginPath();c.arc(0,hy,9.5,0,7);c.fillStyle=o.skin;c.fill();
+ c.fillStyle=o.old?"#d9d9e2":o.hair;c.beginPath();c.ellipse(0,hy-3,10,7.5,0,PI,0);c.fill();
+ if(o.long){c.beginPath();c.ellipse(0,hy+1,10.6,9,0,PI,0);c.lineTo(10.6,hy+7);c.lineTo(7,hy);c.lineTo(-7,hy);c.lineTo(-10.6,hy+7);c.fill()}
+ if(o.cap){c.fillStyle=o.cap;c.beginPath();c.ellipse(0,hy-5,10,6,0,PI,0);c.fill();rr(c,2,hy-6,11,2.6,1.3);c.fill()}
+ if(o.old){c.strokeStyle="#3a3a48";c.lineWidth=1;c.beginPath();c.arc(-3.6,hy+1,2.4,0,7);c.stroke();c.beginPath();c.arc(3.6,hy+1,2.4,0,7);c.stroke()}
+ el(c,-3.6,hy+1,1.4,1.8,"#2b1a12");el(c,3.6,hy+1,1.4,1.8,"#2b1a12");
+ c.strokeStyle="#8a4b3a";c.lineWidth=1.1;c.beginPath();c.arc(0,hy+4.5,2,.3,PI-.3);c.stroke()}
+function shadeS(h){const n=parseInt(h.slice(1),16);return`rgb(${(n>>16)*.78|0},${(n>>8&255)*.78|0},${(n&255)*.78|0})`}
 /* Mostri */
 function drawGuard(c,t,o){const b=Math.sin(t/280)*.6;shadow(c,12);legs(c,o.walk||0,"#1f2d55","#111");
  c.fillStyle=lg(c,0,-4,0,12,"#34508f","#22396b");rr(c,-11,-4+b,22,15,5);c.fill();c.fillStyle="#ffc93c";star(c,-5,0+b,2.4,"#ffc93c");
@@ -436,7 +468,7 @@ const IN=[{mx:0,my:0,atk:false,wsel:0},{mx:0,my:0,atk:false,wsel:0}],NOIN={mx:0,
 let EVQ=[];
 const BLOCKP="#S1234RAOKLPF";
 function ev(e){EVQ.push(e)}
-function toast(t){ev({k:"toast",t})}
+function toast(t,d){ev({k:"toast",t,d})}
 function float(x,y,t,c){ev({k:"float",x,y,t,c})}
 function solidAt(x,y){if(x<0||y<0||x>=S.W||y>=S.H)return true;const c=S.G[y][x];if(c==="E")return!S.exitOpen;return SOLID.includes(c)}
 function hitsSolid(x,y,r){const x0=Math.floor(x-r),x1=Math.floor(x+r),y0=Math.floor(y-r),y1=Math.floor(y+r);
@@ -446,23 +478,29 @@ function moveCircle(o,dx,dy,r){o.bx=o.by=false;const st=Math.max(1,Math.ceil(Mat
 function los(ax,ay,bx,by){const d=dist(ax,ay,bx,by),n=Math.ceil(d/.3);for(let i=1;i<n;i++){const x=Math.floor(ax+(bx-ax)*i/n),y=Math.floor(ay+(by-ay)*i/n);if(S.G[y]&&S.G[y][x]==="#")return false}return true}
 function freeSpot(minD){for(let k=0;k<200;k++){const x=ri(1,S.W-2),y=ri(1,S.H-2);if(S.G[y][x]==="."&&!solidAt(x,y)&&!S.players.some(p=>dist(p.x,p.y,x+.5,y+.5)<(minD||3)))return[x+.5,y+.5]}return[S.spawn[0],S.spawn[1]]}
 
-function newRun(cfg,from){
- S={mode:cfg.mode,cfg,lvl:1,phase:"intro",coins:12,lives:3,frags:0,ammo:{soap:20,gum:3},up:{},fish:{food:100,water:100,pot:null,potT:0,x:0,y:0,cd:1,sick:0,warn:0},
-  time:0,nid:1,kills:0,active:0,turnT:75,paused:false,gv:0,players:[]};
- if(from)Object.assign(S,{lvl:from.lvl,coins:from.coins,lives:from.lives,frags:from.frags,ammo:from.ammo,up:from.up,fish:{...S.fish,food:from.food,water:from.water}});
- const heroes=cfg.mode==="solo"?[cfg.solo]:[0,1];
- S.players=heroes.map((h,i)=>({id:"p"+i,i,hero:h,name:cfg.names[h],look:cfg.look,max:100,hp:100,x:0,y:0,fx:1,fy:0,face:1,w:0,cd:0,inv:0,stun:0,slowT:0,slip:0,swing:0,walk:0,kx:0,ky:0,carry:null,down:false,respawn:0,rev:0,hidden:cfg.mode==="hot"&&i===1,shop:false,ax:1,ay:0}));
- loadLevel(S.lvl);
+function newRun(cfg){
+ S={mode:cfg.mode,cfg,lvl:0,phase:"play",coins:12,lives:3,frags:0,done:{},shops:{},seen:{},ammo:{soap:20,gum:3},up:{},fish:{food:100,water:100,pot:null,potT:0,x:0,y:0,cd:1,sick:0,warn:0},
+  time:0,nid:1,kills:0,active:0,turnT:75,paused:false,gv:0,players:[],proj:[]};
+ const heroes=cfg.mode==="solo"?[cfg.solo]:[cfg.solo,1-cfg.solo];
+ S.players=heroes.map((h,i)=>({id:"p"+i,i,hero:h,name:cfg.names[h],look:"boy",max:100,hp:100,x:0,y:0,fx:1,fy:0,face:1,w:0,cd:0,inv:0,stun:0,slowT:0,slip:0,swing:0,walk:0,kx:0,ky:0,carry:null,down:false,respawn:0,rev:0,hidden:cfg.mode==="hot"&&i===1,shop:false,ax:1,ay:0,doorLock:false}));
+ loadLevel(0);placeTeam(S.spawn);
+ toast("Benvenuti nella hall! Entrate in un negozio dalla sua porta",4.5);
 }
-function addEnemy(t,x,y){const d=EN[t],L=S.lvl,co=S.mode==="coop"?1.35:1;let hp=d.hp;
+const AREA_KEYS=["G","W","H","enemies","items","tables","ovens","kiosks","shelves","hidden","respawn","fragSpot","cage","exit","spawn","catSpawns","spawnT","mission","people","hallDoors","fount"];
+const MARK="@mpx$f";
+function baseGrid(L){return(L?MAPS[L-1]:HALL).map(r=>[...r].map(ch=>MARK.includes(ch)||EN[ch]?".":ch))}
+function addEnemy(t,x,y){const d=EN[t],L=Math.max(1,S.lvl),co=S.mode==="coop"?1.35:1;let hp=d.hp;
  if(t==="B")hp=Math.round(d.hp*co);else if(!d.stunOnly&&t!=="k")hp=Math.round(d.hp*(1+.22*(L-1))*co);
  const e={id:"e"+(S.nid++),t,x,y,hx:x,hy:y,hp,max:hp,dmg:Math.round(d.dmg*(1+.15*(L-1))),cd:rnd(.6,d.cd+.6),stun:0,slow:0,poison:0,hit:0,atk:0,wind:0,walk:0,face:1,kx:0,ky:0,wt:0,wx:0,wy:0,unst:0,ux:0,uy:0,flee:false,fleeT:0,charge:false,dash:0,dcd:2,sum:0};
  S.enemies.push(e);return e}
+function newPerson(x,y){const o={id:"q"+(S.nid++),x,y,kx:0,ky:0,walk:0,face:Math.random()<.5?1:-1,mode:"walk",t:rnd(0,3),tx:x,ty:y,spd:rnd(.8,1.4),
+ shirt:SHIRTS[ri(0,SHIRTS.length-1)],pants:["#3b3f6b","#2f3443","#5a4636","#6b6b7a","#24476b"][ri(0,4)],hair:HAIRS[ri(0,HAIRS.length-1)],skin:SKINS[ri(0,SKINS.length-1)],old:Math.random()<.18,long:Math.random()<.45,cap:Math.random()<.15?SHIRTS[ri(0,8)]:null,bag:Math.random()<.6?SHIRTS[ri(0,8)]:null};
+ S.people.push(o);return o}
 function loadLevel(L){
- S.lvl=L;const rows=MAPS[L-1];S.H=rows.length;S.W=rows[0].length;S.G=rows.map(r=>[...r]);S.gv++;
- Object.assign(S,{enemies:[],proj:[],items:[],tables:[],ovens:[],kiosks:[],shelves:[],hidden:{},respawn:[],exitOpen:false,fragSpot:null,cage:null,exit:null,spawn:[1.5,1.5],catSpawns:[],spawnT:0,phase:"intro"});
+ S.lvl=L;const rows=L?MAPS[L-1]:HALL;S.H=rows.length;S.W=rows[0].length;S.G=rows.map(r=>[...r]);S.gv++;
+ Object.assign(S,{enemies:[],proj:[],items:[],tables:[],ovens:[],kiosks:[],shelves:[],hidden:{},respawn:[],exitOpen:true,fragSpot:null,cage:null,exit:null,spawn:[1.5,1.5],catSpawns:[],spawnT:0,people:[],hallDoors:[],fount:null});
  S.mission={kind:LV[L].kind,n:0,need:0,cats:0,catNeed:8,kit:false,done:false,boss:false,freed:false,sp:0};
- let mc=0,hid=0;
+ let mc=0,hid=0,fx0=99,fy0=99,fx1=-1,fy1=-1;
  for(let y=0;y<S.H;y++)for(let x=0;x<S.W;x++){const ch=S.G[y][x],cx=x+.5,cy=y+.5;
   if(ch==="@"){S.spawn=[cx,cy];S.G[y][x]="."}
   else if(EN[ch]){addEnemy(ch,cx,cy);if(ch==="k")S.catSpawns.push([cx,cy]);S.G[y][x]="."}
@@ -476,15 +514,32 @@ function loadLevel(L){
   else if(ch==="K")S.kiosks.push([cx,cy]);
   else if(ch==="E")S.exit=[cx,cy];
   else if(ch==="F")S.cage=[cx,cy];
-  if("PRAL=S1234".includes(ch)&&hash(x+L*7,y*3+L)<.42&&hid<9){S.hidden[x+","+y]=1;hid++}}
+  else if(DOORS[ch])S.hallDoors.push({x:cx,y:cy,to:DOORS[ch],front:[cx,y<S.H/2?cy+1:cy-1]});
+  else if(ch==="W"){fx0=Math.min(fx0,x);fy0=Math.min(fy0,y);fx1=Math.max(fx1,x+1);fy1=Math.max(fy1,y+1)}
+  if("PRAL=S1234V".includes(ch)&&hash(x+L*7,y*3+L)<.42&&hid<9){S.hidden[x+","+y]=1;hid++}}
+ if(fx1>0)S.fount=[fx0,fy0,fx1,fy1];
+ if(S.exit){const[ex,ey]=[Math.floor(S.exit[0]),Math.floor(S.exit[1])];for(const[dx,dy]of[[-1,0],[0,-1],[1,0],[0,1]])if(!solidAt(ex+dx,ey+dy)){S.spawn=[ex+dx+.5,ey+dy+.5];break}}
  const seen={};
  for(let y=0;y<S.H;y++)for(let x=0;x<S.W;x++)if(S.G[y][x]==="T"&&!seen[x+","+y]){const cells=[],q=[[x,y]];seen[x+","+y]=1;
   while(q.length){const[a,b]=q.pop();cells.push([a,b]);for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const k=(a+dx)+","+(b+dy);if(!seen[k]&&S.G[b+dy]&&S.G[b+dy][a+dx]==="T"){seen[k]=1;q.push([a+dx,b+dy])}}}
   const cx=cells.reduce((s,c)=>s+c[0],0)/cells.length+.5,cy=cells.reduce((s,c)=>s+c[1],0)/cells.length+.5;S.tables.push({cells,cx,cy,want:false,t:rnd(0,6)})}
- const m=S.mission;m.need={shelves:S.items.filter(i=>i.k==="merch").length,pizza:10,pastry:20,cats:8,boss:1}[m.kind];
- S.players.forEach((p,i)=>{Object.assign(p,{x:S.spawn[0]+(S.mode==="coop"?i*.9:0),y:S.spawn[1],hp:p.max,down:false,respawn:0,carry:null,stun:0,slowT:0,slip:0,inv:1,kx:0,ky:0,shop:false,rev:0});p.hidden=S.mode==="hot"&&i!==S.active});
- S.fish.x=S.spawn[0]-.6;S.fish.y=S.spawn[1]-.7;
+ const m=S.mission;m.need={hall:0,shelves:S.items.filter(i=>i.k==="merch").length,pizza:10,pastry:20,cats:8,boss:1}[m.kind];
+ const np=L===0?14:L===5?2:3;for(let i=0;i<np;i++){const[x,y]=freeSpot(3);newPerson(x,y)}
 }
+function placeTeam(pos){S.players.forEach((p,i)=>{let x=pos[0]+(S.mode==="coop"?(i?.55:-.55):0),y=pos[1];if(hitsSolid(x,y,.3)){x=pos[0];y=pos[1]}
+  Object.assign(p,{x,y,kx:0,ky:0,stun:0,slip:0,inv:1.2,doorLock:true,shop:false});if(p.down){p.down=false;p.hp=Math.max(40,p.hp);p.respawn=0;p.rev=0}});
+ S.fish.x=pos[0]-.6;S.fish.y=pos[1]-.7}
+function enterArea(L){const from=S.lvl;
+ S.players.forEach(p=>dropCarry(p));
+ if(from>0){const o={};for(const k of AREA_KEYS)o[k]=S[k];S.shops[from]=o}
+ S.proj=[];
+ if(L>0&&S.shops[L]){const o=S.shops[L];if(!o.G)o.G=baseGrid(L);Object.assign(S,o);S.lvl=L;S.gv++}else loadLevel(L);
+ let pos=S.spawn;if(L===0&&from>0){const d=S.hallDoors.find(d=>d.to===from);if(d)pos=d.front}
+ placeTeam(pos);ev({k:"sfx",s:"door"});
+ if(L>0){if(!S.seen[L]){S.seen[L]=1;toast(LV[L].intro,7)}else toast(S.done[L]?`${LV[L].name}: missione già completata`:`Bentornati da ${LV[L].name}`,2.5)}
+ else toast(S.frags>=4&&!S.done[5]?"Il volantino è completo: correte al Sushi Samurai!":"Hall del centro commerciale",2.5);
+}
+function retryArea(){S.lives=3;S.phase="play";S.players.forEach(p=>{if(!p.hidden)respawnP(p)})}
 const actives=()=>S.players.filter(p=>!p.hidden&&!p.down&&!p.shop);
 function inputFor(i){if(S.mode==="hot")return i===S.active?IN[0]:NOIN;if(S.mode==="solo")return IN[0];return IN[i]}
 
@@ -495,6 +550,7 @@ function tick(dt){
  fishTick(dt);
  S.players.forEach((p,i)=>updPlayer(p,inputFor(i),dt));
  if(S.mode==="coop")reviveTick(dt);
+ updPeople(dt);
  for(const e of S.enemies)if(!e.dead)updEnemy(e,dt);
  S.enemies=S.enemies.filter(e=>!e.dead);
  updProj(dt);
@@ -529,7 +585,7 @@ function updPlayer(p,inp,dt){
  const spd=4.2*(S.up.shoes?1.22:1)*(p.slowT>0?.55:1);
  if(m>.15&&p.stun<=0){moveCircle(p,mx*spd*dt,my*spd*dt,.3);const n=Math.hypot(mx,my);p.fx=mx/n;p.fy=my/n;p.walk+=dt*13*Math.min(1,m);if(Math.abs(mx)>.2)p.face=Math.sign(mx)}
  if(inp.atk&&p.cd<=0&&p.stun<=0)attack(p);
- interact(p);p.kT=p.nearK?(p.kT||0)+dt:0;
+ bumpPeople(p);interact(p);p.kT=p.nearK?(p.kT||0)+dt:0;p.fT=S.lvl===0&&fountDist(p)<.95?(p.fT||0)+dt:0;
 }
 function nearestTarget(x,y,r,needLos){let best=null,bd=r;for(const e of S.enemies){if(e.dead||e.flee)continue;const d=dist(x,y,e.x,e.y);if(d<bd&&(!needLos||los(x,y,e.x,e.y))){bd=d;best=e}}return best}
 function attack(p){
@@ -540,7 +596,9 @@ function attack(p){
  p.ax=ax;p.ay=ay;if(Math.abs(ax)>.2)p.face=Math.sign(ax);
  if(p.w===0){p.cd=.38;p.swing=.22;ev({k:"swing",id:p.id,ax,ay,wet:!!S.up.towel});const dmg=S.up.towel?32:18;
   for(const e of S.enemies){if(e.dead)continue;const dx=e.x-p.x,dy=e.y-p.y,d=Math.hypot(dx,dy);if(d<1.65&&(d<.9||(dx*ax+dy*ay)/d>.1))hitE(e,dmg,ax,ay)}
-  revealNear(p.x+ax*.9,p.y+ay*.9,1.1)}
+  revealNear(p.x+ax*.9,p.y+ay*.9,1.1);
+  for(const q of S.people){const dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy);if(d<1.65&&(d<.9||(dx*ax+dy*ay)/d>.1)){const n=d||1;q.kx=dx/n*7;q.ky=dy/n*7;q.mode="walk";q.t=rnd(2,5);[q.tx,q.ty]=freeSpot(0);
+   float(q.x,q.y-.2,["Ehi!","Scusi!","Che modi!","Ops!","Faccio strada!"][ri(0,4)],"#fff");ev({k:"sfx",s:"bump",x:q.x,y:q.y})}}}
  else if(p.w===1){S.ammo.soap--;p.cd=.42;p.swing=.12;S.proj.push({id:S.nid++,k:"soap",x:p.x+ax*.4,y:p.y+ay*.4,vx:ax*9.5,vy:ay*9.5,own:"p",dmg:S.up.lav?22:14,life:.85,r:.2,pierce:!!S.up.lav,hit:[]})}
  else{S.ammo.gum--;p.cd=.7;p.swing=.15;const d=tg?Math.min(dist(p.x,p.y,tg.x,tg.y),5):3;let tx=p.x+ax*d,ty=p.y+ay*d;
   for(let k=0;k<12&&hitsSolid(tx,ty,.15);k++){tx-=ax*.3;ty-=ay*.3}
@@ -582,18 +640,31 @@ function interact(p){
    float(it.x,it.y,key==="food"?(old>=100?"Il pesce è già sazio":"Pappa per il pesce! +"+Math.round(f.food-old)):(old>=100?"L'acqua è già pulita":"Acqua pulita! +"+Math.round(f.water-old)),key==="food"?"#ffb347":"#8fe0ff");ev({k:"sfx",s:"pick"})}
   else if(it.k==="pastry"&&d<.62){m.n++;S.items.splice(i,1);ev({k:"sfx",s:"pick"});if(Math.random()<.35)S.coins++;ev({k:"burst",x:it.x,y:it.y,col:"#ff9cc6",n:10});float(it.x,it.y,`${Math.min(m.n,m.need)}/${m.need}`,"#ff9cc6")}
   else if(it.k==="banana"&&d<.42&&p.slip<=0&&p.inv<1.5){p.slip=.6;p.svx=p.fx*6.5;p.svy=p.fy*6.5;p.stun=1;p.inv=Math.max(p.inv,.5);float(p.x,p.y,"Scivolone!","#ffd23c");ev({k:"sfx",s:"slip"});const[x,y]=freeSpot(5);it.x=x;it.y=y}
-  else if(it.k==="frag"&&d<.75){S.items.splice(i,1);S.frags++;S.coins+=20;S.exitOpen=true;ev({k:"burst",x:it.x,y:it.y,col:"#ffc93c",n:30});toast(`Pezzo ${S.frags} di 4 del volantino! L'uscita è aperta`);ev({k:"sfx",s:"frag"})}}
+  else if(it.k==="frag"&&d<.75){S.items.splice(i,1);S.frags++;S.coins+=20;S.done[S.lvl]=true;ev({k:"burst",x:it.x,y:it.y,col:"#ffc93c",n:30});toast(S.frags<4?`Pezzo ${S.frags} di 4 del volantino! Uscite dalla porta HALL e cercate gli altri`:"Volantino completo! Uscite nella hall: il Sushi Samurai è aperto",5);ev({k:"sfx",s:"frag"})}}
  if(m.kind==="shelves"&&p.carry&&p.carry.k==="merch"){for(const s of S.shelves)if(s.c===p.carry.c&&dist(p.x,p.y,s.x,s.y)<1.2){m.n++;S.coins+=2;p.carry=null;ev({k:"sfx",s:"deliver"});ev({k:"burst",x:s.x,y:s.y,col:["","#ff4f6d","#4f8bff","#ffc93c","#3fcf7a"][s.c],n:14});float(s.x,s.y,`Riordinato! ${m.n}/${m.need}`,"#fff");break}}
  if(m.kind==="pizza"){
   if(!p.carry){for(const o of S.ovens)if(dist(p.x,p.y,o[0],o[1])<1.25){p.carry={k:"pizza"};float(p.x,p.y,"Pizza calda!","#ffc93c");ev({k:"sfx",s:"pick"});break}}
   else if(p.carry.k==="pizza"){for(const tb of S.tables)if(tb.want&&tb.cells.some(c=>dist(p.x,p.y,c[0]+.5,c[1]+.5)<1.2)){tb.want=false;tb.t=rnd(14,22);p.carry=null;m.n++;S.coins+=3;ev({k:"sfx",s:"deliver"});ev({k:"burst",x:tb.cx,y:tb.cy,col:"#ffc93c",n:16});float(tb.cx,tb.cy,`Buon appetito! ${m.n}/${m.need}`,"#fff");break}}}
  p.nearK=S.kiosks.some(k=>dist(p.x,p.y,k[0],k[1])<1.35);
- if(S.exitOpen&&S.exit&&dist(p.x,p.y,S.exit[0],S.exit[1])<.85)levelDone();
+ const doors=S.lvl===0?S.hallDoors:S.exit?[{x:S.exit[0],y:S.exit[1],to:0}]:[];let nearD=false;
+ for(const d of doors){const dd=dist(p.x,p.y,d.x,d.y);if(dd<1.15)nearD=true;if(dd<.78&&!p.doorLock){useDoor(p,d);return}}
+ if(!nearD)p.doorLock=false;
  if(m.boss&&!m.freed&&S.cage&&dist(p.x,p.y,S.cage[0],S.cage[1])<1.5){m.freed=true;S.phase="win";ev({k:"burst",x:S.cage[0],y:S.cage[1],col:"#ffc93c",n:60})}
 }
-function levelDone(){if(S.phase!=="play")return;ev({k:"sfx",s:"level"});S.phase="between";S.coins+=10;S.players.forEach(p=>{p.carry=null;p.shop=false})}
-function nextLevel(){if(S.lvl>=5)return;loadLevel(S.lvl+1)}
-function missionTick(dt){const m=S.mission;S.spawnT-=dt;
+function useDoor(p,d){
+ if(d.to===5&&S.frags<4){p.doorLock=true;toast(`Il Sushi Samurai è chiuso: servono i 4 pezzi del volantino (${S.frags}/4)`,3);ev({k:"sfx",s:"empty"});p.ky=d.y>S.H/2?-3.5:3.5;return}
+ enterArea(d.to)}
+function fountDist(p){const f=S.fount;if(!f)return 99;const dx=Math.max(f[0]-p.x,0,p.x-f[2]),dy=Math.max(f[1]-p.y,0,p.y-f[3]);return Math.hypot(dx,dy)}
+function updPeople(dt){for(const q of S.people){
+ if(q.kx||q.ky){moveCircle(q,q.kx*dt,q.ky*dt,.3);const f=Math.pow(.02,dt);q.kx*=f;q.ky*=f;if(Math.abs(q.kx)+Math.abs(q.ky)<.1)q.kx=q.ky=0;q.walk+=dt*14;continue}
+ q.t-=dt;
+ if(q.mode==="look"){if(q.t<=0){q.mode="walk";q.t=rnd(4,9);[q.tx,q.ty]=freeSpot(0)}continue}
+ const dx=q.tx-q.x,dy=q.ty-q.y,d=Math.hypot(dx,dy);
+ if(d<.3||q.t<=0){if(Math.random()<.55){q.mode="look";q.t=rnd(3,8)}else{q.t=rnd(4,9);[q.tx,q.ty]=freeSpot(0)}continue}
+ for(const p of S.players)if(!p.hidden&&dist(p.x,p.y,q.x,q.y)<.75){q.t=Math.min(q.t,.6)}
+ const ox=q.x,oy=q.y;moveCircle(q,dx/d*q.spd*dt,dy/d*q.spd*dt,.3);q.walk+=dt*9;if(Math.abs(dx)>.15)q.face=Math.sign(dx);if(dist(ox,oy,q.x,q.y)<q.spd*dt*.3)q.t-=dt*3}}
+function bumpPeople(p){for(const q of S.people){const d=dist(p.x,p.y,q.x,q.y),m=.6;if(d<m&&d>.001){const k=(m-d)/d;moveCircle(p,(p.x-q.x)*k,(p.y-q.y)*k,.3)}}}
+function missionTick(dt){const m=S.mission;S.spawnT-=dt;if(m.kind==="hall")return;
  if(m.kind==="pizza"){let w=S.tables.filter(t=>t.want).length;for(const t of S.tables)if(!t.want){t.t-=dt;if(t.t<=0&&w<4){t.want=true;w++}}}
  if(m.kind==="pastry"&&S.spawnT<=0){S.spawnT=2;const on=S.items.filter(i=>i.k==="pastry").length;if(on<6&&m.n+on<m.need+4){const[x,y]=freeSpot(4);S.items.push({id:S.nid++,k:"pastry",v:ri(0,2),x,y})}}
  if(m.kind==="cats"&&S.spawnT<=0){S.spawnT=4;const on=S.enemies.filter(e=>e.t==="k"&&!e.flee).length;if(on<3&&m.cats+on<m.catNeed+2&&S.catSpawns.length){const s=S.catSpawns[ri(0,S.catSpawns.length-1)];if(!S.players.some(p=>dist(p.x,p.y,s[0],s[1])<3))addEnemy("k",s[0],s[1])}}
@@ -702,11 +773,11 @@ function playFx(e){const now=performance.now(),m=meP();fxSound(e,m);
  else if(e.k==="swing")FX.sw[e.id]={b:now,ax:e.ax,ay:e.ay,wet:e.wet};
  else if(e.k==="boom"){FX.booms.push({...e,b:now});for(let i=0;i<26;i++){const a=rnd(0,PI*2),v=rnd(2,6);FX.pt.push({x:e.x,y:e.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:0,ml:rnd(.4,.8),c:Math.random()<.5?"#ff6fae":"#ffd23c",s:rnd(2,4.5)})}}
  else if(e.k==="coin"){for(let i=0;i<5;i++){const a=rnd(0,PI*2);FX.pt.push({x:e.x,y:e.y,vx:Math.cos(a)*2,vy:Math.sin(a)*2-2,l:0,ml:.5,c:"#ffd23c",s:2})}}
- else if(e.k==="toast")showToast(e.t);
+ else if(e.k==="toast")showToast(e.t,e.d);
  else if(e.k==="warn")FX.warn.push({...e,b:now});
  else if(e.k==="buy"&&!$("ovShop").hidden)renderShop();
 }
-function showToast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove("on"),2300)}
+function showToast(t,d){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove("on"),(d||2.3)*1000)}
 function meP(){if(!S)return null;if(S.mode==="hot")return S.players[S.active];return S.players[role==="guest"?1:0]||S.players[0]}
 
 function buildStatic(){const L=LV[S.lvl];SC=document.createElement("canvas");SC.width=S.W*TS*SS;SC.height=S.H*TS*SS;const c=SC.getContext("2d");c.scale(SS,SS);
@@ -721,11 +792,16 @@ function buildStatic(){const L=LV[S.lvl];SC=document.createElement("canvas");SC.
   if(isW(x,y-1)){c.fillStyle=lg(c,0,py,0,py+14,"rgba(0,0,0,.25)","rgba(0,0,0,0)");c.fillRect(px,py,TS,14)}
   if(isW(x-1,y)){c.fillStyle=lg(c,px,0,px+8,0,"rgba(0,0,0,.15)","rgba(0,0,0,0)");c.fillRect(px,py,8,TS)}
   decor(c,ch,px,py,x,y,L)}
- const sx=Math.floor(W/2)*TS,sw=Math.min(300,W*TS*.4);c.fillStyle=L.acc;rr(c,sx-sw/2,6,sw,24,10);c.fill();c.fillStyle="rgba(255,255,255,.25)";rr(c,sx-sw/2+3,8,sw-6,8,6);c.fill();
- c.font="700 16px Fredoka,system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillStyle="#fff";c.fillText(L.name,sx,19);
+ const sign=(sx,sy,sw,col,txt)=>{c.fillStyle=col;rr(c,sx-sw/2,sy-12,sw,24,10);c.fill();c.fillStyle="rgba(255,255,255,.25)";rr(c,sx-sw/2+3,sy-10,sw-6,8,6);c.fill();
+  c.font="700 16px Fredoka,system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillStyle="#fff";c.fillText(txt,sx,sy+1)};
+ if(S.lvl===0)for(const d of S.hallDoors)sign(d.x*TS,d.y<H/2?18:(H-.55)*TS,Math.min(250,6.2*TS),LV[d.to].acc,LV[d.to].name);
+ else sign(Math.floor(W/2)*TS,18,Math.min(300,W*TS*.4),L.acc,L.name);
  scKey=S.lvl+":"+S.gv}
 function shade(hex,k){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const f=v=>Math.round(k<0?v*(1+k):v+(255-v)*k);return`rgb(${f(r)},${f(g)},${f(b)})`}
-function floor(c,px,py,x,y,L){c.fillStyle=L.floor[(x+y)%2];c.fillRect(px,py,TS,TS);
+function floor(c,px,py,x,y,L){
+ if(S.lvl===0){c.fillStyle=L.floor[((x>>1)+(y>>1))%2];c.fillRect(px,py,TS,TS);c.strokeStyle="rgba(120,100,80,.12)";c.lineWidth=1;if(x%2===0)c.strokeRect(px+.5,py+.5,TS*2-1,y%2===0?TS*2-1:0);
+  if(hash(x>>1,y>>1)>.6){c.fillStyle="rgba(255,255,255,.35)";c.beginPath();c.moveTo(px+4,py+TS-4);c.lineTo(px+12,py+TS-4);c.lineTo(px+TS-4,py+4);c.lineTo(px+TS-12,py+4);c.fill()}return}
+ c.fillStyle=L.floor[(x+y)%2];c.fillRect(px,py,TS,TS);
  if(S.lvl===5){c.fillStyle="rgba(0,0,0,.18)";c.fillRect(px,py+((x%2)?13:27),TS,1.5);c.fillStyle="rgba(255,255,255,.03)";c.fillRect(px,py,TS,6)}
  else{c.strokeStyle="rgba(0,0,0,.06)";c.lineWidth=1;c.strokeRect(px+.5,py+.5,TS-1,TS-1);if(hash(x,y)>.9){c.fillStyle="rgba(255,255,255,.35)";c.fillRect(px+8,py+8,10,2)}}}
 function decor(c,ch,px,py,x,y,L){const cx=px+TS/2,cy=py+TS/2,h=hash(x*3,y*7);
@@ -754,10 +830,17 @@ function decor(c,ch,px,py,x,y,L){const cx=px+TS/2,cy=py+TS/2,h=hash(x*3,y*7);
  else if(ch==="K"){c.fillStyle="#d9dde6";rr(c,px+1,py+10,TS-2,TS-11,4);c.fill();c.fillStyle="#9aa3b8";c.fillRect(px+1,py+TS-10,TS-2,9);
   c.fillStyle="#3a3f52";rr(c,px+8,py+2,24,16,3);c.fill();c.fillStyle="#7dffb0";c.fillRect(px+11,py+5,18,6);c.fillStyle="#2a2f3c";for(let i=0;i<3;i++)c.fillRect(px+11+i*6,py+13,4,3);
   c.fillStyle="#ff4f9a";rr(c,px+4,py+TS-9,TS-8,7,3);c.fill();c.fillStyle="#fff";c.font="700 6.5px Fredoka,system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("CASSA",cx,py+TS-5.3)}
+ else if(ch==="V"){const top=y<S.H/2,d=S.hallDoors.filter(d=>(d.y<S.H/2)===top).sort((a,b)=>Math.abs(a.x-x)-Math.abs(b.x-x))[0],Lt=d?d.to:1,acc=LV[Lt].acc;
+  c.fillStyle="#3a3f55";c.fillRect(px,py,TS,TS);c.fillStyle=lg(c,0,py,0,py+TS,"#dff4ff","#9fd2ee");c.fillRect(px+2,py+3,TS-4,TS-6);
+  c.fillStyle=acc;c.fillRect(px,top?py+TS-5:py,TS,5);c.save();c.translate(cx,cy+(top?-2:3));
+  if(Lt===1)drawItem(c,{k:"merch",c:1+((x+y)%4),x:0},0);else if(Lt===2){drawPizzaShape(c,9)}else if(Lt===3)drawItem(c,{k:"pastry",v:x%3,x:0},0);else if(Lt===4){c.scale(1.2,1.2);drawFishBody(c,x*300,null,1)}else{el(c,0,0,11,7,"#fff");el(c,0,-1,6,3.5,"#ff7a4a")}
+  c.restore();c.fillStyle="rgba(255,255,255,.4)";c.fillRect(px+5,py+5,3,TS-12)}
+ else if(ch==="h"){el(c,cx,py+TS-6,16,4,"rgba(0,0,0,.18)");c.fillStyle="#8a5a2b";for(let i=0;i<3;i++)rr(c,px+3,py+10+i*7,TS-6,5,2),c.fill();c.fillStyle="#4a4f5c";c.fillRect(px+5,py+30,3,8);c.fillRect(px+TS-8,py+30,3,8)}
  else if(ch==="E"||ch==="F"){}
 }
 function objective(m){const p=m;if(!p||!S)return null;const M=S.mission,near=(arr)=>{let b=null,bd=1e9;for(const a of arr){const d=dist(p.x,p.y,a[0],a[1]);if(d<bd){bd=d;b=a}}return b};
- const frag=S.items.find(i=>i.k==="frag");if(frag)return[frag.x,frag.y];if(S.exitOpen)return S.exit;
+ if(M.kind==="hall"){const L=S.frags>=4?5:[1,2,3,4].find(l=>!S.done[l]);const d=S.hallDoors.find(d=>d.to===L);return d?[d.x,d.y]:null}
+ const frag=S.items.find(i=>i.k==="frag");if(frag)return[frag.x,frag.y];if(S.done[S.lvl])return S.exit;
  if(M.kind==="shelves")return p.carry?near(S.shelves.filter(s=>s.c===p.carry.c).map(s=>[s.x,s.y])):near(S.items.filter(i=>i.k==="merch").map(i=>[i.x,i.y]));
  if(M.kind==="pizza")return p.carry?near(S.tables.filter(t=>t.want).map(t=>[t.cx,t.cy])):near(S.ovens);
  if(M.kind==="pastry")return near(S.items.filter(i=>i.k==="pastry").map(i=>[i.x,i.y]));
@@ -776,14 +859,13 @@ function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/100
  const rp=o=>{let r=RP[o.id];if(!r||dist(r.x,r.y,o.x,o.y)>3)r=RP[o.id]={x:o.x,y:o.y};r.x+=(o.x-r.x)*k;r.y+=(o.y-r.y)*k;return r};
  const c=cx;c.setTransform(1,0,0,1,0,0);c.fillStyle="#120c2a";c.fillRect(0,0,cv.width,cv.height);
  const mr=m?rp(m):{x:S.spawn[0],y:S.spawn[1]};
- const padT=1.6,padB=1.4;let camX=S.W<=VWt?(S.W-VWt)/2:cl(mr.x-VWt/2,0,S.W-VWt),camY=cl(mr.y-VHt/2,-padT,S.H-VHt+padB);
+ const padT=1.6,padB=3.2,padR=2.4;let camX=S.W<=VWt?(S.W-VWt)/2:cl(mr.x-VWt/2,-.4,S.W-VWt+padR),camY=cl(mr.y-VHt/2,-padT,S.H-VHt+padB);
  VIEW.camX=camX;VIEW.camY=camY;c.setTransform(scale,0,0,scale,-camX*TS*scale,-camY*TS*scale);
  c.drawImage(SC,0,0,S.W*TS,S.H*TS);
  const x0=Math.max(0,Math.floor(camX)-1),x1=Math.min(S.W,Math.ceil(camX+VWt)+1),y0=Math.max(0,Math.floor(camY)-1),y1=Math.min(S.H,Math.ceil(camY+VHt)+1);
  for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){const ch=S.G[y][x],px=x*TS+TS/2,py=y*TS+TS/2;
-  if(ch==="E"){c.save();c.translate(px,py);const o=S.exitOpen;c.fillStyle="#2b2f3c";rr(c,-19,-19,38,38,4);c.fill();const sl=o?10+Math.sin(t/300)*2:0;
-   c.fillStyle=o?"rgba(160,240,210,.8)":"rgba(170,190,220,.7)";c.fillRect(-17-sl*.0,-17,16-sl,34);c.fillRect(1+sl,-17,16-sl,34);c.fillStyle=o?"#4fe3b5":"#ff5d6c";el(c,0,-15,4,2.4,o?"#4fe3b5":"#ff5d6c");
-   c.font="700 9px Fredoka,system-ui";c.textAlign="center";c.fillStyle="#fff";c.fillText("USCITA",0,22);c.restore()}
+  if(ch==="E")drawDoor(c,px,py,LV[S.lvl].acc,"HALL","",t,y>S.H/2);
+  else if(DOORS[ch]){const L=DOORS[ch];drawDoor(c,px,py,LV[L].acc,"",L===5&&S.frags<4?"lock":S.done[L]?"done":"",t,y>S.H/2)}
   else if(ch==="F"){c.save();c.translate(px,py);drawPrincess(c,t,S.mission.freed);c.restore()}
   else if(ch==="O"){const f=.5+.5*Math.sin(t/120+x);c.fillStyle=`rgba(255,140,40,${.18+.12*f})`;c.beginPath();c.arc(px,py+14,14+f*3,0,7);c.fill()}
   else if(ch==="K"){const b=Math.sin(t/300)*2;c.fillStyle="rgba(79,227,181,.25)";c.beginPath();c.arc(px,py,24+b,0,7);c.fill()}
@@ -809,6 +891,8 @@ function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/100
  FX.dead=FX.dead.filter(d=>now-d.b<450);
  for(const d of FX.dead)list.push({y:d.y,f:()=>{const p=(now-d.b)/450;c.save();c.globalAlpha=1-p;c.translate(d.x*TS,d.y*TS-4-p*10);c.rotate(p*.8*(d.face||1));c.scale(1-p*.4,1-p*.4);DRAW[d.t](c,t,{stun:true});c.restore()}});
  for(const p of S.players){if(p.hidden)continue;const r=rp(p);list.push({y:r.y,f:()=>drawPlayer(c,p,r,t,now)})}
+ for(const q of S.people||[]){const r=rp(q);if(r.x<x0-2||r.x>x1+2||r.y<y0-2||r.y>y1+2)continue;list.push({y:r.y,f:()=>{c.save();c.translate(r.x*TS,r.y*TS-4);c.scale(q.face<0?-1:1,1);drawShopper(c,t+r.x*150,q);c.restore()}})}
+ if(S.fount){const f=S.fount;list.push({y:f[1]+(f[3]-f[1])*.6,f:()=>drawFountain(c,t,f)})}
  const fr=rp({id:"fish",x:S.fish.x,y:S.fish.y});list.push({y:fr.y+.3,f:()=>{c.save();c.translate(fr.x*TS,fr.y*TS+Math.sin(t/400)*3);drawBowl(c,t,S.fish.water,S.fish.pot,S.fish.food<=0||S.fish.water<=0);c.restore();
   const bw=30,by=fr.y*TS-24+Math.sin(t/400)*3;c.fillStyle="rgba(0,0,0,.55)";rr(c,fr.x*TS-bw/2,by,bw,5,2.5);c.fill();c.fillStyle=S.fish.food<25?"#ff5d6c":"#ffb347";rr(c,fr.x*TS-bw/2+1,by+1,(bw-2)*cl(S.fish.food,0,100)/100,3,1.5);c.fill()}});
  list.sort((a,b)=>a.y-b.y).forEach(o=>o.f());
@@ -860,14 +944,37 @@ function drawPoster(el,t){const w=el.clientWidth;if(!w)return;const h=el.clientH
  const c=el.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
  c.fillStyle=rg(c,w/2,h*.6,10,w*.6,"rgba(255,111,174,.35)","rgba(255,111,174,0)");c.fillRect(0,0,w,h);
  const s=Math.min(2.2,h/80);
- c.save();c.translate(w/2-70*s/1.6,h*.62);c.scale(s,s);drawKid(c,t,{hero:0,look:CFG.look,walk:t/150});c.restore();
+ c.save();c.translate(w/2-70*s/1.6,h*.62);c.scale(s,s);drawKid(c,t,{hero:0,look:"boy",walk:t/150});c.restore();
  c.save();c.translate(w/2-20*s/1.6,h*.62);c.scale(-s,s);drawKid(c,t+400,{hero:1,walk:t/150+1});c.restore();
  c.save();c.translate(w/2+70*s/1.6,h*.55);c.scale(s*.9,s*.9);drawPrincess(c,t,true);c.restore();
  c.save();c.translate(w/2+20*s/1.6,h*.32+Math.sin(t/400)*4);c.scale(s*.8,s*.8);drawBowl(c,t,90,null,false);c.restore()}
-function drawPosterLoop(t){if(!$("ovMenu").hidden)drawPoster($("poster"),t);if(!$("ovEnd").hidden)drawPoster($("poster2"),t)}
+function drawPosterLoop(t){if(!$("ovEnd").hidden)drawPoster($("poster2"),t)}
+
+function drawDoor(c,px,py,acc,label,state,t,bottom){const near=S.players.some(p=>!p.hidden&&dist(p.x,p.y,px/TS,py/TS)<1.8),sl=near&&state!=="lock"?11:1;
+ c.save();c.translate(px,py);c.fillStyle="#2b2f3c";rr(c,-20,-20,40,40,4);c.fill();c.fillStyle=acc;c.fillRect(-20,bottom?16:-20,40,4);
+ c.fillStyle="rgba(190,235,255,.85)";c.fillRect(-18,-16,17-sl,32);c.fillRect(1+sl,-16,17-sl,32);c.fillStyle="rgba(255,255,255,.5)";c.fillRect(-15,-14,2,26);c.fillRect(4+sl,-14,2,26);
+ if(near&&state!=="lock"){c.fillStyle="rgba(255,240,170,.25)";c.fillRect(-7,-16,14,32)}
+ if(label){c.font="700 9px Fredoka,system-ui";c.textAlign="center";c.textBaseline="middle";c.fillStyle="#fff";c.fillText(label,0,bottom?-11:11)}
+ if(state==="done"){el(c,12,-12,8,8,"#2fcf98");c.strokeStyle="#fff";c.lineWidth=2.4;c.lineCap="round";c.beginPath();c.moveTo(8,-12);c.lineTo(11,-9);c.lineTo(16,-15);c.stroke()}
+ if(state==="lock"){c.fillStyle="#ffc93c";rr(c,-7,-3,14,11,2);c.fill();c.strokeStyle="#ffc93c";c.lineWidth=2.6;c.beginPath();c.arc(0,-3,4.5,PI,0);c.stroke();el(c,0,2,1.6,1.6,"#3a2300")}
+ c.restore()}
+function drawFountain(c,t,f){const cx=(f[0]+f[2])/2*TS,cy=(f[1]+f[3])/2*TS,rx=(f[2]-f[0])/2*TS,ry=(f[3]-f[1])/2*TS;
+ el(c,cx,cy+ry*.2,rx+6,ry+4,"rgba(0,0,0,.18)");
+ c.beginPath();c.ellipse(cx,cy,rx,ry,0,0,7);c.fillStyle=lg(c,0,cy-ry,0,cy+ry,"#e2dccf","#a39b8d");c.fill();
+ c.beginPath();c.ellipse(cx,cy+3,rx-12,ry-11,0,0,7);c.fillStyle=lg(c,0,cy-ry,0,cy+ry,"#8fe0ff","#2f86d0");c.fill();
+ c.save();c.beginPath();c.ellipse(cx,cy+3,rx-12,ry-11,0,0,7);c.clip();
+ c.strokeStyle="rgba(230,248,255,.65)";c.lineWidth=1.4;for(let i=0;i<4;i++){const p=((t/2200)+i/4)%1;c.globalAlpha=1-p;c.beginPath();c.ellipse(cx,cy+8,20+p*(rx-30),8+p*(ry-24),0,0,7);c.stroke()}c.globalAlpha=1;
+ for(let i=0;i<9;i++){const a=hash(i,3)*PI*2,r=.3+hash(i,7)*.55;el(c,cx+Math.cos(a)*(rx-20)*r,cy+12+Math.sin(a)*(ry-18)*r,2.6,1.6,"rgba(255,215,90,.85)")}c.restore();
+ c.fillStyle=lg(c,cx-10,0,cx+10,0,"#e8e2d6","#b5ad9f");rr(c,cx-9,cy-14,18,26,4);c.fill();el(c,cx,cy-14,16,6,"#d6cfc2");
+ const b=Math.sin(t/500)*2,mx=cx+22,my=cy-40+b;
+ c.save();c.translate(cx,cy-36+b);c.scale(3.6,3.6);c.rotate(-.25);drawFishBody(c,t,"#ff5a2a");c.restore();
+ c.save();c.translate(cx,cy-60+b);c.fillStyle=lg(c,0,-6,0,2,"#ffe58a","#d99a1e");c.beginPath();c.moveTo(-8,2);c.lineTo(-9,-6);c.lineTo(-4,-1);c.lineTo(0,-8);c.lineTo(4,-1);c.lineTo(9,-6);c.lineTo(8,2);c.closePath();c.fill();c.restore();
+ for(let i=0;i<18;i++){const ph=((t/1300)+i/18)%1,s=i%2?1:-1,sp=.6+hash(i,1)*.5;const x=mx-4+s*ph*rx*.7*sp,y=my-Math.sin(ph*PI)*55*sp+ph*ph*40;c.globalAlpha=1-ph*.8;el(c,x,y,2.6,3.4,"#bfeaff");}
+ for(let i=0;i<8;i++){const ph=((t/700)+i/8)%1;c.globalAlpha=1-ph;el(c,mx+Math.sin(i)*3,my-ph*46,2,3,"#e6f7ff")}c.globalAlpha=1;
+ c.fillStyle="#6b6457";rr(c,cx-46,cy+ry-20,92,18,6);c.fill();c.font="700 10.5px Fredoka,system-ui";c.textAlign="center";c.textBaseline="middle";c.fillStyle="#ffe58a";c.fillText("Fontana · salva qui",cx,cy+ry-11)}
 
 /* ---------- audio: musica chiptune anni '80 ed effetti ---------- */
-const AU={ctx:null,on:true,song:null,timer:0,playing:0,noise:null};
+const AU={ctx:null,on:true,song:null,timer:0,playing:-1,noise:null};
 try{AU.on=localStorage.getItem("ppr-audio")!=="off"}catch(e){}
 const mf=m=>440*Math.pow(2,(m-69)/12);
 function auInit(){if(AU.ctx){if(AU.ctx.state==="suspended")AU.ctx.resume();return}
@@ -883,13 +990,14 @@ function nz(dur,vol,dest,t0,type,freq,q){const c=AU.ctx,s=c.createBufferSource()
 /* brani: lead/bassi in MIDI, null = pausa */
 const _=null;
 const SONGS={
+ 0:{dt:.15,bar:16,be:8,lead:[74,_,73,_,71,_,69,_,71,_,_,_,66,_,_,_, 69,_,71,_,73,_,74,_,76,_,_,_,_,_,_,_, 74,_,73,_,71,_,69,_,66,_,_,_,64,_,_,_, 62,_,64,_,66,_,69,_,71,_,_,_,_,_,_,_],bass:[50,47,43,45],dr:"soft",wave:"triangle"},
  1:{dt:.118,bar:16,be:4,lead:[72,_,76,_,79,_,76,_,77,_,76,_,74,_,72,_, 74,_,77,_,81,_,77,_,79,_,77,_,76,_,74,_, 72,_,76,_,79,_,84,_,83,_,79,_,81,_,79,_, 77,_,76,_,74,_,76,_,72,_,_,_,72,_,_,_],bass:[48,50,48,43],dr:"pop"},
  2:{dt:.115,bar:12,be:6,lead:[69,72,76,_,76,74,72,71,69,_,69,_, 71,74,77,_,77,76,74,72,71,_,71,_, 72,76,79,_,79,77,76,74,72,_,76,_, 71,72,74,76,74,72,71,_,69,_,_,_],bass:[45,40,45,40],dr:"tar"},
  3:{dt:.13,bar:16,be:8,lead:[77,_,_,81,84,_,81,_,79,_,_,77,76,_,77,_, 79,_,_,77,76,_,74,_,72,_,_,_,_,_,_,_, 74,_,_,77,81,_,79,_,77,_,_,76,74,_,76,_, 77,_,_,_,72,_,_,_,77,_,_,_,_,_,_,_],bass:[41,36,38,36],dr:"soft",wave:"triangle"},
  4:{dt:.12,bar:16,be:4,lead:[67,_,71,74,_,71,79,_,78,_,74,_,71,_,_,_, 69,_,72,76,_,72,81,_,79,_,76,_,72,_,_,_, 71,_,74,79,_,74,83,_,81,_,79,_,78,_,76,_, 74,_,79,_,78,_,76,_,74,_,_,_,67,_,_,_],bass:[43,45,40,38],dr:"pop"},
  5:{dt:.14,bar:16,be:8,lead:[74,_,_,75,74,_,72,_,69,_,_,_,67,_,69,_, 72,_,_,69,67,_,63,_,62,_,_,_,_,_,_,_, 74,_,75,_,79,_,_,75,74,_,72,_,69,_,_,_, 67,_,69,_,72,_,69,67,63,_,_,_,62,_,_,_],bass:[38,38,36,38],dr:"taiko"}};
 function musicStart(l){musicStop();if(!AU.ctx||!SONGS[l])return;AU.song={M:SONGS[l],step:0,next:AU.ctx.currentTime+.08};AU.playing=l;AU.timer=setInterval(musTick,40)}
-function musicStop(){clearInterval(AU.timer);AU.timer=0;AU.song=null;AU.playing=0}
+function musicStop(){clearInterval(AU.timer);AU.timer=0;AU.song=null;AU.playing=-1}
 function musTick(){const s=AU.song,c=AU.ctx;if(!s||!c)return;if(c.currentTime-s.next>.5)s.next=c.currentTime+.05;
  while(s.next<c.currentTime+.18){const M=s.M,i=s.step%M.lead.length,bi=i%M.bar,bar=Math.floor(i/M.bar),t=s.next;
   const n=M.lead[i];if(n)tone(mf(n),M.dt*1.7,M.wave||"square",.11,AU.mus,t);
@@ -928,6 +1036,9 @@ function sfx(n,vol){if(!AU.ctx||!AU.on)return;const now=AU.ctx.currentTime;if(sf
  case"mission":[67,72,76,79,76,79,84].forEach((m,i)=>tone(mf(m),.14,"square",.12*v,F,t+i*.09));break;
  case"level":[72,_,72,74,76,_,79,_,84].forEach((m,i)=>m&&tone(mf(m),.16,"square",.13*v,F,t+i*.1));break;
  case"alarm":for(let i=0;i<4;i++)tone(i%2?660:880,.12,"square",.1*v,F,t+i*.13);break;
+ case"door":tone(660,.07,"square",.1*v,F,t);tone(990,.1,"square",.1*v,F,t+.07);nz(.2,.08*v,F,t,"bandpass",3000,.5);break;
+ case"bump":tone(300,.08,"triangle",.25*v,F,t,200);break;
+ case"save":[60,67,72,76,79].forEach((m,i)=>tone(mf(m),.16,"triangle",.28*v,F,t+i*.08));nz(.5,.08,F,t,"highpass",4000);break;
  case"win":[72,76,79,84,79,84,88,91].forEach((m,i)=>tone(mf(m),.22,"square",.14*v,F,t+i*.14));break;
  case"over":[64,60,57,52,48].forEach((m,i)=>tone(mf(m),.3,"triangle",.25*v,F,t+i*.22));break;
  }}
@@ -939,100 +1050,114 @@ const SPK_ON='<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#ff
 function muteIcons(){$("bMute").innerHTML=AU.on?SPK_ON:SPK_OFF;$("bMute2").textContent=AU.on?"Spegni musica e suoni":"Accendi musica e suoni"}
 
 /* ---------- interfaccia ---------- */
-let CFG={mode:"solo",look:"boy",solo:0},uiT=0,lastPhase=null,shopMode=null,shopSig="",OUTEV=[],dc=null,pc=null,GRID=null,lastGv=-1,netLost=false;
+let CFG={mode:"solo",solo:0,cont:null},uiT=0,lastPhase=null,shopMode=null,shopSig="",OUTEV=[],dc=null,pc=null,GRID=null,lastGv=-1,netLost=false;
 const myIdx=()=>S&&S.mode==="hot"?S.active:(role==="guest"?1:0);
 function names(){return[($("n1").value.trim()||"Tommy").slice(0,14),($("n2").value.trim()||"Viola").slice(0,14)]}
 const flyerHTML=n=>[1,2,3,4].map(i=>`<i class="${i<=n?"got":""}">${i<=n?"SUSHI":i}</i>`).join("");
 function hide(...ids){ids.forEach(i=>$(i).hidden=true)}
 function onPhase(ph){
- hide("ovIntro","ovTurn","ovEnd","ovDone");if(ph!=="play"&&shopMode)closeShop();if(ph!=="play"&&!$("ovStat").hidden)closeStat();
- const G=role==="guest",host=S.players[0].name;
- if(ph==="intro"){const L=LV[S.lvl];$("inT").textContent=`Livello ${S.lvl}: ${L.name}`;$("inP").textContent=L.intro;$("inF").innerHTML=flyerHTML(S.frags);
-  $("bGo").disabled=G;$("bGo").textContent=G?`Aspetta ${host}…`:"Via!";$("inH").textContent=S.mode==="hot"?`Inizia ${S.players[S.active].name}. Ogni turno dura 75 secondi.`:S.lvl===1?"La freccia gialla indica sempre dove andare. Tocca la boccia del pesce per vedere come sta.":"";
-  $("ovIntro").hidden=false;if(!G&&S.mode!=="coop")save()}
- else if(ph==="between"){$("dnT").textContent=`${LV[S.lvl].name} completato!`;$("dnP").textContent=S.frags<4?`Avete il pezzo ${S.frags} di 4 del volantino del ristorante sushi. Avanti verso il prossimo negozio!`:"Il volantino è completo: il ristorante Sushi Samurai vi aspetta!";
-  $("dnF").innerHTML=flyerHTML(S.frags);$("bNext").textContent=G?`Aspetta ${host}…`:`Vai al livello ${S.lvl+1}`;$("bNext").disabled=G;$("ovDone").hidden=false}
- else if(ph==="turn"){const n=S.players[1-S.active];$("tuT").textContent="Tempo scaduto!";$("tuP").textContent=`Passa il telefono a ${n.name}. Riparte dal punto in cui eri, con le stesse monete e lo stesso pesce.`;$("bTurn").textContent=`Sono ${n.name}, pronto/a!`;$("ovTurn").hidden=false;sfx("stepup")}
- else if(ph==="over"){sfx("over");$("enT").textContent="Vite finite!";$("enP").textContent=`Il Cuoco del Sushi ride sotto i baffi... ma non è finita: potete riprovare il livello ${S.lvl} con le monete e gli oggetti che avete.`;
-  $("bEnd").textContent=G?"In attesa…":"Riprova il livello";$("bEnd").disabled=G;$("enH").textContent="";$("ovEnd").hidden=false}
+ hide("ovTurn","ovEnd");if(ph!=="play"){if(shopMode)closeShop();if(!$("ovStat").hidden)closeStat();if(!$("ovSave").hidden)closeSave()}
+ const G=role==="guest";
+ if(ph==="turn"){const n=S.players[1-S.active];$("tuT").textContent="Tempo scaduto!";$("tuP").textContent=`Passa il telefono a ${n.name}. Riparte dal punto in cui eri, con le stesse monete e lo stesso pesce.`;$("bTurn").textContent=`Sono ${n.name}, pronto/a!`;$("ovTurn").hidden=false;sfx("stepup")}
+ else if(ph==="over"){sfx("over");$("enT").textContent="Vite finite!";$("enP").textContent=`Il Cuoco del Sushi ride sotto i baffi... ma non è finita: ripartite da ${S.lvl?LV[S.lvl].name:"la hall"} con 3 vite nuove, la missione resta a dove eravate arrivati.`;
+  $("bEnd").textContent=G?"In attesa…":"Riprova";$("bEnd").disabled=G;$("enH").textContent="";$("ovEnd").hidden=false}
  else if(ph==="win"){sfx("win");const mm=Math.floor(S.time/60),ss=String(Math.floor(S.time%60)).padStart(2,"0");$("enT").textContent="Principessa liberata!";
   $("enP").textContent=`${S.players.map(p=>p.name).join(" e ")} ${S.players.length>1?"hanno":"ha"} sconfitto il Cuoco del Sushi e salvato la principessa dei pesci rossi! Mostri sconfitti: ${S.kills} · monete rimaste: ${S.coins} · tempo di gioco: ${mm}:${ss}.`;
-  $("bEnd").textContent="Gioca ancora";$("bEnd").disabled=false;$("enH").textContent="Il pesce rosso vi ringrazia con mille bollicine.";$("ovEnd").hidden=false;try{localStorage.removeItem("ppr-save")}catch(e){}}
+  $("bEnd").textContent="Gioca ancora";$("bEnd").disabled=false;$("enH").textContent="Il pesce rosso vi ringrazia con mille bollicine.";$("ovEnd").hidden=false}
 }
-function missionText(){const m=S.mission,p=meP();if(S.items.some(i=>i.k==="frag"))return"Missione compiuta: prendi il pezzo del volantino!";if(S.exitOpen)return"Corri verso la porta USCITA";
+function missionText(){const m=S.mission,p=meP();
+ if(m.kind==="hall"){const left=[1,2,3,4].filter(l=>!S.done[l]).map(l=>LV[l].name);return S.frags>=4?"Volantino completo: entrate nel Sushi Samurai!":`Negozi da completare: ${left.join(", ")}`}
+ if(S.items.some(i=>i.k==="frag"))return"Missione compiuta: prendi il pezzo del volantino!";if(S.done[S.lvl])return"Missione completata · uscite dalla porta HALL";
  switch(m.kind){case"shelves":return`Riordina gli scaffali ${m.n}/${m.need}${p&&p.carry?" · portalo allo scaffale del suo colore":""}`;
  case"pizza":return`Pizze servite ${m.n}/${m.need}${p&&p.carry?" · portala a un tavolo col fumetto":""}`;
  case"pastry":return`Pasticcini ${Math.min(m.n,m.need)}/${m.need}`;
  case"cats":return`Gatti scacciati ${Math.min(m.cats,m.catNeed)}/${m.catNeed} · Kit ${m.kit?"comprato":"da comprare alla cassa"}`;
  case"boss":return m.boss?"Libera la principessa nella gabbia!":(()=>{const b=S.enemies.find(e=>e.t==="B");return b?`Sconfiggi il Cuoco del Sushi · energia ${Math.max(0,Math.ceil(b.hp/b.max*100))}%`:"Trova il Cuoco del Sushi"})()}return""}
 const WNAME=["Asciugamano","Saponette","Chewing-gum"];
-let shopLock=false;
+let shopLock=false,saveLock=false;
 function syncUI(){
  if(S&&S.phase!==lastPhase){lastPhase=S.phase;onPhase(S.phase)}
  updateInput();
- if(AU.ctx){const want=S&&S.phase==="play"?S.lvl:0;if(want!==AU.playing){if(want)musicStart(want);else musicStop()}}
+ if(AU.ctx){const want=S&&S.phase==="play"?S.lvl:-1;if(want!==AU.playing){if(want>=0)musicStart(want);else musicStop()}}
+ drawMenuHeroes();
  const now=performance.now();if(now-uiT<120)return;uiT=now;if(!S)return;
  const p=meP();
- $("lvl").textContent=`Livello ${S.lvl}/5 · ${LV[S.lvl].name} — ${missionText()}${netLost?" · collegamento perso!":""}`;
+ $("lvl").textContent=`${S.lvl?`Negozio ${S.lvl}/5 · `:""}${LV[S.lvl].name} — ${missionText()}${netLost?" · collegamento perso!":""}`;
  $("hud").innerHTML=S.players.map(q=>`<b class="${S.mode==="hot"&&q.i===S.active?"on":""}">${esc(q.name)}${q.down?" (KO)":""}</b>`).join(" · ")+
   ` <span style="color:#ff8cc0">♥ ${S.lives}</span> <span style="color:#ffc93c">● ${S.coins}</span> <span style="color:#c9c2ff">volantino ${S.frags}/4</span>`+(S.mode==="hot"?` <span>turno ${Math.max(0,Math.ceil(S.turnT))}s</span>`:"");
  if(p)document.querySelectorAll(".wb").forEach(b=>{const i=+b.dataset.w,am=i===1?S.ammo.soap:i===2?S.ammo.gum:-1;b.classList.toggle("sel",p.w===i);b.classList.toggle("empty",am===0);b.querySelector("small").textContent=am<0?"∞":am});
- if(p&&S.phase==="play"){if(!(p.kT>0))shopLock=false;else if(p.kT>.45&&!shopLock&&!shopMode&&$("ovStat").hidden&&$("ovHelp").hidden&&!p.down){shopLock=true;openShop()}}
+ const free=!shopMode&&$("ovStat").hidden&&$("ovHelp").hidden&&$("ovSave").hidden;
+ if(p&&S.phase==="play"){
+  if(!(p.kT>0))shopLock=false;else if(p.kT>.45&&!shopLock&&free&&!p.down){shopLock=true;openShop()}
+  if(!(p.fT>0))saveLock=false;else if(p.fT>.5&&!saveLock&&free&&!p.down){saveLock=true;openSave()}}
  if(shopMode){const sig=[S.coins,S.ammo.soap,S.ammo.gum,S.lives,JSON.stringify(S.up),S.mission.kit,S.fish.pot,p&&p.hp|0].join();if(sig!==shopSig)renderShop()}
  if(!$("ovStat").hidden)renderStat();
 }
 /* pausa / sicurezza mentre una finestra è aperta */
 function setSafe(v){if(!S)return;if(S.mode==="coop"){if(role==="guest")send({t:"shop",v});else S.players[0].shop=v}else S.paused=v}
-function openShop(){shopMode="kiosk";shopSig="";renderShop();$("ovShop").hidden=false;setSafe(true);sfx("buy",.4)}
+let shopCat=null;
+function openShop(){shopMode="kiosk";shopSig="";shopCat=S.lvl===4&&!S.mission.kit?"spe":null;renderShop();$("ovShop").hidden=false;setSafe(true);sfx("buy",.4)}
 function closeShop(){if(!shopMode)return;shopMode=null;$("ovShop").hidden=true;setSafe(false)}
 function renderShop(){if(!S)return;const p=meP(),G=role==="guest";
  shopSig=[S.coins,S.ammo.soap,S.ammo.gum,S.lives,JSON.stringify(S.up),S.mission.kit,S.fish.pot,p&&p.hp|0].join();
- $("shT").textContent="Tutto a Tutti Pure i Tetti";
- $("shP").textContent="Potenzia le armi e fai scorta con le monete. Mentre sei alla cassa i mostri non ti toccano.";$("shF").hidden=true;
  $("shW").innerHTML=[`Monete ${S.coins}`,`Saponette ${S.ammo.soap}`,`Chewing-gum ${S.ammo.gum}`,`Vite ${S.lives}`,p?`Energia ${Math.ceil(p.hp)}`:""].filter(Boolean).map(s=>`<span>${s}</span>`).join("");
- $("shG").innerHTML=SHOP.filter(it=>!it.only||it.only===S.lvl).map(it=>{const own=(it.up&&S.up[it.id])||(it.id==="kit"&&S.mission.kit);return`<div class="it${own?" own":""}"><canvas data-i="${it.icon}" width="80" height="80"></canvas><div><b>${esc(it.name)}</b><small>${esc(it.desc)}</small></div><button data-b="${it.id}" ${own||S.coins<it.price?"disabled":""}>${own?"Già vostro":it.price+" monete"}</button></div>`}).join("");
- $("shG").querySelectorAll("canvas").forEach(cn=>{const c=cn.getContext("2d");c.setTransform(2,0,0,2,20,20);c.scale(1.3,1.3);drawIcon(c,cn.dataset.i,0)});
+ const cats=CAT.filter(c=>!c.only||c.only===S.lvl);
+ $("shC").innerHTML=cats.map(c=>`<button class="shelf${shopCat===c.id?" sel":""}" data-c="${c.id}"><canvas data-i="${c.icon}" width="80" height="80"></canvas>${esc(c.name)}</button>`).join("");
+ const cat=cats.find(c=>c.id===shopCat);
+ $("shG").innerHTML=cat?cat.ids.map(id=>SHOP.find(s=>s.id===id)).filter(Boolean).map(it=>{const own=(it.up&&S.up[it.id])||(it.id==="kit"&&S.mission.kit);return`<div class="it${own?" own":""}"><canvas data-i="${it.icon}" width="80" height="80"></canvas><div><b>${esc(it.name)}</b><small>${esc(it.desc)}</small></div><button data-b="${it.id}" ${own||S.coins<it.price?"disabled":""}>${own?"Già vostro":it.price+" monete"}</button></div>`}).join(""):"";
+ document.querySelectorAll("#shC canvas,#shG canvas").forEach(cn=>{const c=cn.getContext("2d");c.setTransform(2,0,0,2,20,20);c.scale(1.3,1.3);drawIcon(c,cn.dataset.i,0)});
+ $("shC").querySelectorAll("button").forEach(b=>b.onclick=()=>{shopCat=shopCat===b.dataset.c?null:b.dataset.c;renderShop()});
  $("shG").querySelectorAll("button").forEach(b=>b.onclick=()=>{if(G)send({t:"buy",id:b.dataset.b});else{buy(b.dataset.b,myIdx());const q=EVQ;EVQ=[];q.forEach(playFx);if(role==="host")OUTEV.push(...q)}renderShop()});
- $("bShopX").textContent="Torna a giocare";$("bShopX").disabled=false;
- $("shH").textContent=S.lvl===4&&!S.mission.kit?"Missione: compra il Kit del Pesce Rosso!":""}
+ $("shH").textContent=!cat?"Scegli uno scaffale per vedere i prodotti.":S.lvl===4&&!S.mission.kit?"Missione: compra il Kit del Pesce Rosso!":""}
 function renderStat(){if(!S)return;const f=S.fish,bar=(v,col)=>`<div class="sb"><i style="width:${cl(v,0,100)}%;background:${col}"></i></div>`,wq=f.water>66?"pulita":f.water>33?"da cambiare":"sporca";
  let h=`<h3>Pesce rosso</h3><div class="sr"><span>Cibo</span>${bar(f.food,"linear-gradient(90deg,#ff9a2e,#ffd36b)")}<span>${Math.ceil(f.food)}%</span></div><div class="sr"><span>Acqua ${wq}</span>${bar(f.water,waterCol(f.water))}<span>${Math.ceil(f.water)}%</span></div>`+
   `<div class="tags"><span>${f.pot?"Pozione "+POT[f.pot].name+" · "+Math.ceil(f.potT)+" s":"Nessuna pozione attiva"}</span><span>${f.food<=0||f.water<=0?"Sta male: non spruzza":f.food<25||f.water<25?"Affaticato: spruzza piano":"In forma: spruzza acqua"}</span></div>`;
  for(const q of S.players)h+=`<h3>${esc(q.name)}${S.mode==="hot"&&q.i===S.active?" (di turno)":""}</h3><div class="sr"><span>Energia</span>${bar(q.hp/q.max*100,"linear-gradient(90deg,#4fe3b5,#9dfbd8)")}<span>${q.down?"KO":Math.ceil(q.hp)}</span></div><div class="tags"><span>Arma: ${WNAME[q.w]}</span>${q.carry?`<span>Sta portando ${q.carry.k==="pizza"?"una pizza":"un vestito"}</span>`:""}</div>`;
  const ups=SHOP.filter(i=>i.up&&S.up[i.id]).map(i=>i.name);
  h+=`<h3>Squadra</h3><div class="tags"><span>Vite ${S.lives}</span><span>Monete ${S.coins}</span><span>Volantino ${S.frags}/4</span><span>Saponette ${S.ammo.soap}</span><span>Chewing-gum ${S.ammo.gum}</span><span>Mostri sconfitti ${S.kills}</span><span>${ups.length?"Potenziamenti: "+ups.join(", "):"Nessun potenziamento"}</span></div>`+
-  `<h3>Missione</h3><p>Livello ${S.lvl}/5 · ${esc(LV[S.lvl].name)}: ${esc(missionText())}</p>`;
+  `<h3>Negozi</h3><div class="tags">${[1,2,3,4,5].map(l=>`<span>${S.done[l]?"✓ ":""}${esc(LV[l].name)}</span>`).join("")}</div><h3>Adesso</h3><p>${esc(LV[S.lvl].name)}: ${esc(missionText())}</p>`;
  if($("stB").innerHTML!==h)$("stB").innerHTML=h}
 function openStat(){if(!S||S.phase!=="play")return;renderStat();$("ovStat").hidden=false;setSafe(true)}
 function closeStat(){$("ovStat").hidden=true;setSafe(false)}
-$("bShopX").onclick=closeShop;$("bStatX").onclick=closeStat;$("ovStat").addEventListener("click",e=>{if(e.target.id==="ovStat")closeStat()});
+/* ---------- salvataggio alla fontana ---------- */
+function openSave(){const G=role==="guest",sv=loadSave();
+ $("svW").innerHTML=[`Monete ${S.coins}`,`Vite ${S.lives}`,`Negozi completati ${[1,2,3,4].filter(l=>S.done[l]).length}/4`,`Mostri sconfitti ${S.kills}`].map(s=>`<span>${s}</span>`).join("");$("svF").innerHTML=flyerHTML(S.frags);
+ $("bSave").disabled=G;$("bSave").textContent=G?"Salva chi ha creato la partita":"Salva la partita";
+ $("svH").textContent=sv&&sv.when?`Ultimo salvataggio: ${new Date(sv.when).toLocaleString("it-IT",{dateStyle:"short",timeStyle:"short"})}`:"Nessun salvataggio precedente.";
+ $("ovSave").hidden=false;setSafe(true);sfx("spray")}
+function closeSave(){$("ovSave").hidden=true;setSafe(false)}
+function save(){try{const s=JSON.parse(JSON.stringify(S));s.phase="play";s.paused=false;s.players.forEach(p=>p.shop=false);s.proj=[];localStorage.setItem("ppr-save2",JSON.stringify({when:Date.now(),S:s}));return true}catch(e){return false}}
+function loadSave(){try{return JSON.parse(localStorage.getItem("ppr-save2"))}catch(e){return null}}
+$("bSave").onclick=()=>{if(role==="guest")return;const ok=save();sfx(ok?"save":"empty");$("svH").textContent=ok?"Partita salvata! Dal menu potrai ripartire con Continua.":"Non è stato possibile salvare su questo dispositivo.";$("bSave").textContent=ok?"Salvata ✓":"Riprova"};
+$("bSaveX").onclick=closeSave;$("bShopX").onclick=closeShop;$("bStatX").onclick=closeStat;
+for(const id of["ovStat","ovSave","ovShop"])$(id).addEventListener("click",e=>{if(e.target.id===id)(id==="ovStat"?closeStat:id==="ovSave"?closeSave:closeShop)()});
 $("bMute").onclick=()=>{auInit();auToggle()};$("bMute2").onclick=()=>{auInit();auToggle()};
-$("bNext").onclick=()=>{if(role!=="guest"&&S&&S.phase==="between")nextLevel()};
-$("bGo").onclick=()=>{auInit();if(role!=="guest"&&S&&S.phase==="intro")S.phase="play"};
 $("bTurn").onclick=()=>{if(S&&S.phase==="turn")switchTurn()};
-$("bEnd").onclick=()=>{if(!S)return;if(S.phase==="win")toMenu();else if(S.phase==="over"&&role!=="guest"){S.lives=3;loadLevel(S.lvl)}};
+$("bEnd").onclick=()=>{if(!S)return;if(S.phase==="win")toMenu();else if(S.phase==="over"&&role!=="guest")retryArea()};
 $("bMenu").onclick=toMenu;
-function toMenu(){closePeer();role=null;S=null;lastPhase=null;shopMode=null;musicStop();hide("ovEnd","ovShop","ovIntro","ovTurn","ovNet","ovDone","ovStat");$("ovMenu").hidden=false;refreshMenu()}
-
-/* ---------- salvataggio ---------- */
-function save(){try{localStorage.setItem("ppr-save",JSON.stringify({lvl:S.lvl,coins:S.coins,lives:Math.max(S.lives,1),frags:S.frags,ammo:S.ammo,up:S.up,food:S.fish.food,water:S.fish.water,cfg:S.cfg}))}catch(e){}}
-function loadSave(){try{return JSON.parse(localStorage.getItem("ppr-save"))}catch(e){return null}}
+function toMenu(){closePeer();role=null;S=null;lastPhase=null;shopMode=null;musicStop();hide("ovEnd","ovShop","ovTurn","ovNet","ovStat","ovSave");$("ovMenu").hidden=false;refreshMenu()}
 
 /* ---------- menu ---------- */
-function refreshMenu(){document.querySelectorAll("#modes .mode").forEach(b=>b.classList.toggle("sel",b.dataset.m===CFG.mode));
- document.querySelectorAll("#look button").forEach(b=>b.classList.toggle("sel",b.dataset.l===CFG.look));
- document.querySelectorAll("#soloPick button").forEach(b=>b.classList.toggle("sel",+b.dataset.h===CFG.solo));
- $("soloPick").hidden=CFG.mode!=="solo";
- $("menuHint").textContent=CFG.mode==="coop"?"Chi crea la partita gioca con la felpa, chi si unisce con i capelli viola.":CFG.mode==="hot"?"Si comincia con l'eroe con la felpa.":"";
- const sv=loadSave();$("bCont").hidden=!sv||CFG.mode==="coop";if(sv)$("bCont").textContent=`Continua dal livello ${sv.lvl}`}
-document.querySelectorAll("#modes .mode").forEach(b=>b.onclick=()=>{CFG.mode=b.dataset.m;refreshMenu()});
-document.querySelectorAll("#look button").forEach(b=>b.onclick=()=>{CFG.look=b.dataset.l;refreshMenu()});
-document.querySelectorAll("#soloPick button").forEach(b=>b.onclick=()=>{CFG.solo=+b.dataset.h;refreshMenu()});
-function startLocal(from){role=null;lastPhase=null;const cfg={mode:CFG.mode,names:names(),look:CFG.look,solo:CFG.solo};
- if(from&&from.cfg){Object.assign(cfg,from.cfg,{mode:CFG.mode,names:names(),look:CFG.look})}newRun(cfg,from);$("ovMenu").hidden=true}
-$("bPlay").onclick=()=>{if(CFG.mode==="coop"){$("ovMenu").hidden=true;openNet("host")}else startLocal()};
-$("bCont").onclick=()=>{const sv=loadSave();if(sv)startLocal(sv)};
-const openHelp=()=>{$("ovHelp").hidden=false;if(S&&S.phase==="play")setSafe(true)},closeHelp=()=>{$("ovHelp").hidden=true;if(S&&S.phase==="play"&&!shopMode&&$("ovStat").hidden)setSafe(false)};
+function refreshMenu(){document.querySelectorAll("#modes button").forEach(b=>b.classList.toggle("sel",b.dataset.m===CFG.mode));
+ document.querySelectorAll(".hero").forEach(h=>h.classList.toggle("sel",CFG.mode==="hot"||+h.dataset.h===CFG.solo));
+ $("menuSub").textContent=CFG.mode==="hot"?"Scrivete i vostri nomi: tocca il personaggio che comincia":"Tocca il tuo personaggio e scrivi il nome";
+ $("menuHint").textContent=CFG.mode==="coop"?"Scegli il tuo personaggio: chi si unisce userà l'altro. Servono due telefoni sulla stessa Wi-Fi.":CFG.mode==="hot"?`Comincia ${names()[CFG.solo]}; ogni turno dura 75 secondi.`:"";
+ const sv=loadSave();$("bCont").hidden=!sv;if(sv)$("bCont").textContent="Continua"}
+document.querySelectorAll("#modes button").forEach(b=>b.onclick=()=>{CFG.mode=b.dataset.m;refreshMenu()});
+document.querySelectorAll(".hero").forEach(h=>{const pick=()=>{CFG.solo=+h.dataset.h;refreshMenu()};h.addEventListener("click",e=>{if(e.target.tagName!=="INPUT")pick()});h.querySelector("input").addEventListener("focus",pick);h.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target===h)pick()})});
+function drawMenuHeroes(){if($("ovMenu").hidden)return;const t=performance.now();for(const i of[0,1]){const el=$("hc"+i),w=el.clientWidth,h=el.clientHeight;if(!w)continue;
+ const px=Math.round(w*dpr),py=Math.round(h*dpr);if(el.width!==px||el.height!==py){el.width=px;el.height=py}const c=el.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+ const sel=CFG.mode==="hot"||CFG.solo===i,s=Math.min(h/62,w/46);c.save();c.translate(w/2,h*.6);c.scale(s*(i?-1:1),s);drawKid(c,t+i*400,{hero:i,look:"boy",walk:sel?t/140:0});c.restore();
+ if(sel){c.save();c.translate(w/2+(i?-1:1)*w*.32,h*.28+Math.sin(t/400)*3);c.scale(s*.55,s*.55);drawBowl(c,t,95,null,false);c.restore()}}}
+function startLocal(){role=null;lastPhase=null;newRun({mode:CFG.mode,names:names(),solo:CFG.solo});$("ovMenu").hidden=true}
+function restoreGame(sv,mode){const s=sv.S;S=s;S.phase="play";S.paused=false;S.gv=(S.gv||0)+1;S.proj=[];if(!S.seen)S.seen={};
+ for(const k in S.shops)if(!S.shops[k].G)S.shops[k].G=baseGrid(+k);if(!S.G)S.G=baseGrid(S.lvl);
+ if(mode&&mode!==S.mode){if(mode==="solo"){S.players=[S.players[0]];S.players[0].hidden=false;S.active=0}else if(S.players.length===1){const a=S.players[0],h=1-a.hero;S.players.push({...a,id:"p1",i:1,hero:h,name:names()[h],hidden:mode==="hot",carry:null})}S.mode=mode;S.cfg.mode=mode}
+ if(S.mode==="hot")S.players.forEach((p,i)=>p.hidden=i!==S.active);else S.players.forEach(p=>p.hidden=false);
+ S.players.forEach(p=>{p.shop=false;p.doorLock=true});lastPhase=null;shopMode=null;saveLock=true;shopLock=true}
+$("bPlay").onclick=()=>{auInit();if(CFG.mode==="coop"){CFG.cont=null;$("ovMenu").hidden=true;openNet("host")}else startLocal()};
+$("bCont").onclick=()=>{auInit();const sv=loadSave();if(!sv)return;if(CFG.mode==="coop"){CFG.cont=sv;$("ovMenu").hidden=true;openNet("host")}else{role=null;restoreGame(sv,CFG.mode);$("ovMenu").hidden=true;showToast("Partita ripresa dall'ultimo salvataggio")}};
+const openHelp=()=>{$("ovHelp").hidden=false;if(S&&S.phase==="play")setSafe(true)},closeHelp=()=>{$("ovHelp").hidden=true;if(S&&S.phase==="play"&&!shopMode&&$("ovStat").hidden&&$("ovSave").hidden)setSafe(false)};
 $("bHelp").onclick=$("bHelp2").onclick=openHelp;$("bHelpOk").onclick=closeHelp;$("ovHelp").addEventListener("click",e=>{if(e.target.id==="ovHelp")closeHelp()});
 
 /* ---------- comandi ---------- */
@@ -1051,9 +1176,9 @@ document.querySelectorAll(".wb").forEach(b=>{const i=+b.dataset.w;
  const up=e=>{if(e.pointerId!==wPtr)return;atkBtn=false;wPtr=null;b.classList.remove("on")};b.addEventListener("pointerup",up);b.addEventListener("pointercancel",up);
  b.addEventListener("contextmenu",e=>e.preventDefault())});
 function wIcons(){const ids=["towel","soap","gum"];document.querySelectorAll(".wb canvas").forEach((cn,i)=>{const c=cn.getContext("2d");c.clearRect(0,0,88,88);c.setTransform(2.6,0,0,2.6,44,44);drawIcon(c,ids[i],0)})}
-const anyOpen=()=>["ovShop","ovMenu","ovIntro","ovHelp","ovStat","ovTurn","ovDone","ovEnd","ovNet"].some(i=>!$(i).hidden);
+const anyOpen=()=>["ovShop","ovMenu","ovHelp","ovStat","ovSave","ovTurn","ovEnd","ovNet"].some(i=>!$(i).hidden);
 addEventListener("keydown",e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return;auInit();
- if(e.key==="Escape"||e.code==="KeyP"){if(!$("ovHelp").hidden)closeHelp();else if(!$("ovStat").hidden)closeStat();else if(shopMode)closeShop();else if(S&&S.phase==="play")openHelp();return}
+ if(e.key==="Escape"||e.code==="KeyP"){if(!$("ovHelp").hidden)closeHelp();else if(!$("ovStat").hidden)closeStat();else if(!$("ovSave").hidden)closeSave();else if(shopMode)closeShop();else if(S&&S.phase==="play")openHelp();return}
  if(anyOpen())return;
  KEY[e.code]=1;if(e.code==="Space"||e.code==="KeyJ"){atkKey=true;e.preventDefault()}
  else if(e.code==="Digit1"||e.code==="Digit2"||e.code==="Digit3")IN[0].wsel=+e.code.slice(5)-1;
@@ -1072,7 +1197,7 @@ function updateInput(){const kx=(KEY.ArrowRight||KEY.KeyD?1:0)-(KEY.ArrowLeft||K
 const ICE={iceServers:[{urls:"stun:stun.l.google.com:19302"}]};
 function send(o){if(dc&&dc.readyState==="open")try{dc.send(JSON.stringify(o))}catch(e){}}
 function sendSnap(){if(!dc||dc.readyState!=="open"||!S)return;if(lastGv!==S.gv){lastGv=S.gv;send({t:"grid",G:S.G,gv:S.gv})}
- const s=JSON.stringify({t:"snap",ev:OUTEV,s:S},(k,v)=>k==="G"?undefined:v);OUTEV=[];try{dc.send(s)}catch(e){}}
+ const s=JSON.stringify({t:"snap",ev:OUTEV,s:S},(k,v)=>k==="G"||k==="shops"?undefined:v);OUTEV=[];try{dc.send(s)}catch(e){}}
 function b64e(u8){let s="";for(let i=0;i<u8.length;i+=8192)s+=String.fromCharCode.apply(null,u8.subarray(i,i+8192));return btoa(s)}
 function b64d(s){const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
 async function pack(o){const s=JSON.stringify({type:o.type,sdp:o.sdp});
@@ -1083,11 +1208,12 @@ function waitIce(p){return new Promise(r=>{if(p.iceGatheringState==="complete")r
 function netStatus(t,cls){const e=$("netS");e.textContent=t;e.className="status "+(cls||"")}
 function closePeer(){try{dc&&dc.close()}catch(e){}try{pc&&pc.close()}catch(e){}dc=null;pc=null;netLost=false}
 function wirePc(){pc.onconnectionstatechange=()=>{const s=pc&&pc.connectionState;if(s==="failed"){netStatus("Collegamento non riuscito: controllate la stessa rete Wi-Fi e riprovate.","bad");if(S)netLost=true}else if(s==="disconnected"&&S)netLost=true}}
-function wireDc(){dc.onopen=()=>{netLost=false;netStatus("Collegati!","good");if(role==="guest")send({t:"hello",name:names()[1]})};
+function wireDc(){dc.onopen=()=>{netLost=false;netStatus("Collegati!","good");if(role==="guest")send({t:"hello",name:names()[CFG.solo],hero:CFG.solo})};
  dc.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(_){return}onMsg(m)};dc.onclose=()=>{if(S){netLost=true;showToast("Collegamento perso con l'altro telefono")}}}
 function onMsg(m){
  if(role==="host"){
-  if(m.t==="hello"){const nm=names();nm[1]=String(m.name||"Viola").slice(0,14);lastPhase=null;newRun({mode:"coop",names:nm,look:CFG.look,solo:0});lastGv=-1;hide("ovNet","ovMenu")}
+  if(m.t==="hello"){const nm=names(),gh=1-CFG.solo;nm[gh]=String(m.name||nm[gh]).slice(0,14);lastPhase=null;
+   if(CFG.cont){restoreGame(CFG.cont,"coop");const g=S.players[1];if(g){g.name=nm[g.hero];g.hidden=false}CFG.cont=null}else newRun({mode:"coop",names:nm,solo:CFG.solo});lastGv=-1;hide("ovNet","ovMenu")}
   else if(m.t==="in"&&S){IN[1].mx=cl(+m.mx||0,-1,1);IN[1].my=cl(+m.my||0,-1,1);IN[1].atk=!!m.atk;IN[1].wsel=cl(m.wsel|0,0,2)}
   else if(m.t==="buy"&&S&&typeof m.id==="string")buy(m.id,1);
   else if(m.t==="shop"&&S&&S.players[1])S.players[1].shop=!!m.v}
