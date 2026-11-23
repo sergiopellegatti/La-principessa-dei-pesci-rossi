@@ -218,7 +218,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <li>Fermatevi davanti alla <b>fontana</b> per salvare la partita.</li>
     <li><b>Carrelli e pensilina</b> (solo nella hall): se sconfiggete il <b>bambino nel carrello</b> della hall non lascia monete ma il suo carrello. Il carrello si aggancia da solo passandoci vicino e vi segue; riportatelo alla <b>pensilina dei carrelli</b> in basso al centro per avere le ricompense (monete, punti, pappa e acqua per il pesce).</li>
     <li>Nella hall trovate anche dei <b>carrelli abbandonati</b> (con un cerchio azzurro): se ne avete già uno, passandoci vicino li agganciate. Più carrelli portate insieme, più ricompense avete (<b>massimo 3 alla volta</b>), ma andate un po' più piano. Se vi colpiscono e andate KO, i carrelli si perdono.</li>
-    <li>Se la pensilina è <b>piena</b> non si possono agganciare i carrelli: aspettate la <b>mamma</b> che carica il bambino nel carrello e se ne va, liberando un posto (lui non vi viene addosso). Ogni tanto anche qualche cliente riporta un carrello.</li></ul>
+    <li>Se la pensilina è <b>piena</b> non si possono agganciare i carrelli: aspettate la <b>mamma</b>: arriva col bambino per mano, lui sale su un carrello della pensilina e parte a razzo con la mamma che gli corre dietro, liberando un posto. Poi il bambino sul carrello è di nuovo in giro (da sconfiggere!) e la mamma torna a fare spese tra i negozi. Ogni tanto anche qualche cliente riporta un carrello.</li></ul>
     <h3>Modalità</h3>
     <ul><li><b>Da solo</b>: un eroe a scelta tra il ragazzo con la felpa, la ragazza dai capelli viola, la mamma con le trecce bionde e il papà muscoloso con la maglietta del fai da te.</li>
     <li><b>Più telefoni</b> (da 2 a 4, sulla stessa Wi-Fi): chi crea la partita mostra un QR, chi si unisce lo inquadra con la fotocamera e il gioco si apre pronto; poi mostra il QR di risposta e chi ha creato la partita lo inquadra con «Scansiona la risposta». Dopo ogni collegamento compare un nuovo QR per il giocatore successivo; quando ci siete tutti, tocca <b>Inizia la partita</b>.</li>
@@ -833,11 +833,18 @@ function hallTick(dt){
  const sh=S.shelter,W=S.W;
  if(!S.mom){S.momT-=dt;if(S.momT<=0){S.momT=rnd(14,22);
    if(S.cartN<S.cartCap&&Math.random()<.35){S.cartN++;float((sh.x0+sh.x1)/2,sh.y1+.4,"Un cliente riporta un carrello","#9fd2ee")}
-   else if(S.cartN>0){const side=Math.random()<.5?-1:1;S.mom={x:side<0?1.4:W-1.4,y:sh.y1+1.4,st:"go",t:0,side,walk:0,face:-side,skin:SKINS[ri(0,SKINS.length-1)],hair:HAIRS[ri(0,HAIRS.length-1)],shirt:SHIRTS[ri(0,SHIRTS.length-1)]}}}}
- else{const m=S.mom;m.walk+=dt*9;
-  if(m.st==="go"){const tx=(sh.x0+sh.x1)/2,dx=tx-m.x;m.face=Math.sign(dx)||1;m.x+=Math.sign(dx)*Math.min(Math.abs(dx),1.5*dt);if(Math.abs(dx)<.1){m.st="load";m.t=2.4;float(m.x,m.y-1,"La mamma carica il bambino nel carrello","#fff")}}
-  else if(m.st==="load"){m.t-=dt;if(m.t<=0){if(S.cartN>0)S.cartN--;m.st="leave";m.face=m.side;ev({k:"sfx",s:"pick"});float(m.x,m.y-1,"Un posto libero alla pensilina!","#4fe3b5")}}
-  else{m.x+=m.side*1.7*dt;m.face=m.side;if(m.x<.6||m.x>W-.6)S.mom=null}}
+   else if(S.cartN>0){const side=Math.random()<.5?-1:1;S.mom={x:side<0?1.4:W-1.4,y:sh.y1+1.4,st:"go",t:0,side,dir:-side,walk:0,face:-side,cx:0,skin:SKINS[ri(0,SKINS.length-1)],hair:HAIRS[ri(0,HAIRS.length-1)],shirt:SHIRTS[ri(0,SHIRTS.length-1)]}}}}
+ else{const m=S.mom,d=m.dir;
+  if(m.st==="go"){m.walk+=dt*9;const tx=(sh.x0+sh.x1)/2,dx=tx-m.x;m.face=d;m.x+=Math.sign(dx)*Math.min(Math.abs(dx),1.5*dt);if(Math.abs(dx)<.1){m.st="load";m.t=m.T=2.2;m.walk=0;if(S.cartN>0)S.cartN--;ev({k:"sfx",s:"pick"});float(m.x,m.y-1.1,"Un carrello per il piccolo!","#fff")}}
+  else if(m.st==="load"){m.t-=dt;if(m.t<=0){m.st="dash";m.t=1.4;m.cx=m.x+d*.95;m.walk=0;ev({k:"sfx",s:"empty"});ev({k:"burst",x:m.cx,y:m.y+.3,col:"#ffffff",n:12});float(m.x,m.y-1.1,"Fermo! Torna qui!","#ff9a2e");float(m.cx,m.y-1.1,"Si parte a razzo!","#ffd23c")}}
+  else{m.walk+=dt*16;m.t-=dt;const lo=1.3,hi=S.W-1.3;m.cx=Math.max(lo,Math.min(hi,m.cx+d*7.2*dt));m.x=Math.max(lo,Math.min(hi,m.x+d*5.4*dt));m.face=d;
+   if(Math.random()<dt*14)ev({k:"burst",x:m.cx-d*.6,y:m.y+.4,col:"#d8dce6",n:2});
+   if(m.t<=0||m.cx<=lo||m.cx>=hi){
+    if(S.enemies.filter(e=>e.t==="b"&&!e.dead).length<7){const e=addEnemy("b",m.cx,m.y);e.face=d;float(m.cx,m.y-1,"Il bambino sul carrello è in giro!","#ff9a2e")}
+    else float(m.cx,m.y-1,"Il bambino se ne va col carrello","#9fd2ee");
+    const q=newPerson(m.x,m.y);Object.assign(q,{skin:m.skin,hair:m.hair,shirt:m.shirt,pants:"#5a4636",long:true,bag:null,old:false,cap:null,face:d,mode:"walk",t:rnd(3,6),spd:1.1});[q.tx,q.ty]=freeSpot(0);
+    const mine=S.people.filter(p=>p.zoo==null);if(mine.length>16){const i=S.people.indexOf(mine[0]);if(i>=0&&mine[0]!==q)S.people.splice(i,1)}
+    S.mom=null;S.momT=rnd(14,22)}}}
 }
 function dropCarts(p){const n=p.carts|0;for(let i=0;i<n;i++)S.items.push({id:S.nid++,k:"cart",x:p.x+rnd(-.5,.5),y:p.y+rnd(-.5,.5)});if(n)float(p.x,p.y-.6,"Carrelli persi!","#ff6fae");p.carts=0}
 function cartLogic(p,G){
@@ -1230,8 +1237,21 @@ function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/100
  FX.dead=FX.dead.filter(d=>now-d.b<450);
  for(const d of FX.dead)list.push({y:d.y,f:()=>{const p=(now-d.b)/450;c.save();c.globalAlpha=1-p;c.translate(d.x*TS,d.y*TS-4-p*10);c.rotate(p*.8*(d.face||1));c.scale(1-p*.4,1-p*.4);DRAW[d.t](c,t,{stun:true});c.restore()}});
  if(S.lvl===0&&S.shelter){const sh=S.shelter;list.push({y:sh.y1-.1,f:()=>drawShelter(c,t,sh)})}
- if(S.lvl===0&&S.mom){const m=S.mom;list.push({y:m.y,f:()=>{c.save();c.translate(m.x*TS,m.y*TS-4);c.scale(m.face<0?-1:1,1);drawShopper(c,t,{walk:m.st==="load"?0:m.walk,shirt:m.shirt,pants:"#5a4636",hair:m.hair,skin:m.skin,long:true,bag:null,old:false,cap:null});
-   c.save();c.translate(26,-1);if(m.st==="load")c.translate(0,Math.sin(t/120)*1);drawCart(c,t,{calm:true});c.restore();c.restore()}})}
+ if(S.lvl===0&&S.mom){const m=S.mom,d=m.dir||m.face||1,KID={walk:0,shirt:"#ff6b6b",pants:"#24476b",hair:"#6b3f1f",skin:m.skin,bag:null,old:false,cap:"#e63946"};
+  const put=(x,y,fn)=>list.push({y,f:()=>{c.save();c.translate(x*TS,y*TS-4);fn();c.restore()}});
+  put(m.x,m.y,()=>{c.save();c.scale(d<0?-1:1,1);drawShopper(c,t,{walk:m.st==="load"?0:m.walk,shirt:m.shirt,pants:"#5a4636",hair:m.hair,skin:m.skin,long:true,bag:null,old:false,cap:null});
+    if(m.st==="go"){const kx=.62*TS;c.strokeStyle=m.skin;c.lineWidth=2.2;c.beginPath();c.moveTo(11.5,8.5);c.lineTo(kx-6,8.5);c.stroke();
+      c.save();c.translate(kx,5);c.scale(.62,.62);drawShopper(c,t,Object.assign({},KID,{walk:m.walk}));c.restore()}
+    else if(m.st==="load"){const p=1-m.t/(m.T||2.2),cx=.95*TS;
+      if(p<.4){const k=p/.4;c.save();c.translate(cx,-(1-k)*1.2*TS);drawCartEmpty(c,t,{s:.95});c.restore();
+        c.save();c.translate(.62*TS,5);c.scale(.62,.62);drawShopper(c,t,KID);c.restore()}
+      else if(p<.72){const k=(p-.4)/.32,kx=(.62+(.95-.62)*k)*TS,ky=5-Math.sin(k*Math.PI)*24;c.save();c.translate(cx,0);drawCartEmpty(c,t,{s:.95});c.restore();
+        c.save();c.translate(kx,ky);c.scale(.62,.62);drawShopper(c,t,KID);c.restore()}
+      else{c.save();c.translate(cx,-1+Math.sin(t/90)*1.2);drawCart(c,t,{calm:true});c.restore()}}
+    c.restore()});
+  if(m.st==="dash")put(m.cx,m.y,()=>{c.save();c.scale(d<0?-1:1,1);c.strokeStyle="rgba(255,255,255,.75)";c.lineWidth=2;c.lineCap="round";
+    for(let i=0;i<4;i++){const y=-8+i*7,l=22+((t/25+i*9)%14);c.beginPath();c.moveTo(-18,y);c.lineTo(-18-l,y);c.stroke()}
+    c.rotate(-.06);c.translate(0,Math.sin(t/35)*1.2);drawCart(c,t,{calm:false,charge:true});c.restore()})}
  for(const p of S.players){if(p.hidden||p.away)continue;const r=rp(p);cartChain(c,p,r,list,t);list.push({y:r.y,f:()=>drawPlayer(c,p,r,t,now)});const F=p.fish;if(!F)continue;
   const fr=rp({id:"fish"+p.id,x:F.x,y:F.y});list.push({y:fr.y+.3,f:()=>{c.save();c.translate(fr.x*TS,fr.y*TS+Math.sin(t/400)*3);drawBowl(c,t,F.water,F.pot,F.food<=0||F.water<=0);c.restore();
   const bw=30,by=fr.y*TS-24+Math.sin(t/400)*3;c.fillStyle="rgba(0,0,0,.55)";rr(c,fr.x*TS-bw/2,by,bw,5,2.5);c.fill();c.fillStyle=F.food<25?"#ff5d6c":"#ffb347";rr(c,fr.x*TS-bw/2+1,by+1,(bw-2)*cl(F.food,0,100)/100,3,1.5);c.fill();
