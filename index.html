@@ -245,10 +245,10 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <tr><td>Saponette</td><td>Si lanciano lontano, servono munizioni. Alla Lavanda attraversano i nemici.</td></tr>
     <tr><td>Chewing-gum esplosivo</td><td>Si attacca a terra e dopo un attimo esplode colpendo tutto intorno. Il Mega fa un botto più grande.</td></tr></table>
     <h3>Il pesce rosso nella boccia</h3>
-    <ul><li>Ogni giocatore ha il suo pesce: segue il suo eroe e spruzza acqua sui mostri insieme a lui.</li>
+    <ul><li>Ogni giocatore ha il suo pesce: segue il suo eroe e spruzza sui mostri l'acqua della sua boccia. <b>Ogni spruzzo consuma un po' d'acqua</b>: il livello nella boccia si abbassa e la barretta azzurra sopra di essa scende. Quando ne resta poca il pesce non spara più finché non lo ricaricate con acqua pulita (bottiglie dei nemici o «Acqua fresca» alla cassa).</li>
     <li>La barretta arancione sopra la boccia è il suo <b>cibo</b>. Il colore dell'acqua dice quanto è pulita: <b>azzurra</b> pulita, <b>verde</b> da cambiare, <b>marrone</b> sporca.</li>
     <li>Cibo (sacchetti di mangime) e acqua pulita (bottiglie) <b>cadono dai nemici sconfitti</b>, al posto delle monete, e si comprano anche alla cassa nello scaffale <b>Per il pesce</b>. Oltre il 100% non si va.</li>
-    <li>Se il cibo finisce o l'acqua diventa troppo sporca, il pesce smette di sparare e voi perdete energia piano piano.</li>
+    <li>Se il cibo finisce o l'acqua si esaurisce, il pesce smette di sparare e voi perdete energia piano piano.</li>
     <li>Le <b>pozioni</b> della cassa fanno brillare la boccia e cambiano lo spruzzo per 60 secondi: rossa bollente (doppio danno), blu gelata (rallenta), verde appiccicosa (danno continuo), oro (spara il doppio).</li></ul>
     <h3>I livelli</h3>
     <table><tr><th>Negozio</th><th>Missione</th><th>Nuovo mostro</th></tr>
@@ -341,7 +341,7 @@ const SHOP=[
  {id:"gum",name:"Chewing-gum ×3",desc:"Esplosivi appiccicosi",price:10,icon:"gum"},
  {id:"snack",name:"Merendina",desc:"Ridà 40 di energia a chi la compra",price:8,icon:"snack"},
  {id:"food",name:"Mangime",desc:"Pappa per il pesce +40",price:5,icon:"food"},
- {id:"water",name:"Acqua fresca",desc:"Acqua pulita per il pesce +50",price:4,icon:"water"},
+ {id:"water",name:"Acqua fresca",desc:"Ricarica la boccia: acqua pulita +50",price:4,icon:"water"},
  {id:"towel",name:"Asciugamano Bagnato",desc:"Arma: frustata più forte",price:30,icon:"towel",up:1},
  {id:"lav",name:"Saponette alla Lavanda",desc:"Arma: più danno e attraversano i nemici",price:35,icon:"soap",up:1},
  {id:"mega",name:"Mega Chewing-gum",desc:"Arma: esplosione più grande",price:40,icon:"gum",up:1},
@@ -522,9 +522,9 @@ function drawBowl(c,t,water,potion,sick){const wc=waterCol(water);
  if(potion){const pc=POT[potion].col;c.fillStyle=rg(c,0,0,8,24,pc+"aa",pc+"00");c.beginPath();c.arc(0,0,24,0,7);c.fill();
   for(let i=0;i<4;i++){const a=t/350+i*PI/2;star(c,Math.cos(a)*17,Math.sin(a)*17,2.6,pc)}}
  c.beginPath();c.arc(0,0,13,0,7);c.fillStyle="rgba(220,240,255,.2)";c.fill();
- c.save();c.beginPath();c.arc(0,0,12.4,0,7);c.clip();c.fillStyle=wc;c.globalAlpha=.62;c.fillRect(-14,-6+Math.sin(t/300)*1,28,30);c.globalAlpha=1;
+ c.save();c.beginPath();c.arc(0,0,12.4,0,7);c.clip();const lvl=12-24*cl(water,0,100)/100;c.fillStyle=wc;c.globalAlpha=.62;c.fillRect(-14,lvl+Math.sin(t/300)*.8,28,30);c.globalAlpha=1;if(water>2&&water<100){c.fillStyle="rgba(255,255,255,.55)";c.fillRect(-12,lvl+Math.sin(t/300)*.8,24,1.2)}
  if(water<45){c.fillStyle="rgba(70,45,20,.35)";for(let i=0;i<5;i++)el(c,Math.sin(i*7.3+t/900)*8,2+Math.cos(i*3.1+t/700)*6,1.4,1.4,"rgba(70,45,20,.45)")}
- c.translate(Math.sin(t/700)*4,3+Math.sin(t/350)*1.5);c.scale(Math.cos(t/700)>=0?1:-1,1);if(sick)c.rotate(PI*.9);drawFishBody(c,t);c.restore();
+ c.translate(Math.sin(t/700)*4,Math.max(3,Math.min(9,lvl+5))+Math.sin(t/350)*1.5);c.scale(Math.cos(t/700)>=0?1:-1,1);if(sick)c.rotate(PI*.9);drawFishBody(c,t);c.restore();
  c.strokeStyle="rgba(230,245,255,.8)";c.lineWidth=1.3;c.beginPath();c.arc(0,0,13,0,7);c.stroke();
  c.strokeStyle="rgba(255,255,255,.7)";c.beginPath();c.arc(0,0,10,-2.6,-1.8);c.stroke();
  c.fillStyle="rgba(230,245,255,.5)";rr(c,-8,-14,16,3,1.5);c.fill()}
@@ -810,6 +810,7 @@ function tick(dt){
 }
 function fishTick(dt){for(const p of vis())fishStep(p,dt)}
 function fishMsg(p,t){if(vis().length>1)float(p.x,p.y-1,p.name+": "+t,"#ffb347");else toast(t)}
+const WCOST=1.5;
 function fishStep(p,dt){const f=p.fish||(p.fish=newFish()),ok=!p.down&&!p.shop;
  f.food=Math.max(0,f.food-dt/3.4);f.water=Math.max(0,f.water-dt/4.4);
  if(f.pot){f.potT-=dt;if(f.potT<=0){f.pot=null;fishMsg(p,"L'effetto della pozione è finito")}}
@@ -821,6 +822,8 @@ function fishStep(p,dt){const f=p.fish||(p.fish=newFish()),ok=!p.down&&!p.shop;
  f.cd-=dt;if(sick||f.cd>0||!ok)return;
  let best=null,bd=5.5;for(const e of S.enemies){if(e.dead||e.flee)continue;const d=dist(f.x,f.y,e.x,e.y);if(d<bd&&los(f.x,f.y,e.x,e.y)){bd=d;best=e}}
  if(!best)return;
+ if(f.water<WCOST+2){if(S.time-(f.dryT||-9)>6){f.dryT=S.time;float(f.x,f.y-.6,"Boccia quasi vuota! Serve acqua","#8fe0ff");ev({k:"sfx",s:"empty"})}return}
+ f.water=Math.max(0,f.water-WCOST*(f.pot==="po"?.6:1));
  f.cd=(f.pot==="po"?.65:1.4)*(f.food<25||f.water<25?1.6:1);
  const dx=best.x-f.x,dy=best.y-f.y,d=Math.hypot(dx,dy)||1;
  ev({k:"sfx",s:"spray"});S.proj.push({id:S.nid++,k:"water",x:f.x,y:f.y,vx:dx/d*9,vy:dy/d*9,own:"p",by:p.i,dmg:f.pot==="pr"?16:8,pot:f.pot,life:.8,r:.18,hit:[]});
@@ -1184,7 +1187,8 @@ function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/100
  for(const d of FX.dead)list.push({y:d.y,f:()=>{const p=(now-d.b)/450;c.save();c.globalAlpha=1-p;c.translate(d.x*TS,d.y*TS-4-p*10);c.rotate(p*.8*(d.face||1));c.scale(1-p*.4,1-p*.4);DRAW[d.t](c,t,{stun:true});c.restore()}});
  for(const p of S.players){if(p.hidden||p.away)continue;const r=rp(p);list.push({y:r.y,f:()=>drawPlayer(c,p,r,t,now)});const F=p.fish;if(!F)continue;
   const fr=rp({id:"fish"+p.id,x:F.x,y:F.y});list.push({y:fr.y+.3,f:()=>{c.save();c.translate(fr.x*TS,fr.y*TS+Math.sin(t/400)*3);drawBowl(c,t,F.water,F.pot,F.food<=0||F.water<=0);c.restore();
-  const bw=30,by=fr.y*TS-24+Math.sin(t/400)*3;c.fillStyle="rgba(0,0,0,.55)";rr(c,fr.x*TS-bw/2,by,bw,5,2.5);c.fill();c.fillStyle=F.food<25?"#ff5d6c":"#ffb347";rr(c,fr.x*TS-bw/2+1,by+1,(bw-2)*cl(F.food,0,100)/100,3,1.5);c.fill()}})}
+  const bw=30,by=fr.y*TS-24+Math.sin(t/400)*3;c.fillStyle="rgba(0,0,0,.55)";rr(c,fr.x*TS-bw/2,by,bw,5,2.5);c.fill();c.fillStyle=F.food<25?"#ff5d6c":"#ffb347";rr(c,fr.x*TS-bw/2+1,by+1,(bw-2)*cl(F.food,0,100)/100,3,1.5);c.fill();
+  c.fillStyle="rgba(0,0,0,.55)";rr(c,fr.x*TS-bw/2,by+7,bw,5,2.5);c.fill();c.fillStyle=F.water<WCOST+2?"#ff5d6c":"#5ab8ff";rr(c,fr.x*TS-bw/2+1,by+8,(bw-2)*cl(F.water,0,100)/100,3,1.5);c.fill()}})}
  for(const q of S.people||[]){const r=rp(q);if(r.x<x0-2||r.x>x1+2||r.y<y0-2||r.y>y1+2)continue;list.push({y:r.y,f:()=>{c.save();c.translate(r.x*TS,r.y*TS-4);c.scale(q.face<0?-1:1,1);if(q.zoo!=null)drawZooClerk(c,t+r.x*150,{sp:q.zoo,walk:q.walk});else drawShopper(c,t+r.x*150,q);c.restore()}})}
  if(S.fount){const f=S.fount;list.push({y:f[1]+(f[3]-f[1])*.6,f:()=>drawFountain(c,t,f)})}
  for(const cg of S.cages||[])list.push({y:cg.y+.45,f:()=>drawCage(c,cg,t)});
