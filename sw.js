@@ -1,6 +1,6 @@
 /* Service worker: il gioco funziona anche senza internet.
    La pagina si aggiorna da sola quando c'è rete (prima la rete, poi la copia salvata). */
-const CACHE = "pesci-rossi-v1";
+const CACHE = "pesci-rossi-v2";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-maskable-512.png", "./icons/apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
