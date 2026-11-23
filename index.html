@@ -108,7 +108,11 @@ button:hover{background:rgba(255,255,255,.14)}button:focus-visible{outline:3px s
 .flyer{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;max-width:300px;margin:10px auto 0}
 .flyer i{aspect-ratio:3/4;border-radius:6px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px var(--line);display:grid;place-items:center;font:700 13px var(--fd);color:var(--dim);font-style:normal}
 .flyer i.got{background:linear-gradient(160deg,#ff5d6c,#ffb03a);color:#fff}
-.help{text-align:left}.help h3{color:var(--mint);font-size:17px;margin:16px 0 6px}.help ul{margin:0;padding-left:20px}.help li{margin:4px 0;color:#d9d3f2}
+.help{text-align:left;display:flex;flex-direction:column;overflow:hidden}.help .hbody{overflow:auto;flex:1;min-height:0;padding-right:2px}.help .hbody>h3:first-child{margin-top:8px}
+.htabs{flex:none;display:flex;gap:4px;overflow-x:auto;margin:8px 0 2px;padding-bottom:4px;scrollbar-width:none}.htabs::-webkit-scrollbar{display:none}
+.htabs button{flex:0 0 auto;min-height:48px;min-width:56px;padding:2px 6px;border-radius:12px;display:grid;justify-items:center;gap:0;font:600 10px/1.1 var(--fd)}.htabs button b{font-size:19px;line-height:1.2}.htabs button.sel{background:rgba(255,201,60,.22);box-shadow:inset 0 0 0 2px var(--gold)}
+.hnav{flex:none;display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}.hnav .pg{font:600 13px var(--fd);color:var(--dim)}.hnav button{min-height:42px}.hnav .big{flex:1;max-width:150px}
+.help h2{margin-bottom:0}.help h3{color:var(--mint);font-size:17px;margin:16px 0 6px}.help ul{margin:0;padding-left:20px}.help li{margin:4px 0;color:#d9d3f2}
 .help table{width:100%;border-collapse:collapse;font-size:14.5px}.help td,.help th{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}.help th{color:var(--dim);font-size:13px}
 kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;padding:1px 6px;white-space:nowrap}
 .qr{display:block;margin:8px auto;width:min(330px,84vw);height:auto;image-rendering:pixelated;border-radius:10px;background:#fff;cursor:zoom-in}
@@ -248,7 +252,9 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <ul><li>Ogni giocatore ha il suo pesce: segue il suo eroe e spruzza sui mostri l'acqua della sua boccia. <b>Ogni spruzzo consuma un po' d'acqua</b>: il livello nella boccia si abbassa e la barretta azzurra sopra di essa scende. Quando ne resta poca il pesce non spara più finché non lo ricaricate con acqua pulita (bottiglie dei nemici o «Acqua fresca» alla cassa).</li>
     <li>La barretta arancione sopra la boccia è il suo <b>cibo</b>. Il colore dell'acqua dice quanto è pulita: <b>azzurra</b> pulita, <b>verde</b> da cambiare, <b>marrone</b> sporca.</li>
     <li>Cibo (sacchetti di mangime) e acqua pulita (bottiglie) <b>cadono dai nemici sconfitti</b>, al posto delle monete, e si comprano anche alla cassa nello scaffale <b>Per il pesce</b>. Oltre il 100% non si va.</li>
-    <li>Se il cibo finisce o l'acqua si esaurisce, il pesce smette di sparare e voi perdete energia piano piano.</li>
+    <li><b>Cibo o acqua sotto il 25%</b>: compare un avviso e il pesce spara più lentamente. <b>Acqua quasi finita</b>: il pesce non spara più finché non gli date acqua pulita.</li>
+    <li><b>Cibo o acqua a zero</b>: il pesce sta male (si capovolge e lo schermo lampeggia in arancione), non spara e il suo giocatore perde 3 di energia ogni 5 secondi. Se l'energia finisce si va KO: in «Insieme» costa una vita, nelle altre regole 5 monete e 100 punti. Si risolve subito con pappa o acqua, raccolte dai nemici o comprate alla cassa.</li>
+    <li>Cibo e acqua calano anche col tempo, quindi tenete d'occhio le due barrette sopra la boccia.</li>
     <li>Le <b>pozioni</b> della cassa fanno brillare la boccia e cambiano lo spruzzo per 60 secondi: rossa bollente (doppio danno), blu gelata (rallenta), verde appiccicosa (danno continuo), oro (spara il doppio).</li></ul>
     <h3>I livelli</h3>
     <table><tr><th>Negozio</th><th>Missione</th><th>Nuovo mostro</th></tr>
@@ -1572,9 +1578,25 @@ function restoreGame(sv,mode,joined){const s=sv.S;S=s;S.phase="play";S.paused=fa
  lastPhase=null;shopMode=null;saveLock=true;shopLock=true;return slots}
 $("bPlay").onclick=()=>{auInit();CFG.reloaded=false;if(CFG.mode==="coop"){CFG.cont=null;$("ovMenu").hidden=true;if(CFG.join){const c=CFG.join;CFG.join=null;openNet("guest",c)}else openNet("host")}else{CFG.join=null;startLocal()}};
 $("bCont").onclick=()=>{auInit();const sv=loadSave();if(!sv)return;if(CFG.mode==="coop"){CFG.cont=sv;$("ovMenu").hidden=true;openNet("host")}else{role=null;restoreGame(sv,CFG.mode);$("ovMenu").hidden=true;showToast("Partita ripresa dall'ultimo salvataggio")}};
-const openHelp=()=>{$("ovHelp").hidden=false;if(S&&S.phase==="play")setSafe(true)},closeHelp=()=>{$("ovHelp").hidden=true;if(S&&S.phase==="play"&&!shopMode&&$("ovStat").hidden&&$("ovSave").hidden)setSafe(false)};
+const openHelp=()=>{helpGo(0);$("ovHelp").hidden=false;if(S&&S.phase==="play")setSafe(true)},closeHelp=()=>{$("ovHelp").hidden=true;if(S&&S.phase==="play"&&!shopMode&&$("ovStat").hidden&&$("ovSave").hidden)setSafe(false)};
 $("bHelp").onclick=$("bHelp2").onclick=openHelp;$("bHelpOk").onclick=closeHelp;$("ovHelp").addEventListener("click",e=>{if(e.target.id==="ovHelp")closeHelp()});
 
+/* ---------- aiuto a capitoli ---------- */
+const HCH=[["🎯","Obiettivo",[]],["🏬","Hall",["La hall"]],["👥","Modalità",["Modalità","Regole","Classifica"]],["🎮","Comandi",["Comandi sul","Comandi da","Armi"]],["🐠","Pesce",["Il pesce"]],["🛍️","Negozi",["I livelli","Il Mondo dei Pesci"]],["🪙","Monete",["Monete"]],["📲","Installa",["Installare","Musica"]]];
+let hPage=0,hBodies=[];
+function helpInit(){const m=document.querySelector("#ovHelp .help");if(!m||m.dataset.ch)return;m.dataset.ch=1;const kids=[...m.children],h2=kids.find(k=>k.tagName==="H2"),ok=kids.find(k=>k.classList.contains("row")),body=kids.filter(k=>k!==h2&&k!==ok);
+ hBodies=HCH.map(()=>document.createElement("div"));let cur=0;
+ for(const k of body){if(k.tagName==="H3"){const i=HCH.findIndex(c=>c[2].some(p=>k.textContent.startsWith(p)));cur=i<0?cur:i}else if(k===body[0])cur=0;hBodies[cur].appendChild(k)}
+ const tabs=document.createElement("div");tabs.className="htabs";tabs.setAttribute("role","tablist");
+ HCH.forEach((c,i)=>{const b=document.createElement("button");b.innerHTML=`<b>${c[0]}</b>${c[1]}`;b.setAttribute("role","tab");b.onclick=()=>helpGo(i);tabs.appendChild(b)});
+ const bd=document.createElement("div");bd.className="hbody";bd.id="hBody";
+ const nav=document.createElement("div");nav.className="hnav";nav.innerHTML='<button id="hPrev">‹ Indietro</button><span class="pg" id="hPg"></span><button id="hNext">Avanti ›</button>';
+ ok.className="hnav";ok.querySelector("button").className="big";
+ m.append(tabs,bd,nav,ok);ok.style.marginTop="6px";ok.style.justifyContent="center";
+ $("hPrev").onclick=()=>helpGo(hPage-1);$("hNext").onclick=()=>helpGo(hPage+1);helpGo(0)}
+function helpGo(i){helpInit();hPage=cl(i,0,HCH.length-1);const bd=$("hBody");bd.replaceChildren(hBodies[hPage]);bd.scrollTop=0;
+ document.querySelectorAll(".htabs button").forEach((b,k)=>{b.classList.toggle("sel",k===hPage);b.setAttribute("aria-selected",k===hPage);if(k===hPage)try{b.scrollIntoView({inline:"center",block:"nearest"})}catch(_){}});
+ $("hPg").textContent=`${hPage+1} / ${HCH.length} · ${HCH[hPage][1]}`;$("hPrev").disabled=hPage===0;$("hNext").disabled=hPage===HCH.length-1}
 /* ---------- comandi ---------- */
 const KEY={};let atkBtn=false,atkKey=false,JV={x:0,y:0},jid=null,jcx=0,jcy=0;
 const joy=$("joy"),ring=$("ring"),knob=$("knob");
@@ -1596,6 +1618,7 @@ function wIcons(scene){const ids=scene?["hook","shoo","exit"]:["towel","soap","g
 const anyOpen=()=>["ovShop","ovMenu","ovHelp","ovStat","ovSave","ovTurn","ovEnd","ovNet"].some(i=>!$(i).hidden);
 addEventListener("keydown",e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return;auInit();
  if(e.key==="Escape"||e.code==="KeyP"){if(!$("ovHelp").hidden)closeHelp();else if(!$("ovStat").hidden)closeStat();else if(!$("ovSave").hidden)closeSave();else if(shopMode)closeShop();else if(S&&S.phase==="play")openHelp();return}
+ if(!$("ovHelp").hidden&&(e.key==="ArrowRight"||e.key==="ArrowLeft")){helpGo(hPage+(e.key==="ArrowRight"?1:-1));e.preventDefault();return}
  if(anyOpen())return;
  KEY[e.code]=1;
  if(S&&S.lvl===6){if(e.code==="Space"||e.code==="KeyJ"||e.code==="Digit1"){IN[LI()].wsel=0;atkKey=e.code!=="Digit1";if(e.code==="Digit1")pulse=performance.now()+180;e.preventDefault();return}
