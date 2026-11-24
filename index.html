@@ -1798,7 +1798,7 @@ function animChar(g,walk,moving,dt,t,lying){const u=g.userData;u.amp+=((moving?1
 const angLerp=(a,b,k)=>{let d=b-a;while(d>PI)d-=PI*2;while(d<-PI)d+=PI*2;return a+d*k};
 function faceChar(g,dx,dz,dt){if(Math.abs(dx)+Math.abs(dz)<.01)return;const u=g.userData;u.ry=angLerp(u.ry,Math.atan2(dx,dz),Math.min(1,dt*14));g.rotation.y=u.ry}
 const HC3=[{shirt:"#262b36",pants:"#3a4152",hair:"#2a1d16",skin:"#f2c29b",hairStyle:"short",stripe:"#6ff05a",shoes:"#14151a"},{shirt:"#ffb703",pants:"#3b3f6b",hair:"#9b5cff",skin:"#f6cfae",hairStyle:"pony",shoes:"#ff6fae"},{shirt:"#e9758a",pants:"#4a5d8a",hair:"#e8d27a",skin:"#f6cfae",hairStyle:"braids",shoes:"#f4f1e4"},{shirt:"#3c78c8",pants:"#5a4636",hair:"#4a2f1b",skin:"#e8b48f",hairStyle:"short",beard:true,wide:1.22,scale:1.1,shoes:"#3a2a1a"}];
-const ENC3={g:{shirt:"#34508f",pants:"#1f2d55",hair:"#1f2d55",skin:"#f6cda9",hairStyle:"police",baton:true},v:{shirt:"#9a6bc9",pants:"#6b6b7a",hair:"#d9d9e2",skin:"#f8dcc6",hairStyle:"bun",glasses:true,cane:true,shoes:"#4a2f22"},kid:{shirt:"#e63946",pants:"#24476b",hair:"#6b3f1f",skin:"#ffe0c2",hairStyle:"cap",cap:"#e63946",scale:.6}};
+const ENC3={g:{shirt:"#34508f",pants:"#1f2d55",hair:"#1f2d55",skin:"#f6cda9",hairStyle:"police",baton:true},v:{shirt:"#9a6bc9",pants:"#6b6b7a",hair:"#d9d9e2",skin:"#f8dcc6",hairStyle:"bun",glasses:true,cane:true,shoes:"#4a2f22"},kid:{shirt:"#e63946",pants:"#24476b",hair:"#6b3f1f",skin:"#ffe0c2",hairStyle:"cap",cap:"#e63946",scale:.8}};
 /* ---- carrello ---- */
 function makeCart(sc){const g=new THREE.Group(),L=.74,W=.5,H=.36,Y=.16;const bx=new THREE.BoxGeometry(L,H,W);
  const body=new THREE.Mesh(bx,new THREE.MeshStandardMaterial({color:"#d5deeb",transparent:true,opacity:.3,roughness:.4,depthWrite:false}));body.position.y=Y+H/2;g.add(body);
@@ -1879,11 +1879,14 @@ function r3Frame(t,dt){
  for(const q of S.people||[]){const o=get("q"+q.id,()=>{const old=q.old;return{g:makeChar({shirt:q.shirt,pants:q.pants,hair:old?"#d0d0d8":q.hair,skin:q.skin,hairStyle:q.cap?"cap":old?"bun":q.long?"long":"short",cap:q.cap,bag:q.bag,glasses:old,cane:old,scale:old?.92:1})}});
   place(o,q.x,q.y);const mv=o.sp>.25;o.walk=(o.walk||0)+dt*(mv?9:0);faceChar(o.g,o.dx,o.dz,dt);animChar(o.g,o.walk,mv,dt,t,false)}
  // nemici
- for(const e of S.enemies){if(e.dead)continue;const o=get("e"+e.id,()=>{if(e.t==="b"){const g=new THREE.Group(),c=makeCart(1.15),kid=makeChar(ENC3.kid);kid.position.set(0,.14,0);g.add(c,kid);g.userData={kid};return{g,cart:true}}return{g:makeChar(ENC3[e.t]||ENC3.g)}});
+ for(const e of S.enemies){if(e.dead)continue;const o=get("e"+e.id,()=>{if(e.t==="b"){const g=new THREE.Group(),c=makeCart(1.15),kid=makeChar(ENC3.kid);kid.position.set(0,.2,0);g.add(c,kid);g.userData={kid};return{g,cart:true}}return{g:makeChar(ENC3[e.t]||ENC3.g)}});
   place(o,e.x,e.y);const mv=o.sp>.25;
   if(o.cart){const a=Math.atan2(o.dx,o.dz);if(mv){o.g.rotation.y=angLerp(o.g.rotation.y,a-PI/2+PI/2*0,Math.min(1,dt*10))}o.g.rotation.y=o.g.rotation.y;o.g.children[0].rotation.y=-PI/2;o.g.children[1].rotation.y=0}
   else{o.walk=(o.walk||0)+dt*(mv?9:0);faceChar(o.g,o.dx,o.dz,dt);animChar(o.g,o.walk,mv,dt,t,false)}
-  o.g.visible=!(e.hit>0&&Math.floor(t/60)%2)}
+  o.g.visible=true;const mx=e.max||e.hp||1,fr=Math.max(0,Math.min(1,e.hp/mx)),k2=Math.round(fr*20);
+  if(!o.bar){const cn=document.createElement("canvas");cn.width=64;cn.height=12;o.bc=cn;o.bt=new THREE.CanvasTexture(cn);o.bar=new THREE.Sprite(new THREE.SpriteMaterial({map:o.bt,transparent:true,depthTest:false}));o.bar.scale.set(.9,.17,1);o.bar.position.y=o.cart?1.25:1.75;o.g.add(o.bar);o.bk=-1}
+  if(o.bk!==k2){o.bk=k2;const g=o.bc.getContext("2d");g.clearRect(0,0,64,12);g.fillStyle="rgba(20,10,40,.85)";g.fillRect(0,0,64,12);g.fillStyle=fr>.5?"#4fe36b":fr>.25?"#ffc93c":"#ff4f4f";g.fillRect(2,2,60*fr,8);o.bt.needsUpdate=true}
+  o.bar.visible=fr<1&&e.hp>0;const pop=e.hit>0?1+Math.sin(e.hit*40)*.12+.1:1;o.g.scale.setScalar(pop*(o.cart?1.35:1))}
  // oggetti
  for(const it of S.items||[]){const o=get("i"+it.id,()=>{let g;
    if(it.k==="coin"){g=new THREE.Mesh(new THREE.CylinderGeometry(.17,.17,.04,16),new THREE.MeshStandardMaterial({color:"#ffc93c",metalness:.7,roughness:.25,emissive:"#a87400",emissiveIntensity:.3}));g.rotation.x=PI/2}
