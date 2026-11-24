@@ -1011,7 +1011,8 @@ function interact(p){
   else if(p.carry.k==="pizza"){for(const tb of S.tables)if(tb.want&&tb.cells.some(c=>dist(p.x,p.y,c[0]+.5,c[1]+.5)<1.2)){tb.want=false;tb.t=rnd(14,22);p.carry=null;m.n++;G.coins+=3;p.score=(p.score|0)+100;ev({k:"sfx",s:"deliver"});ev({k:"burst",x:tb.cx,y:tb.cy,col:"#ffc93c",n:16});float(tb.cx,tb.cy,`Buon appetito! ${m.n}/${m.need}`,"#fff");break}}}
  p.nearK=S.kiosks.some(k=>dist(p.x,p.y,k[0],k[1])<1.35);
  const doors=S.lvl===0?S.hallDoors:S.exit?[{x:S.exit[0],y:S.exit[1],to:0}]:[];let nearD=false;
- for(const d of doors){const dd=dist(p.x,p.y,d.x,d.y);if(dd<1.15)nearD=true;if(dd<.78&&!p.doorLock){useDoor(p,d);return}}
+ let inD=null;for(const d of doors){const dd=dist(p.x,p.y,d.x,d.y);if(dd<1.15)nearD=true;if(dd<.78&&!p.doorLock)inD=d}
+ if(inD){p.dT=(p.dT||0)+1/30;if(p.dT>=.8){p.dT=0;useDoor(p,inD);return}}else p.dT=0;
  if(!nearD)p.doorLock=false;
  if(m.boss&&!m.freed&&S.cage&&dist(p.x,p.y,S.cage[0],S.cage[1])<1.5){m.freed=true;S.freer=p.i;p.score=(p.score|0)+3000;if(S.rule==="insieme")S.players.forEach(q=>{if(q!==p)q.score=(q.score|0)+1000});S.phase="win";ev({k:"burst",x:S.cage[0],y:S.cage[1],col:"#ffc93c",n:60})}
 }
@@ -1584,8 +1585,8 @@ function syncUI(){
  if(p)document.querySelectorAll(".wb").forEach(b=>{const i=+b.dataset.w,am=scene?-2:i===1?(cartIco?p.carts:G.ammo.soap):i===2?G.ammo.gum:-1;b.classList.toggle("sel",!scene&&p.w===i);b.classList.toggle("empty",am===0);b.querySelector("small").textContent=scene?["Lancia","Sciò","Esci"][i]:am<0?"∞":am});
  const free=!shopMode&&$("ovStat").hidden&&$("ovHelp").hidden&&$("ovSave").hidden&&$("ovPause").hidden;
  if(p&&S.phase==="play"){
-  if(!(p.kT>0))shopLock=false;else if(p.kT>.45&&!shopLock&&free&&!p.down){shopLock=true;openShop()}
-  if(!(p.fT>0))saveLock=false;else if(p.fT>.5&&!saveLock&&free&&!p.down){saveLock=true;openSave()}}
+  if(!(p.kT>0))shopLock=false;else if(p.kT>1&&!shopLock&&free&&!p.down){shopLock=true;openShop()}
+  if(!(p.fT>0))saveLock=false;else if(p.fT>1.2&&!saveLock&&free&&!p.down){saveLock=true;openSave()}}
  if(shopMode&&shopKey()!==shopSig)renderShop();
  if(!$("ovStat").hidden)renderStat();
 }
