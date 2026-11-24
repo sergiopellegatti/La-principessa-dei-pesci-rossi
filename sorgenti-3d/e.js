@@ -138,6 +138,7 @@ for(const id of["ovStat","ovSave","ovShop"])$(id).addEventListener("click",e=>{i
 $("bMute").onclick=()=>{auInit();auToggle()};$("bMute2").onclick=()=>{auInit();auToggle()};
 $("bAbandon").onclick=()=>{const n=performance.now();if(n>abArm){abArm=n+2800;showToast(S&&S.lvl===8?"Premi ancora per uscire dal puzzle":"Premi ancora per abbandonare la corsa");$("bAbandon").classList.add("arm");setTimeout(()=>$("bAbandon").classList.remove("arm"),2800)}else{abArm=0;abT=n+350;$("bAbandon").classList.remove("arm")}};
 $("b3d").onclick=()=>{R3.on=!R3.on;try{localStorage.setItem("ppr-3d",R3.on?"1":"0")}catch(_){}showToast(R3.on?"Grafica 3D attiva (prova: solo la hall)":"Grafica 2D")};
+$("b1p").onclick=()=>{R3.view=R3.view==="fps"?"top":"fps";R3.yaw=null;try{localStorage.setItem("ppr-3dview",R3.view)}catch(_){}showToast(R3.view==="fps"?"Prima persona: la levetta ruota (sinistra/destra) e avanza (su/giù)":"Vista dall'alto")};
 $("bTurn").onclick=()=>{if(S&&S.phase==="turn")switchTurn()};
 $("bEnd").onclick=()=>{if(!S)return;if(S.phase==="win")toMenu();else if(S.phase==="over"&&role!=="guest")retryArea()};
 $("bMenu").onclick=toMenu;
@@ -268,8 +269,8 @@ addEventListener("blur",()=>{for(const k in KEY)KEY[k]=0;atkKey=atkBtn=false});
 document.addEventListener("pointerdown",()=>auInit(),{capture:true});
 let sendT=0,pulse=0;
 function updateInput(){const kx=(KEY.ArrowRight||KEY.KeyD?1:0)-(KEY.ArrowLeft||KEY.KeyA?1:0),ky=(KEY.ArrowDown||KEY.KeyS?1:0)-(KEY.ArrowUp||KEY.KeyW?1:0);
- const I=IN[LI()];if(jid!==null){I.mx=JV.x;I.my=JV.y}else{I.mx=kx;I.my=ky}I.atk=atkBtn||atkKey||performance.now()<pulse;I.ab=performance.now()<abT;
- if(role==="guest"&&dc&&dc.readyState==="open"){const n=performance.now();if(n-sendT>50){sendT=n;send({t:"in",mx:+I.mx.toFixed(2),my:+I.my.toFixed(2),atk:I.atk,wsel:I.wsel,ab:I.ab})}}}
+ const I=IN[LI()];if(jid!==null){I.mx=JV.x;I.my=JV.y}else{I.mx=kx;I.my=ky}if(typeof r3Input==="function")r3Input(I);I.atk=atkBtn||atkKey||performance.now()<pulse;I.ab=performance.now()<abT;
+ if(role==="guest"&&dc&&dc.readyState==="open"){const n=performance.now();if(n-sendT>50){sendT=n;send({t:"in",mx:+I.mx.toFixed(2),my:+I.my.toFixed(2),atk:I.atk,wsel:I.wsel,ab:I.ab,aim:I.aim,ax:+(I.ax||0).toFixed(2),ay:+(I.ay||0).toFixed(2)})}}}
 
 /* ---------- rete (WebRTC con codici, fino a 4 telefoni) ---------- */
 const ICE={iceServers:[{urls:"stun:stun.l.google.com:19302"}]};
@@ -313,7 +314,7 @@ function guestMsg(m){if(role!=="guest")return;
 function hostMsg(p,m){
  if(m.t==="hello"){p.hello=true;p.name=String(m.name||"Amico").slice(0,14);p.hero=cl(m.hero|0,0,3);p.team=m.team?1:0;renderLobby()}
  else if(!S||p.slot==null)return;
- else if(m.t==="in"){const I=IN[p.slot];I.mx=cl(+m.mx||0,-1,1);I.my=cl(+m.my||0,-1,1);I.atk=!!m.atk;I.ab=!!m.ab;I.wsel=cl(m.wsel|0,0,2)}
+ else if(m.t==="in"){const I=IN[p.slot];I.mx=cl(+m.mx||0,-1,1);I.my=cl(+m.my||0,-1,1);I.atk=!!m.atk;I.ab=!!m.ab;I.aim=!!m.aim;I.ax=+m.ax||0;I.ay=+m.ay||0;I.wsel=cl(m.wsel|0,0,2)}
  else if(m.t==="buy"&&typeof m.id==="string")buy(m.id,p.slot);
  else if(m.t==="shop"){const q=S.players[p.slot];if(q)q.shop=!!m.v}
  else if(m.t==="save"){const ok=save();if(ok){sendAll({t:"saved"});showToast(`${S.players[p.slot].name} ha salvato la partita`);if(!$("ovSave").hidden)savedMsg(true)}}}

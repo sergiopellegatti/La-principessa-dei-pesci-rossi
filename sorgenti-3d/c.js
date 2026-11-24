@@ -241,6 +241,7 @@ function updPlayer(p,inp,dt){
  if(p.stun>0){mx=my=0}
  const spd=4.2*(GR(p).up.shoes?1.22:1)*(p.slowT>0?.55:1)*(1-.07*(p.carts|0));
  if(m>.15&&p.stun<=0){moveCircle(p,mx*spd*dt,my*spd*dt,.3);const n=Math.hypot(mx,my);p.fx=mx/n;p.fy=my/n;p.walk+=dt*13*Math.min(1,m);if(Math.abs(mx)>.2)p.face=Math.sign(mx)}
+ if(inp.aim&&p.stun<=0&&(inp.ax||inp.ay)){p.fx=inp.ax;p.fy=inp.ay}
  if(inp.atk&&p.cd<=0&&p.stun<=0)attack(p);
  bumpPeople(p);interact(p);p.kT=p.nearK?(p.kT||0)+dt:0;p.fT=S.lvl===0&&fountDist(p)<.95?(p.fT||0)+dt:0;
 }
