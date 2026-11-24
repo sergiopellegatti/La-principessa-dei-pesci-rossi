@@ -131,6 +131,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
 .status{min-height:22px;font-weight:700;color:var(--dim)}.status.good{color:var(--mint)}.status.bad{color:var(--red)}
 .hint{font-size:13px;color:var(--dim)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+#raceBig{position:fixed;left:0;right:0;top:26%;text-align:center;font:800 min(22vw,150px) Fredoka,system-ui;color:#ffe36b;-webkit-text-stroke:6px #2b1a4a;paint-order:stroke fill;text-shadow:0 8px 0 rgba(0,0,0,.25);pointer-events:none;z-index:30}#raceBig[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -139,6 +140,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
   <div class="top">
     <div class="lvl" id="lvl"></div>
     <div class="hudrow" id="hud"></div>
+    <div id="raceBig" hidden></div>
   </div>
   <div class="corner"><button class="ic" id="bPause" aria-label="Pausa">❚❚</button><button class="ic" id="bMute" aria-label="Musica on/off"></button><button class="ic" id="bHelp" aria-label="Aiuto e pausa">?</button></div>
   <div class="toast" id="toast"></div>
@@ -250,6 +252,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <li>Nella hall trovate anche dei <b>carrelli abbandonati</b> (con un cerchio azzurro): se ne avete già uno, passandoci vicino li agganciate. Più carrelli portate insieme, più ricompense avete (<b>massimo 3 alla volta</b>), ma andate un po' più piano. Se vi colpiscono e andate KO, i carrelli si perdono.</li>
     <li>Se avete più carrelli dei posti liberi se ne depositano solo quanti ne entrano; gli altri restano agganciati.</li>
     <li>Con almeno un carrello agganciato il pulsante delle saponette <b>lancia un carrello</b> (uno alla volta, danno molto più alto): poi il carrello resta a terra e si può riagganciare.</li>
+    <li><b>Parcheggio e gara</b>: dalla hall, la porta <b>Parcheggio</b> (a destra) porta fuori: salite sul carrello e fate <b>3 giri</b>. Guidate col joystick (accelera da solo). I <b>?</b> danno gadget: saponette-razzo (cercano l'avversario), gomma gigante, turbo, bolla scudo. Il pulsante <b>asciugamano</b> fa girare chi ti sta vicino, la <b>gomma</b> si lascia dietro. Chi viene colpito gira su se stesso e rallenta. Vince chi taglia il traguardo per primo (+25 monete); i nemici corrono ma <b>non possono vincere</b>. Dopo la gara la porta resta chiusa 1 minuto (pulizie in corso).</li>
     <li>Se la pensilina è <b>piena</b> non si possono agganciare i carrelli: aspettate la <b>mamma</b>: arriva col bambino per mano, lui sale su un carrello della pensilina e parte a razzo con la mamma che gli corre dietro, liberando un posto. Poi il bambino sul carrello è di nuovo in giro (da sconfiggere!) e la mamma torna a fare spese tra i negozi. Ogni tanto anche qualche cliente riporta un carrello.</li></ul>
     <h3>Modalità</h3>
     <p>Per giocare accedi con il tuo <b>nome utente</b> e la tua password (la prima volta ti iscrivi e scegli il personaggio). Ognuno vede solo i propri salvataggi. Nelle partite a più giocatori dai un <b>alias</b> a ogni partita: le trovi nell'elenco, divise per tipo, e puoi eliminarle con il cestino.</p>
@@ -330,9 +333,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <script>
 {
 const MAPS=[["##############################","#@...m......P....m......R....#","#.....1111.......2222........#","#..m.................m....m..#","#.....................c......#","#..R....###....###.......R...#","#.......#.......#...m........#","#..m....#.......#.....$......#","#.......#..f....#....3333....#","#..4444.#.......#............#","#.......####.####...m....m...#","#..m.....................b...#","#....v.........g.............#","#.......m..R.......m.....g...#","#..R.....................P...#","#....$........c.......$......#","#.......2222.....1111......m.#","#..K.......m.....3333...4444.#","#....$.................m....E#","##############################"],["##############################","#.......OO........OO.........#","#..z.................z.......#","#.....$......................#","#CCCCCC..CCCCCCCCCC..CCCCCCCC#","#............................#","#..TT.....TT.....TT.....TT...#","#..TT.....TT.....TT.....TT...#","#............................#","#.....P.........g.......P....#","#..TT.....TT.....TT.....TT...#","#..TT.....TT.....TT.....TT...#","#.........................v..#","#...b........v...........$...#","#..$.....P..........P........#","#....TT.........TT......f....#","#....TT.........TT......g....#","#.@........K.................#","#.....................$.....E#","##############################"],["##############################","#@..p....x....p.....p....x...#","#.......CCCCCC....CCCCCC.....#","#..p.......t.........p.......#","#....x.........p.........p...#","#..CC....p.........x.....CC..#","#..CC.........P..........CC..#","#.......x.....P.....p....b...#","#..p.......CCCCCCCC......x...#","#.....b.................p....#","#..x....p......g.....x.......#","#.......CCCC.......CCCC..p...#","#..p.........v.........g.....#","#.....x.....p.......t....x...#","#..CC...........p.........CC.#","#..CC..p...x.........p....CC.#","#.......$.......f.....$......#","#..K....x...p........x...p...#","#....$......v...........$...E#","##############################"],["##############################","#.G...G...G...G...G.....AAAA.#","#............................#","#..w.....w..........w....k...#","#....P.........$.......P.....#","#..AA....###.....###....AA...#","#..AA....#.........#....AA...#","#........#....w....#.........#","#..w.....#....f....#.....w...#","#........###.....###.........#","#....g...................v...#","#..AA.......w....w.......AA..#","#..AA.....$........$.....AA..#","#.....b..........g...........#","#..k...........P.......w.....#","#.......CCCCC.......P........#","#.......CCKCC...........$....#","#..P.....w...................#","#.G...G...G...G...G.........E#","##############################"],["##############################","#@.....L.......L.......L.....#","#..........................n.#","#..======================....#","#............................#","#..n.......TT......TT........#","#..........TT......TT.....$..#","#....P.....................P.#","#.......g...........v....b...#","####.#########..#########.####","#............................#","#..L......................L..#","#.......n.....g......n.......#","#....b.......................#","#.......CCCCCCCCCCCCC....v...#","#............B...............#","#..K.........................#","#.............F..............#","#.$......................$...#","##############################"]];
-const HALL=["##############################","#VVVVQVVVV#VVVVUVVVV#VVVVYVVV#","#............................#","#..h.....P..........P.....h..#","#............................#","#.....P..............P.......#","#.....g......................#","#............................#","#...h......WWWWWW......h.....#","#..........WWWWWW............#","#..........WWWWWW............#","#..........WWWWWW............#","#............................#","#.....P..............P.......#","#.............@.........b....#","#..h.....P..........P.....h..#","#..............JJJJJ.........#","#............................#","#VVVZVVVV#VVHVV#VVVVVVXVVVVVV#","##############################"];
+const HALL=["##############################","#VVVVQVVVV#VVVVUVVVV#VVVVYVVV#","#............................#","#..h.....P..........P.....h..#","#............................#","#.....P..............P.......#","#.....g......................#","#............................#","#...h......WWWWWW......h.....#","#..........WWWWWW............#","#..........WWWWWW............N","#..........WWWWWW............#","#............................#","#.....P..............P.......#","#.............@.........b....#","#..h.....P..........P.....h..#","#..............JJJJJ.........#","#............................#","#VVVZVVVV#VVHVV#VVVVVVXVVVVVV#","##############################"];
 
-const TS=40,PI=Math.PI,SOLID="#SRPCOTALK=F1234VWhGJ",DOORS={Q:1,U:2,Y:3,Z:4,X:5,H:6};
+const TS=40,PI=Math.PI,SOLID="#SRPCOTALK=F1234VWhGJ",DOORS={Q:1,U:2,Y:3,Z:4,X:5,H:6,N:7};
 const $=id=>document.getElementById(id);
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const rnd=(a,b)=>a+Math.random()*(b-a);
@@ -355,6 +358,7 @@ const LV=[{name:"Hall del centro commerciale",kind:"hall",floor:["#efe9df","#e4d
 
 LV[6]={name:"Il Mondo dei Pesci",kind:"fishing",floor:["#bfe6f2","#acdcec"],wall:"#1f5a7a",top:"#3f8fb5",acc:"#3fa9f5",
  intro:"Pesca dalla grande boccia! Le frecce orientano la canna, l'asciugamano lancia l'amo. Evita murena (scossa), topo (mangia la pappa del pesce rosso), scarpone e lattina di pelati. La saponetta scaccia i gatti che rubano dal cesto, il chewing-gum ti fa uscire vendendo i pesci pescati."};
+LV[7]={name:"Parcheggio — Gara di carrelli",kind:"race",floor:["#4a4d57","#454852"],wall:"#2f7a45",top:"#3f8f55",acc:"#ff9a2e",intro:"Gara di carrelli nel parcheggio! Guidate con la levetta (l'acceleratore è automatico), raccogliete i ? per saponette razzo, gomma gigante, turbo e bolla scudo. Chi viene colpito gira su se stesso e rallenta. I bambini coi carrelli corrono contro di voi ma non possono vincere: chi taglia per primo il traguardo dopo 3 giri guadagna 25 monete."};
 /* Enemy definitions (valori al livello 1) */
 const EN={
  g:{name:"Guardia",type:"melee",hp:60,spd:2.1,dmg:12,cd:1.3,aggro:7,coins:[3,5],r:.34},
@@ -735,6 +739,7 @@ function newPerson(x,y){const o={id:"q"+(S.nid++),x,y,kx:0,ky:0,walk:0,face:Math
  S.people.push(o);return o}
 function loadLevel(L){
  if(L===6){loadFishShop();return}
+ if(L===7){loadRace();return}
  S.lvl=L;const rows=L?MAPS[L-1]:HALL;S.H=rows.length;S.W=rows[0].length;S.G=rows.map(r=>[...r]);S.gv++;
  Object.assign(S,{enemies:[],proj:[],items:[],tables:[],ovens:[],kiosks:[],shelves:[],hidden:{},respawn:[],exitOpen:true,fragSpot:null,cage:null,exit:null,spawn:[1.5,1.5],catSpawns:[],spawnT:0,people:[],hallDoors:[],fount:null,shelter:null,mom:null,cages:[],parrots:[],poops:[],critters:[],fobj:[],scats:[],baskets:[[],[],[],[]],catT:0});
  S.mission={kind:LV[L].kind,n:0,need:0,cats:0,catNeed:8,kit:false,done:false,boss:false,freed:false,sp:0};S.nclerk=0;
@@ -753,7 +758,7 @@ function loadLevel(L){
   else if(ch==="K")S.kiosks.push([cx,cy]);
   else if(ch==="E")S.exit=[cx,cy];
   else if(ch==="F")S.cage=[cx,cy];
-  else if(DOORS[ch])S.hallDoors.push({x:cx,y:cy,to:DOORS[ch],front:[cx,y<S.H/2?cy+1:cy-1]});
+  else if(DOORS[ch])S.hallDoors.push({x:cx,y:cy,to:DOORS[ch],front:ch==="N"?[cx-1,cy]:[cx,y<S.H/2?cy+1:cy-1]});
   else if(ch==="J"){S.shelter=S.shelter||{x0:x,y0:y,x1:x+1,y1:y+1};S.shelter.x0=Math.min(S.shelter.x0,x);S.shelter.x1=Math.max(S.shelter.x1,x+1);S.shelter.y0=Math.min(S.shelter.y0,y);S.shelter.y1=Math.max(S.shelter.y1,y+1)}
   else if(ch==="W"){fx0=Math.min(fx0,x);fy0=Math.min(fy0,y);fx1=Math.max(fx1,x+1);fy1=Math.max(fy1,y+1)}
   if("PRAL=S1234V".includes(ch)&&hash(x+L*7,y*3+L)<.42&&hid<9){S.hidden[x+","+y]=1;hid++}}
@@ -779,12 +784,12 @@ function sceneSlot(p){const v=vis(),k=Math.max(0,v.indexOf(p)),n=Math.max(1,v.le
 const bk=p=>S.baskets[p.i]||(S.baskets[p.i]=[]);
 function enterArea(L){const from=S.lvl;
  S.players.forEach(p=>dropCarry(p));
- if(from>0){const o={};for(const k of AREA_KEYS)o[k]=S[k];S.shops[from]=o}
+ if(from>0&&from!==7){const o={};for(const k of AREA_KEYS)o[k]=S[k];S.shops[from]=o}
  S.proj=[];
- if(L>0&&S.shops[L]){const o=S.shops[L];if(!o.G)o.G=baseGrid(L);Object.assign(S,o);S.lvl=L;S.gv++}else loadLevel(L);
+ if(L>0&&L!==7&&S.shops[L]){const o=S.shops[L];if(!o.G)o.G=baseGrid(L);Object.assign(S,o);S.lvl=L;S.gv++}else loadLevel(L);
  let pos=S.spawn;if(L===0&&from>0){const d=S.hallDoors.find(d=>d.to===from);if(d)pos=d.front}
  if(L>0){S.shelter=null;S.mom=null}
- placeTeam(pos);if(L===6)S.players.forEach(p=>{p.x=sceneSlot(p);p.y=2.7;p.rod={ang:0,st:"idle",len:0,obj:null,cd:.4};p.face=1});ev({k:"sfx",s:"door"});
+ placeTeam(pos);if(L===7)startRace();if(L===6)S.players.forEach(p=>{p.x=sceneSlot(p);p.y=2.7;p.rod={ang:0,st:"idle",len:0,obj:null,cd:.4};p.face=1});ev({k:"sfx",s:"door"});
  if(L>0){if(!S.seen[L]){S.seen[L]=1;toast(LV[L].intro,7)}else toast(S.done[L]?`${LV[L].name}: missione già completata`:`Bentornati da ${LV[L].name}`,2.5)}
  else toast(sushiOpen()&&!S.done[5]?"Tutti hanno il volantino completo: correte al Sushi Samurai!":"Hall del centro commerciale",2.5);
 }
@@ -847,7 +852,8 @@ function inputFor(i){if(S.mode==="hot")return i===S.active?IN[0]:NOIN;if(S.mode=
 function tick(dt){
  if(!S||S.phase!=="play"||S.paused)return;
  S.time+=dt;
- if(S.mode==="hot"){S.turnT-=dt;if(S.turnT<=0){S.phase="turn";return}}
+ if(S.mode==="hot"&&S.lvl!==7){S.turnT-=dt;if(S.turnT<=0){S.phase="turn";return}}
+ if(S.lvl===7){raceTick(dt);return}
  if(S.lvl===6){for(const p of vis()){const f=p.fish;f.food=Math.max(0,f.food-dt/3.4);f.water=Math.max(0,f.water-dt/4.4);if(f.pot){f.potT-=dt;if(f.potT<=0)f.pot=null}if(p.down&&p.respawn>0){p.respawn-=dt;if(p.respawn<=0)respawnP(p)}}sceneTick(dt);return}
  fishTick(dt);
  S.players.forEach((p,i)=>updPlayer(p,inputFor(i),dt));
@@ -951,7 +957,7 @@ function attack(p){const G=GR(p);
   for(let k=0;k<12&&hitsSolid(tx,ty,.15);k++){tx-=ax*.3;ty-=ay*.3}
   S.proj.push({id:S.nid++,k:"gum",x:p.x,y:p.y,sx:p.x,sy:p.y,tx,ty,t:0,ft:.45,st:"fly",own:"p",by:p.i,mega:!!G.up.mega})}
 }
-function hitE(e,dmg,kx,ky,pot,by){const d=EN[e.t];
+function hitE(e,dmg,kx,ky,pot,by){const d=EN[e.t];if(e.kart){spinKart(e,by);return}
  if(e.t==="k"){if(!e.flee){e.flee=true;e.fleeT=0;S.mission.cats++;float(e.x,e.y,"Sciò!","#ffc93c");ev({k:"burst",x:e.x,y:e.y,col:"#ffb15a",n:10});if(Math.random()<.7)dropLoot(e.x,e.y,1)}return}
  if(d.stunOnly){if(e.stun<=0){float(e.x,e.y,e.t==="z"?"Stordito!":"Stordita!","#ffe36b");ev({k:"sfx",s:"stun"})}e.stun=pot?2.2:d.stunOnly;e.hit=.15;return}
  e.hp-=dmg;e.hit=.15;const kb=e.t==="B"?.6:3.5;e.kx=kx*kb;e.ky=ky*kb;
@@ -1018,6 +1024,7 @@ function interact(p){
 }
 function sushiOpen(){return groupsInPlay().every(g=>S.grp[g].frags>=4)}
 function useDoor(p,d){
+ if(d.to===7&&(S.raceCool||0)>0){p.doorLock=true;toast(`🧹 Pulizie in corso nel parcheggio: torna più tardi (${Math.ceil(S.raceCool)} s)`,3);ev({k:"sfx",s:"empty"});p.kx=-4;return}
  if(d.to===5&&!sushiOpen()){p.doorLock=true;const miss=groupsInPlay().filter(g=>S.grp[g].frags<4);
   toast(S.rule==="insieme"?`Il Sushi Samurai è chiuso: servono i 4 pezzi del volantino (${S.grp[0].frags}/4)`:`Il Sushi Samurai apre quando tutti hanno i 4 pezzi. Mancano: ${miss.map(g=>grpName(g)+" "+S.grp[g].frags+"/4").join(", ")}`,3.5);ev({k:"sfx",s:"empty"});p.ky=d.y>S.H/2?-3.5:3.5;return}
  enterArea(d.to)}
@@ -1144,6 +1151,97 @@ function switchTurn(){const a=S.players[S.active],b=S.players[nextTurnIdx()];if(
  if(b.fish){b.fish.x=a.fish.x;b.fish.y=a.fish.y}if(S.lvl===6){b.x=6;b.y=2.7;b.rod={ang:0,st:"idle",len:0,obj:null,cd:.4}}}
  b.inv=1;b.down=false;b.respawn=0;if(b.hp<=0)b.hp=b.max;S.active=b.i;S.turnT=75;S.phase="play"}
 
+/* ---------- gara di carrelli nel parcheggio (livello 7) ---------- */
+const RW=44,RH=30,RLAPS=3,RCOOL=60,RSLOTS=[[24.2,25.4],[24.2,27.6],[21.8,25.4],[21.8,27.6],[19.4,25.4],[19.4,27.6],[17,25.4],[17,27.6]];
+const rIn=(x,y,x0,y0,x1,y1,r)=>{if(x<x0||x>x1||y<y0||y>y1)return false;const cx=x<x0+r?x0+r:x>x1-r?x1-r:x,cy=y<y0+r?y0+r:y>y1-r?y1-r:y;return(x-cx)*(x-cx)+(y-cy)*(y-cy)<=r*r};
+const rRoad=(x,y)=>rIn(x,y,1,1,43,29,8)&&!rIn(x,y,6,6,38,24,3);
+function racePath(){const x0=3.5,y0=3.5,x1=40.5,y1=26.5,r=5.5,pts=[],P=(x,y)=>pts.push([x,y]);
+ const line=(ax,ay,bx,by)=>{const n=Math.max(1,Math.round(Math.hypot(bx-ax,by-ay)/1.1));for(let i=0;i<n;i++)P(ax+(bx-ax)*i/n,ay+(by-ay)*i/n)};
+ const arc=(cx,cy,a0,a1)=>{const n=Math.max(2,Math.round(Math.abs(a1-a0)*r/1.1));for(let i=0;i<n;i++){const a=a0+(a1-a0)*i/n;P(cx+Math.cos(a)*r,cy+Math.sin(a)*r)}};
+ line(26,y1,x1-r,y1);arc(x1-r,y1-r,PI/2,0);line(x1,y1-r,x1,y0+r);arc(x1-r,y0+r,0,-PI/2);line(x1-r,y0,x0+r,y0);arc(x0+r,y0+r,-PI/2,-PI);line(x0,y0+r,x0,y1-r);arc(x0+r,y1-r,PI,PI/2);line(x0+r,y1,26,y1);return pts}
+const RPATH=racePath(),RN=RPATH.length;
+const angD=(a,b)=>{let d=a-b;while(d>PI)d-=PI*2;while(d<-PI)d+=PI*2;return d};
+function loadRace(){S.lvl=7;S.W=RW;S.H=RH;S.G=[];for(let y=0;y<RH;y++){const r=[];for(let x=0;x<RW;x++)r.push(rRoad(x+.5,y+.5)?".":"#");S.G.push(r)}S.gv++;
+ Object.assign(S,{enemies:[],proj:[],items:[],tables:[],ovens:[],kiosks:[],shelves:[],hidden:{},respawn:[],exitOpen:true,fragSpot:null,cage:null,exit:null,spawn:[24,26.5],catSpawns:[],spawnT:0,people:[],hallDoors:[],fount:null,shelter:null,mom:null,cages:[],parrots:[],poops:[],critters:[],fobj:[],scats:[],baskets:[[],[],[],[]],catT:0});
+ S.mission={kind:"race",n:0,need:0,cats:0,catNeed:0,kit:false,done:false,boss:false,freed:false,sp:0};
+ const boxes=[];for(let k=0;k<6;k++){const i=Math.floor(RN*(k+.5)/6),a=RPATH[i],b=RPATH[(i+1)%RN],tx=b[0]-a[0],ty=b[1]-a[1],n=Math.hypot(tx,ty)||1;for(const o of[-1.4,0,1.4])boxes.push({x:a[0]-ty/n*o,y:a[1]+tx/n*o,t:0})}
+ S.race={st:"count",t:3.4,big:"",laps:RLAPS,boxes,gums:[],rp:[],placeN:0,winner:-1,endT:0,clock:0,top:[]}}
+function raceKarts(){return[...S.players.filter(p=>!p.hidden&&!p.away&&!p.watch),...S.enemies.filter(e=>e.kart&&!e.dead)]}
+function startRace(){const R=S.race,hot=S.mode==="hot";S.players.forEach(p=>{p.watch=hot&&p.i!==S.active});
+ const hs=S.players.filter(p=>!p.hidden&&!p.away&&!p.watch);let k=0;
+ for(const p of hs){const s=RSLOTS[k++];Object.assign(p,{x:s[0],y:s[1],kh:0,ks:0,spin:0,boost:0,shield:0,up1:0,up2:0,wi:RN-3-Math.floor((k-1)/2)*2,wr:0,fin:0,cd:.5,kx:0,ky:0,stun:0,inv:0,doorLock:true,down:false,hp:p.max});p.fish&&(p.fish.x=p.x,p.fish.y=p.y)}
+ for(let a=0;a<3;a++){const s=RSLOTS[k++],e=addEnemy("b",s[0],s[1]);Object.assign(e,{kart:true,kh:0,ks:0,spin:0,boost:0,shield:0,wi:RN-3-Math.floor((k-1)/2)*2,wr:0,fin:0,off:[-1,0,1][a]*.9,vmax:6.6+a*.25,fcd:rnd(3,6),face:1,dmg:0,hp:999,max:999})}
+ toast("Gara di carrelli! Salite sul carrello: "+RLAPS+" giri. Raccogliete i ? per i gadget. Vince chi taglia per primo il traguardo!",6)}
+function rkAdv(o){let best=o.wi,bd=1e9;for(let j=-4;j<=12;j++){const i=((o.wi+j)%RN+RN)%RN,d=dist(o.x,o.y,RPATH[i][0],RPATH[i][1]);if(d<bd){bd=d;best=i}}
+ if(best<o.wi-RN/2)o.wr++;else if(best>o.wi+RN/2)o.wr--;o.wi=best}
+const rProg=o=>o.wr*RN+o.wi;
+function spinKart(o,by){if(o.shield>0){o.shield=0;float(o.x,o.y-.8,"Bolla!","#9fe8ff");ev({k:"sfx",s:"pick"});return}if(o.spin>.4)return;o.spin=1.4;o.ks*=.3;ev({k:"sfx",s:"stun",x:o.x,y:o.y});ev({k:"burst",x:o.x,y:o.y,col:"#ffe36b",n:10});float(o.x,o.y-.8,"Ooops!","#ffe36b")}
+function kartDrive(o,dt,want,max,steer){ // want: angolo desiderato o null
+ o.spin=Math.max(0,(o.spin||0)-dt);o.boost=Math.max(0,(o.boost||0)-dt);o.shield=Math.max(0,(o.shield||0)-dt);
+ let top=max*(o.boost>0?1.45:1);
+ if(o.spin>0)o.ks*=Math.pow(.1,dt);
+ else{if(want!=null){const d=angD(want,o.kh),rate=steer*(1.15-.5*Math.min(1,o.ks/top));o.kh+=Math.max(-rate*dt,Math.min(rate*dt,d))}
+  const tg=want!=null?top:top*.5;o.ks+=(tg-o.ks)*Math.min(1,dt*(tg>o.ks?2.4:1.4))}
+ const vx=Math.cos(o.kh)*o.ks,vy=Math.sin(o.kh)*o.ks,ox=o.x,oy=o.y;moveCircle(o,vx*dt,vy*dt,.34);
+ const dd=Math.hypot(o.x-ox,o.y-oy),w=Math.hypot(vx,vy)*dt;if(w>.001&&dd<w*.6){o.ks*=Math.pow(.04,dt);if(S.time-(o.bumpT||-9)>.5){o.bumpT=S.time;ev({k:"sfx",s:"bump",x:o.x,y:o.y})}}
+ o.face=Math.cos(o.kh)<0?-1:1;o.walk=(o.walk||0)+o.ks*dt*2}
+function raceGift(p){const r=Math.random(),n=p.name;
+ if(r<.3){p.up1=3;float(p.x,p.y-1,"Saponetta razzo ×3!","#ff9fd6")}
+ else if(r<.55){p.up2=2;float(p.x,p.y-1,"Gomma gigante ×2!","#ffb3e6")}
+ else if(r<.8){p.boost=2.4;float(p.x,p.y-1,"Turbo!","#ffd23c")}
+ else{p.shield=8;float(p.x,p.y-1,"Bolla scudo!","#9fe8ff")}ev({k:"sfx",s:"pick",x:p.x,y:p.y})}
+function raceFire(o,kind,own){const R=S.race,c=Math.cos(o.kh),s=Math.sin(o.kh);
+ if(kind==="soap"){const hm=own&&o.up1>0;if(hm)o.up1--;R.rp.push({id:S.nid++,x:o.x+c*.7,y:o.y+s*.7,vx:c*(hm?15:13)+c*Math.max(0,o.ks)*.3,vy:s*(hm?15:13)+s*Math.max(0,o.ks)*.3,by:own?o.i:-1,ai:!own,hm,life:1.3})}
+ else{const big=own&&o.up2>0;if(big)o.up2--;R.gums.push({id:S.nid++,x:o.x-c*.95,y:o.y-s*.95,by:own?o.i:-1,ai:!own,big,t:14,arm:.8})}
+ ev({k:"sfx",s:kind==="soap"?"soap":"gum",x:o.x,y:o.y})}
+function raceAttack(p){if(p.cd>0||p.spin>0||p.fin)return;
+ if(p.w===0){p.cd=.5;p.swing=.22;ev({k:"sfx",s:"towel",x:p.x,y:p.y});ev({k:"swing",id:p.id,ax:Math.cos(p.kh),ay:Math.sin(p.kh),wet:false});
+  for(const o of raceKarts()){if(o===p)continue;const dx=o.x-p.x,dy=o.y-p.y,d=Math.hypot(dx,dy);if(d<1.9)spinKart(o,p)}}
+ else if(p.w===1){p.cd=p.up1>0?.55:1;raceFire(p,"soap",true)}
+ else{p.cd=1.3;raceFire(p,"gum",true)}}
+function kartAI(e,dt){const R=S.race,go=R.st==="go"||R.st==="end";rkAdv(e);
+ if(!go||e.fin){kartDrive(e,dt,null,e.fin?4:0,3);if(!go)e.ks=0;return}
+ const L=4+Math.floor(e.ks/3),t=RPATH[(e.wi+L)%RN],t2=RPATH[(e.wi+L+1)%RN],tx=t2[0]-t[0],ty=t2[1]-t[1],n=Math.hypot(tx,ty)||1,gx=t[0]-ty/n*e.off,gy=t[1]+tx/n*e.off;
+ let want=Math.atan2(gy-e.y,gx-e.x);
+ const pl=S.players.filter(p=>!p.hidden&&!p.away&&!p.watch);let mx=0;for(const p of pl)mx=Math.max(mx,rProg(p));
+ const diff=mx-rProg(e),k=diff>RN*.25?1.12:diff<-RN*.12?.88:1;
+ for(const g of R.gums)if(dist(g.x,g.y,e.x+Math.cos(e.kh)*1.6,e.y+Math.sin(e.kh)*1.6)<(g.big?1.5:.9)&&g.by!==-1){want+=.55}
+ kartDrive(e,dt,want,e.vmax*k,3.3);
+ e.fcd-=dt;if(e.fcd<=0){e.fcd=rnd(3.5,7);const c=Math.cos(e.kh),s=Math.sin(e.kh);
+  const ahead=pl.find(p=>{const dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy);return d<7&&d>1.5&&(dx*c+dy*s)/d>.93});
+  if(ahead)raceFire(e,"soap",false);else if(pl.some(p=>{const dx=p.x-e.x,dy=p.y-e.y,d=Math.hypot(dx,dy);return d<3&&(dx*c+dy*s)/d<-.7}))raceFire(e,"gum",false)}}
+function raceTick(dt){const R=S.race;if(!R)return;
+ if(S.raceCool>0)S.raceCool=Math.max(0,S.raceCool-dt);
+ const go=R.st==="go"||R.st==="end";
+ if(R.st==="count"){R.t-=dt;R.big=R.t>0?String(Math.ceil(R.t)):"";if(R.t<=0){R.st="go";R.big="VIA!";R.bigT=1;ev({k:"sfx",s:"deliver"})}}
+ else{R.clock+=dt;if(R.bigT>0){R.bigT-=dt;if(R.bigT<=0)R.big=""}}
+ const ps=S.players.filter(p=>!p.hidden&&!p.away&&!p.watch);
+ S.players.forEach((p,i)=>{if(p.hidden||p.away||p.watch)return;const inp=inputFor(i);if(inp.wsel>=0&&inp.wsel<3&&inp.wsel!==p.w)p.w=inp.wsel|0;
+  p.cd-=dt;p.swing-=dt;let mx=inp.mx||0,my=inp.my||0;const m=Math.hypot(mx,my);
+  kartDrive(p,dt,go&&!p.fin&&m>.2?Math.atan2(my,mx):null,go&&!p.fin?7.2:p.fin?4:0,3.6);if(!go)p.ks=0;
+  if(go&&inp.atk)raceAttack(p);
+  rkAdv(p);p.fx=Math.cos(p.kh);p.fy=Math.sin(p.kh);p.walk=0;
+  if(go&&!p.fin&&p.wr>=RLAPS+1){p.fin=++R.placeN;p.finT=R.clock;
+   if(R.winner<0){R.winner=p.i;R.st="end";R.endT=9;const G=GR(p);G.coins+=25;p.score=(p.score|0)+1500;ev({k:"sfx",s:"free"});ev({k:"burst",x:p.x,y:p.y,col:"#ffc93c",n:40});
+    toast(`🏁 Ha vinto ${S.rule==="squadre"?grpName(gi(p))+" con "+p.name:p.name}! +25 monete${S.rule==="insieme"?" per tutti":""}`,5)}
+   else float(p.x,p.y-1,`${p.fin}° posto!`,"#fff")}});
+ for(const e of S.enemies)if(e.kart&&!e.dead){e.cd=0;kartAI(e,dt);if(e.wr>=RLAPS+1&&!e.fin){e.fin=1;float(e.x,e.y-1,"Un concorrente ha finito","#ccc")}}
+ const ks=raceKarts();
+ for(let i=0;i<ks.length;i++)for(let j=i+1;j<ks.length;j++){const a=ks[i],b=ks[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);if(d>0&&d<.8){const o=(.8-d)/2,nx=dx/d,ny=dy/d;moveCircle(a,-nx*o,-ny*o,.34);moveCircle(b,nx*o,ny*o,.34);const av=a.ks,bv=b.ks;a.ks=a.ks*.85+bv*.1;b.ks=b.ks*.85+av*.1}}
+ for(const bx of R.boxes){if(bx.t>0){bx.t-=dt;continue}for(const o of ks){if(!o.name||dist(o.x,o.y,bx.x,bx.y)>.85)continue;bx.t=6;raceGift(o);break}}
+ for(let i=R.gums.length-1;i>=0;i--){const g=R.gums[i];g.t-=dt;g.arm-=dt;if(g.t<=0){R.gums.splice(i,1);continue}
+  for(const o of ks){if(g.arm>0&&o.i===g.by&&o.name)continue;if(dist(o.x,o.y,g.x,g.y)<(g.big?1.25:.7)){if(g.ai&&!o.name)continue;spinKart(o);R.gums.splice(i,1);break}}}
+ for(let i=R.rp.length-1;i>=0;i--){const q=R.rp[i];q.life-=dt;
+  if(q.hm){let tg=null,bd=9;for(const o of ks){if(o.i===q.by&&o.name)continue;const d=dist(q.x,q.y,o.x,o.y);if(d<bd&&(o.name||!q.ai)){bd=d;tg=o}}
+   if(tg){const sp=Math.hypot(q.vx,q.vy),a=Math.atan2(q.vy,q.vx),w=Math.atan2(tg.y-q.y,tg.x-q.x),na=a+Math.max(-4*dt,Math.min(4*dt,angD(w,a)));q.vx=Math.cos(na)*sp;q.vy=Math.sin(na)*sp}}
+  q.x+=q.vx*dt;q.y+=q.vy*dt;let dead=q.life<=0||solidAt(Math.floor(q.x),Math.floor(q.y));
+  if(!dead)for(const o of ks){if(o.i===q.by&&o.name)continue;if(q.ai&&!o.name)continue;if(dist(o.x,o.y,q.x,q.y)<.7){spinKart(o);dead=true;break}}
+  if(dead){ev({k:"burst",x:q.x,y:q.y,col:"#e8c6ff",n:6});R.rp.splice(i,1)}}
+ R.top=[...ps].sort((a,b)=>(a.fin?a.fin-99:0)-(b.fin?b.fin-99:0)||rProg(b)-rProg(a)).map(p=>p.i);
+ if(R.st==="end"){R.endT-=dt;if(R.endT<=0||ps.every(p=>p.fin))leaveRace()}
+ else if(go&&R.clock>170&&R.winner<0){toast("Tempo scaduto: nessun vincitore",4);R.winner=-2;R.st="end";R.endT=3}}
+function leaveRace(){S.raceCool=RCOOL;S.race=null;S.players.forEach(p=>{p.watch=false;p.spin=0;p.boost=0;p.shield=0});toast("Pulizie nel parcheggio: la porta resta chiusa per 1 minuto",4);enterArea(0)}
+
 /* ---------- rendering ---------- */
 const cv=$("game"),cx=cv.getContext("2d");const dpr=Math.min(2,window.devicePixelRatio||1);
 let VWt=11,VHt=13,scale=1;
@@ -1169,7 +1267,7 @@ function showToast(t,d){const el=$("toast");el.textContent=t;el.classList.add("o
 function meP(){if(!S)return null;if(S.mode==="hot")return S.players[S.active];return S.players[MYI]||S.players[0]}
 const myG=()=>{const p=meP();return p?GR(p):S.grp[0]};
 
-function buildStatic(){const L=LV[S.lvl];SC=document.createElement("canvas");SC.width=S.W*TS*SS;SC.height=S.H*TS*SS;const c=SC.getContext("2d");c.scale(SS,SS);
+function buildStatic(){if(S.lvl===7){buildRaceBG();return}const L=LV[S.lvl];SC=document.createElement("canvas");SC.width=S.W*TS*SS;SC.height=S.H*TS*SS;const c=SC.getContext("2d");c.scale(SS,SS);
  const W=S.W,H=S.H,G=S.G,isW=(x,y)=>x<0||y<0||x>=W||y>=H||G[y][x]==="#";
  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const px=x*TS,py=y*TS,ch=G[y][x];
   if(ch==="#"){const open=!isW(x,y+1);c.fillStyle=L.top;c.fillRect(px,py,TS,TS);
@@ -1183,7 +1281,7 @@ function buildStatic(){const L=LV[S.lvl];SC=document.createElement("canvas");SC.
   decor(c,ch,px,py,x,y,L)}
  const sign=(sx,sy,sw,col,txt)=>{c.fillStyle=col;rr(c,sx-sw/2,sy-12,sw,24,10);c.fill();c.fillStyle="rgba(255,255,255,.25)";rr(c,sx-sw/2+3,sy-10,sw-6,8,6);c.fill();
   c.font="700 16px Fredoka,system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillStyle="#fff";c.fillText(txt,sx,sy+1)};
- if(S.lvl===0)for(const d of S.hallDoors)sign(d.x*TS,d.y<H/2?18:(H-.55)*TS,Math.min(250,6.2*TS),LV[d.to].acc,LV[d.to].name);
+ if(S.lvl===0)for(const d of S.hallDoors)if(d.to!==7)sign(d.x*TS,d.y<H/2?18:(H-.55)*TS,Math.min(250,6.2*TS),LV[d.to].acc,LV[d.to].name);
  else sign(Math.floor(W/2)*TS,18,Math.min(300,W*TS*.4),L.acc,L.name);
  scKey=S.lvl+":"+S.gv}
 function shade(hex,k){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const f=v=>Math.round(k<0?v*(1+k):v+(255-v)*k);return`rgb(${f(r)},${f(g)},${f(b)})`}
@@ -1219,7 +1317,7 @@ function decor(c,ch,px,py,x,y,L){const cx=px+TS/2,cy=py+TS/2,h=hash(x*3,y*7);
  else if(ch==="K"){c.fillStyle="#d9dde6";rr(c,px+1,py+10,TS-2,TS-11,4);c.fill();c.fillStyle="#9aa3b8";c.fillRect(px+1,py+TS-10,TS-2,9);
   c.fillStyle="#3a3f52";rr(c,px+8,py+2,24,16,3);c.fill();c.fillStyle="#7dffb0";c.fillRect(px+11,py+5,18,6);c.fillStyle="#2a2f3c";for(let i=0;i<3;i++)c.fillRect(px+11+i*6,py+13,4,3);
   c.fillStyle="#ff4f9a";rr(c,px+4,py+TS-9,TS-8,7,3);c.fill();c.fillStyle="#fff";c.font="700 6.5px Fredoka,system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("CASSA",cx,py+TS-5.3)}
- else if(ch==="V"){const top=y<S.H/2,d=S.hallDoors.filter(d=>(d.y<S.H/2)===top).sort((a,b)=>Math.abs(a.x-x)-Math.abs(b.x-x))[0],Lt=d?d.to:1,acc=LV[Lt].acc;
+ else if(ch==="V"){const top=y<S.H/2,d=S.hallDoors.filter(d=>d.to!==7&&(d.y<S.H/2)===top).sort((a,b)=>Math.abs(a.x-x)-Math.abs(b.x-x))[0],Lt=d?d.to:1,acc=LV[Lt].acc;
   c.fillStyle="#3a3f55";c.fillRect(px,py,TS,TS);c.fillStyle=lg(c,0,py,0,py+TS,"#dff4ff","#9fd2ee");c.fillRect(px+2,py+3,TS-4,TS-6);
   c.fillStyle=acc;c.fillRect(px,top?py+TS-5:py,TS,5);c.save();c.translate(cx,cy+(top?-2:3));
   if(Lt===1)drawItem(c,{k:"merch",c:1+((x+y)%4),x:0},0);else if(Lt===2){drawPizzaShape(c,9)}else if(Lt===3)drawItem(c,{k:"pastry",v:x%3,x:0},0);else if(Lt===4){c.scale(1.2,1.2);drawFishBody(c,x*300,null,1)}else{el(c,0,0,11,7,"#fff");el(c,0,-1,6,3.5,"#ff7a4a")}
@@ -1248,13 +1346,14 @@ function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/100
  const now=performance.now(),m=meP(),k=Math.min(1,dt*(role==="guest"?14:22));
  const rp=o=>{let r=RP[o.id];if(!r||dist(r.x,r.y,o.x,o.y)>3)r=RP[o.id]={x:o.x,y:o.y};r.x+=(o.x-r.x)*k;r.y+=(o.y-r.y)*k;return r};
  const c=cx;c.setTransform(1,0,0,1,0,0);c.fillStyle=LV[S.lvl].top||"#120c2a";c.fillRect(0,0,cv.width,cv.height);
- const mr=m?rp(m):{x:S.spawn[0],y:S.spawn[1]};
+ let mr=m?rp(m):{x:S.spawn[0],y:S.spawn[1]};if(S.lvl===7&&m&&m.kh!=null){const tx=Math.cos(m.kh)*Math.min(3.2,(m.ks||0)*.45),ty=Math.sin(m.kh)*Math.min(3.2,(m.ks||0)*.45);VIEW.lx=(VIEW.lx||0)+(tx-(VIEW.lx||0))*Math.min(1,dt*3);VIEW.ly=(VIEW.ly||0)+(ty-(VIEW.ly||0))*Math.min(1,dt*3);mr={x:mr.x+VIEW.lx,y:mr.y+VIEW.ly}}
  const padT=1.2,padB=2.6,padR=2;let camX=S.W<=VWt?(S.W-VWt)/2:cl(mr.x-VWt/2,-.2,S.W-VWt+padR),camY=S.H+padT+padB<=VHt?(S.H-VHt)/2+ (padB-padT)/2:cl(mr.y-VHt/2,-padT,S.H-VHt+padB);
  VIEW.camX=camX;VIEW.camY=camY;c.setTransform(scale,0,0,scale,-camX*TS*scale,-camY*TS*scale);
  c.drawImage(SC,0,0,S.W*TS,S.H*TS);
  const x0=Math.max(0,Math.floor(camX)-1),x1=Math.min(S.W,Math.ceil(camX+VWt)+1),y0=Math.max(0,Math.floor(camY)-1),y1=Math.min(S.H,Math.ceil(camY+VHt)+1);
  for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){const ch=S.G[y][x],px=x*TS+TS/2,py=y*TS+TS/2;
-  if(ch==="E")drawDoor(c,px,py,LV[S.lvl].acc,"HALL","",t,y>S.H/2);
+  if(ch==="N")drawParkDoor(c,px,py,t);
+  else if(ch==="E")drawDoor(c,px,py,LV[S.lvl].acc,"HALL","",t,y>S.H/2);
   else if(DOORS[ch]){const L=DOORS[ch];drawDoor(c,px,py,LV[L].acc,"",L===5&&!sushiOpen()?"lock":(m?GR(m):S.grp[0]).done[L]?"done":"",t,y>S.H/2)}
   else if(ch==="F"){c.save();c.translate(px,py);drawPrincess(c,t,S.mission.freed);c.restore()}
   else if(ch==="O"){const f=.5+.5*Math.sin(t/120+x);c.fillStyle=`rgba(255,140,40,${.18+.12*f})`;c.beginPath();c.arc(px,py+14,14+f*3,0,7);c.fill()}
@@ -1263,18 +1362,19 @@ function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/100
  if(m&&m.carry&&m.carry.k==="merch")for(const s of S.shelves)if(s.c===m.carry.c){c.strokeStyle=`rgba(255,255,255,${.5+.4*Math.sin(t/160)})`;c.lineWidth=3;rr(c,s.x*TS-TS/2+1,s.y*TS-TS/2+1,TS-2,TS-2,5);c.stroke()}
  for(const tb of S.tables)if(tb.want){const bx=tb.cx*TS,by=tb.cy*TS-TS*.9+Math.sin(t/250+tb.cx)*3;c.fillStyle="#fff";rr(c,bx-16,by-14,32,26,10);c.fill();c.beginPath();c.moveTo(bx-4,by+11);c.lineTo(bx,by+18);c.lineTo(bx+4,by+11);c.fill();c.save();c.translate(bx,by-1);drawPizzaShape(c,9);c.restore()}
  for(const it of S.items){if(it.x<x0-1||it.x>x1+1||it.y<y0-1||it.y>y1+1)continue;c.save();c.translate(it.x*TS,it.y*TS);drawItem(c,it,t);c.restore()}
+ if(S.lvl===7&&false);
  for(const q of S.poops||[]){if(q.land){c.save();c.translate(q.x*TS,q.y*TS+6);el(c,0,0,8,4.5,"#f4f1e4");el(c,3,1,4,2.4,"#e8e2c8");el(c,-2,-1,1.6,1.2,"#6b5a3a");c.restore()}else{el(c,q.x*TS,q.y*TS+6,4*(1-q.h/1.5)+1,1.6,"rgba(0,0,0,.25)");el(c,q.x*TS,(q.y-q.h)*TS,3.2,4,"#f4f1e4")}}
  for(const w of FX.warn){const p=(now-w.b)/650;if(p>1)continue;c.strokeStyle=`rgba(255,60,60,${.5*(1-p)+.2})`;c.lineWidth=10;c.lineCap="round";ln(c,w.x*TS,w.y*TS,(w.x+w.wx*4.7)*TS,(w.y+w.wy*4.7)*TS)}
  FX.warn=FX.warn.filter(w=>now-w.b<700);
  for(const b of FX.booms){const p=(now-b.b)/450;if(p>1)continue;c.strokeStyle=`rgba(255,111,174,${1-p})`;c.lineWidth=6*(1-p)+1;c.beginPath();c.arc(b.x*TS,b.y*TS,b.r*TS*(.3+.7*p),0,7);c.stroke();c.fillStyle=`rgba(255,210,60,${.35*(1-p)})`;c.beginPath();c.arc(b.x*TS,b.y*TS,b.r*TS*p*.8,0,7);c.fill()}
  FX.booms=FX.booms.filter(b=>now-b.b<500);
- const list=[];
+ const list=[];if(S.lvl===7)drawRaceObjs(c,t,list);
  for(const e of S.enemies){const r=rp(e);if(r.x<x0-2||r.x>x1+2||r.y<y0-2||r.y>y1+2)continue;list.push({y:r.y,f:()=>{
-  const fl=now-(FX.flash[e.id]||-1e4)<150;c.save();c.translate(r.x*TS,r.y*TS-4);if(e.t!=="b")c.scale(e.face<0?-1:1,1);else c.scale(e.face<0?-1:1,1);
+  const fl=now-(FX.flash[e.id]||-1e4)<150;c.save();c.translate(r.x*TS,r.y*TS-4);if(e.kart&&e.spin>0)c.scale(Math.cos(t/60),1);else c.scale(e.face<0?-1:1,1);if(e.kart&&e.shield>0){c.fillStyle="rgba(120,220,255,.2)";c.strokeStyle="rgba(180,240,255,.9)";c.lineWidth=2;c.beginPath();c.arc(0,-4,27,0,7);c.fill();c.stroke()}
   if(e.flee&&e.t==="k")c.globalAlpha=Math.max(0,1-(e.fleeT||0)/2.2);
   if(e.t==="w")drawZooClerk(c,t+e.x*200,{walk:e.walk,sp:e.sp,flee:e.scared,hasKey:true});else DRAW[e.t](c,t+e.x*200,{walk:e.walk,atk:e.atk>0?e.atk/.3:0,stun:e.stun>0,flee:e.flee,charge:e.charge});
   if(fl){c.globalCompositeOperation="lighter";c.fillStyle="rgba(255,90,90,.5)";c.beginPath();c.arc(0,-6,e.t==="B"?28:17,0,7);c.fill()}c.restore();
-  if(e.stun>0){c.save();c.translate(r.x*TS,r.y*TS-(e.t==="B"?62:34));stars(c,t,0);c.restore()}
+  if(e.stun>0||e.spin>0){c.save();c.translate(r.x*TS,r.y*TS-(e.t==="B"?62:46));stars(c,t,0);c.restore()}
   if(e.wind>0||(e.t==="b"&&e.wind>0)){c.font="700 20px Fredoka,system-ui";c.textAlign="center";c.fillStyle="#ff3b3b";c.fillText("!",r.x*TS,r.y*TS-(e.t==="B"?66:38))}
   if(e.slow>0){c.fillStyle="rgba(90,184,255,.35)";el(c,r.x*TS,r.y*TS+12,14,5,"rgba(90,184,255,.35)")}
   if(e.poison>0)for(let i=0;i<2;i++)el(c,r.x*TS-6+i*12,r.y*TS-26-((t/8+i*20)%20),2.4,2.4,"rgba(110,224,90,.8)");
@@ -1297,7 +1397,7 @@ function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/100
   if(m.st==="dash")put(m.cx,m.y,()=>{c.save();c.scale(d<0?-1:1,1);c.strokeStyle="rgba(255,255,255,.75)";c.lineWidth=2;c.lineCap="round";
     for(let i=0;i<4;i++){const y=-8+i*7,l=22+((t/25+i*9)%14);c.beginPath();c.moveTo(-18,y);c.lineTo(-18-l,y);c.stroke()}
     c.rotate(-.06);c.translate(0,Math.sin(t/35)*1.2);drawCart(c,t,{calm:false,charge:true});c.restore()})}
- for(const p of S.players){if(p.hidden||p.away)continue;const r=rp(p);cartChain(c,p,r,list,t);list.push({y:r.y,f:()=>drawPlayer(c,p,r,t,now)});const F=p.fish;if(!F)continue;
+ for(const p of S.players){if(p.hidden||p.away)continue;const r=rp(p);if(S.lvl===7){if(!p.watch)list.push({y:r.y,f:()=>drawKartP(c,p,r,t,now)});continue}cartChain(c,p,r,list,t);list.push({y:r.y,f:()=>drawPlayer(c,p,r,t,now)});const F=p.fish;if(!F)continue;
   const fr=rp({id:"fish"+p.id,x:F.x,y:F.y});list.push({y:fr.y+.3,f:()=>{c.save();c.translate(fr.x*TS,fr.y*TS+Math.sin(t/400)*3);drawBowl(c,t,F.water,F.pot,F.food<=0||F.water<=0);c.restore();
   const bw=30,by=fr.y*TS-24+Math.sin(t/400)*3;c.fillStyle="rgba(0,0,0,.55)";rr(c,fr.x*TS-bw/2,by,bw,5,2.5);c.fill();c.fillStyle=F.food<25?"#ff5d6c":"#ffb347";rr(c,fr.x*TS-bw/2+1,by+1,(bw-2)*cl(F.food,0,100)/100,3,1.5);c.fill();
   c.fillStyle="rgba(0,0,0,.55)";rr(c,fr.x*TS-bw/2,by+7,bw,5,2.5);c.fill();c.fillStyle=F.water<WCOST+2?"#ff5d6c":"#5ab8ff";rr(c,fr.x*TS-bw/2+1,by+8,(bw-2)*cl(F.water,0,100)/100,3,1.5);c.fill()}})}
@@ -1362,6 +1462,7 @@ function drawPlayer(c,p,r,t,now){
  if(p.carry){c.save();c.translate(r.x*TS,r.y*TS-54+Math.sin(t/200)*2);if(p.carry.k==="pizza")drawPizzaShape(c,11);else if(p.carry.k==="key"){drawKey(c,p.carry.sp);c.translate(0,-11);c.scale(.5,.5);drawAnimal(c,p.carry.sp,t,false)}else drawItem(c,{k:"merch",c:p.carry.c,x:0},0);c.restore()}
  if(p.stun>0){c.save();c.translate(r.x*TS,r.y*TS-48);stars(c,t,0);c.restore()}
  {const bw=30,by=r.y*TS-40;c.fillStyle="rgba(0,0,0,.55)";rr(c,r.x*TS-bw/2,by,bw,5,2.5);c.fill();const hp=cl(p.hp/p.max,0,1);c.fillStyle=hp<.3?"#ff5d6c":hp<.6?"#ffc93c":"#4fe3b5";rr(c,r.x*TS-bw/2+1,by+1,(bw-2)*hp,3,1.5);c.fill()}
+ {const f=Math.max((p.kT||0)/1,(p.fT||0)/1.2,(p.dT||0)/.8);dwellRing(c,r.x*TS,r.y*TS-66,f)}
  if(S.mode!=="solo")nameTag(c,p,r.x*TS,r.y*TS+28)
 }
 const HEROC=["#9ff58a","#c9a5ff","#ffe58a","#ff9f6b"];
@@ -1444,6 +1545,57 @@ function drawScene(t,dt){const c=cx,now=performance.now(),W=12,H=18.6;c.setTrans
  FX.fl=FX.fl.filter(f=>now-f.b<1400);c.textAlign="center";c.font="700 15px Fredoka,system-ui,sans-serif";c.lineJoin="round";
  for(const f of FX.fl){const p=(now-f.b)/1400,y=f.y*TS-30-p*24;c.globalAlpha=p<.75?1:(1-p)*4;c.lineWidth=4;c.strokeStyle="rgba(20,10,40,.85)";c.strokeText(f.t,cl(f.x*TS,90,W*TS-90),y);c.fillStyle=f.c;c.fillText(f.t,cl(f.x*TS,90,W*TS-90),y)}c.globalAlpha=1;
  c.setTransform(1,0,0,1,0,0);const fp=(now-FX.myFlash)/350;if(fp<1){c.fillStyle=`rgba(255,230,80,${.35*(1-fp)})`;c.fillRect(0,0,cv.width,cv.height)}}
+
+/* ---------- parcheggio: pista, carrelli, gadget ---------- */
+function buildRaceBG(){SC=document.createElement("canvas");SC.width=S.W*TS*SS;SC.height=S.H*TS*SS;const c=SC.getContext("2d");c.scale(SS,SS);const W=S.W,H=S.H;
+ c.fillStyle="#3f8f55";c.fillRect(0,0,W*TS,H*TS);
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){const px=x*TS,py=y*TS,road=S.G[y][x]==="."&&rRoad(x+.5,y+.5),isl=rIn(x+.5,y+.5,6,6,38,24,3);
+  if(road){c.fillStyle=(x+y)%2?"#4a4d57":"#474a54";c.fillRect(px,py,TS,TS);if(hash(x,y)>.8){c.fillStyle="rgba(255,255,255,.05)";c.fillRect(px+hash(y,x)*30,py+hash(x*3,y)*30,5,3)}}
+  else if(isl){c.fillStyle=(x+y)%2?"#aeb2be":"#a8acb8";c.fillRect(px,py,TS,TS)}
+  else{c.fillStyle=(x+y)%2?"#3f8f55":"#3a8851";c.fillRect(px,py,TS,TS);if(hash(x+9,y)>.86){c.fillStyle="rgba(255,255,255,.35)";c.fillRect(px+hash(y,x)*30,py+hash(x,y*2)*30,3,3)}}}
+ // cordoli rosso/bianchi sul bordo della strada
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(!(S.G[y][x]==="."))continue;const px=x*TS,py=y*TS;
+  for(const[dx,dy,rx,ry,rw,rh]of[[0,-1,0,0,TS,5],[0,1,0,TS-5,TS,5],[-1,0,0,0,5,TS],[1,0,TS-5,0,5,TS]]){const nx=x+dx,ny=y+dy;if(S.G[ny]&&S.G[ny][nx]==="#"){c.fillStyle=((x+y)&1)?"#e63946":"#fff";c.fillRect(px+rx,py+ry,rw,rh)}}}
+ // isola: parcheggio con auto
+ const cols=["#e63946","#4fb8ff","#ffd23c","#2fcf98","#c9a5ff","#ff9a2e","#eceff4","#2b3a5c"];
+ for(let gy=7.2;gy<23.5;gy+=3){for(let gx=7.5;gx<37;gx+=3.1){if(!rIn(gx+1,gy+.6,6.6,6.6,37.4,23.4,3))continue;c.strokeStyle="rgba(255,255,255,.55)";c.lineWidth=2;c.strokeRect(gx*TS-2,gy*TS-2,2.9*TS,1.8*TS);
+   if(hash(gx*5,gy*7)<.28)continue;const col=cols[Math.floor(hash(gx,gy)*cols.length)];c.save();c.translate((gx+1.4)*TS,(gy+.9)*TS);
+   c.fillStyle="rgba(0,0,0,.25)";rr(c,-44,-17,88,40,10);c.fill();c.fillStyle=col;rr(c,-46,-24,92,44,12);c.fill();c.fillStyle="rgba(255,255,255,.28)";rr(c,-44,-22,88,12,8);c.fill();
+   c.fillStyle="#1d2433";rr(c,-26,-18,50,28,8);c.fill();c.fillStyle=col;rr(c,-22,-15,42,21,6);c.fill();c.fillStyle="#bfe6f2";rr(c,-18,-12,15,14,3);c.fill();rr(c,3,-12,15,14,3);c.fill();
+   c.fillStyle="#ffe58a";c.fillRect(40,-16,4,7);c.fillRect(40,6,4,7);c.restore()}}
+ // alberelli nelle aiuole agli angoli dell'isola
+ for(const[tx,ty]of[[7.5,7.5],[36.5,7.5],[7.5,22.5],[36.5,22.5],[22,15]]){c.fillStyle="rgba(0,0,0,.2)";c.beginPath();c.ellipse(tx*TS,ty*TS+14,26,9,0,0,7);c.fill();c.fillStyle="#6b4a2b";c.fillRect(tx*TS-4,ty*TS-6,8,22);c.fillStyle="#2f9a55";c.beginPath();c.arc(tx*TS,ty*TS-14,24,0,7);c.fill();c.fillStyle="#3fb86a";c.beginPath();c.arc(tx*TS-6,ty*TS-20,14,0,7);c.fill()}
+ // linee tratteggiate al centro della pista
+ c.strokeStyle="rgba(255,255,255,.55)";c.lineWidth=3;c.setLineDash([14,16]);c.beginPath();RPATH.forEach((q,i)=>i?c.lineTo(q[0]*TS,q[1]*TS):c.moveTo(q[0]*TS,q[1]*TS));c.closePath();c.stroke();c.setLineDash([]);
+ // traguardo a scacchi (x=26) e arco
+ for(let y=24;y<29;y++)for(let k=0;k<2;k++){c.fillStyle=((y+k)&1)?"#fff":"#1b1b22";c.fillRect(26*TS-8+k*8,y*TS,8,TS)}
+ c.fillStyle="#2b3a5c";c.fillRect(26*TS-14,24*TS-22,28,24);c.fillStyle="#ffc93c";c.font="700 9px Fredoka,system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText("VIA",26*TS,24*TS-10);
+ c.fillStyle="rgba(255,255,255,.08)";c.font="700 30px Fredoka,system-ui";c.fillText("PARCHEGGIO",22*TS,15*TS+54);
+ scKey="7:"+S.gv}
+function drawKartP(c,p,r,t,now){const sp=p.spin>0,hd=p.kh||0,face=Math.cos(hd)<0?-1:1,tilt=Math.sin(hd)*.2*face;
+ c.save();c.translate(r.x*TS,r.y*TS-4);
+ if(p.shield>0){c.fillStyle="rgba(120,220,255,.2)";c.strokeStyle="rgba(180,240,255,.9)";c.lineWidth=2;c.beginPath();c.arc(0,-4,27+Math.sin(t/120)*1.5,0,7);c.fill();c.stroke()}
+ if(p.boost>0){for(let i=0;i<3;i++){c.fillStyle=i%2?"#ffd23c":"#ff7a2e";c.beginPath();c.moveTo(-face*20,4+i*4);c.lineTo(-face*(34+Math.random()*10),6+i*4);c.lineTo(-face*20,9+i*4);c.fill()}}
+ c.save();c.scale(sp?Math.cos(t/60):face,1);if(!sp)c.rotate(tilt);if(p.inv>0&&Math.floor(t/90)%2)c.globalAlpha=.6;
+ drawCartEmpty(c,t,{s:1.5});c.save();c.translate(0,-14);c.scale(.62,.62);drawKid(c,t,{hero:p.hero,look:p.look,walk:0});c.restore();c.restore();
+ if(sp){c.save();c.translate(0,-40);stars(c,t,0);c.restore()}
+ c.restore();if(S.mode!=="solo")nameTag(c,p,r.x*TS,r.y*TS+30)}
+function drawRaceObjs(c,t,list){const R=S.race;if(!R)return;
+ for(const b of R.boxes){if(b.t>0)continue;list.push({y:b.y,f:()=>{c.save();c.translate(b.x*TS,b.y*TS-8+Math.sin(t/260+b.x)*3);c.fillStyle="rgba(0,0,0,.25)";el(c,0,18,12,4,"rgba(0,0,0,.25)");c.rotate(Math.sin(t/500+b.y)*.25);
+  const g=lg(c,-12,-12,12,12,"#ffe36b","#ff9a2e");c.fillStyle=g;rr(c,-13,-13,26,26,6);c.fill();c.strokeStyle="#fff";c.lineWidth=2;rr(c,-13,-13,26,26,6);c.stroke();c.fillStyle="#fff";c.font="700 20px Fredoka,system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText("?",0,1);c.restore()}})}
+ for(const g of R.gums)list.push({y:g.y-.3,f:()=>{c.save();c.translate(g.x*TS,g.y*TS+4);const s=g.big?1.9:1;el(c,0,0,15*s,8*s,"rgba(255,111,174,.85)");el(c,-3*s,-1,8*s,4*s,"#ff9fd0");for(let i=0;i<4;i++)el(c,Math.cos(i*1.6+g.id)*8*s,Math.sin(i*1.6+g.id)*3*s,2.2,1.6,"#fff");c.restore()}});
+ for(const q of R.rp)list.push({y:q.y,f:()=>{c.save();c.translate(q.x*TS,q.y*TS-10);c.rotate(Math.atan2(q.vy,q.vx));if(q.hm){c.fillStyle="rgba(255,120,200,.5)";c.beginPath();c.moveTo(-8,-5);c.lineTo(-26,0);c.lineTo(-8,5);c.fill()}
+  c.fillStyle=q.hm?"#ff6fae":"#c9a0f0";rr(c,-8,-5,16,10,5);c.fill();c.fillStyle="rgba(255,255,255,.6)";rr(c,-5,-3,8,3,1.5);c.fill();c.restore()}})}
+function drawParkDoor(c,px,py,t){const closed=(S.raceCool||0)>0,open=!closed;
+ c.fillStyle="#2f333d";c.fillRect(px-TS/2,py-TS/2-6,TS,TS+12);
+ c.fillStyle=lg(c,px,py-20,px,py+20,"#dff4ff","#9fd2ee");c.fillRect(px-TS/2+2,py-TS/2,TS-8,TS);
+ c.fillStyle="#2f333d";c.fillRect(px-TS/2+2,py-1,TS-8,2);
+ if(closed){c.fillStyle="#ff9a2e";for(let i=-1;i<4;i++){c.beginPath();c.moveTo(px-TS/2+2,py-TS/2+i*14);c.lineTo(px+TS/2-6,py-TS/2+i*14+7);c.lineTo(px+TS/2-6,py-TS/2+i*14+14);c.lineTo(px-TS/2+2,py-TS/2+i*14+7);c.fill()}
+  const bx=px-92,by=py+TS*.9;c.fillStyle="rgba(0,0,0,.25)";rr(c,bx-70,by-26,142,52,10);c.fill();c.fillStyle="#ffd23c";rr(c,bx-72,by-30,142,52,10);c.fill();c.strokeStyle="#1d2433";c.lineWidth=2;rr(c,bx-72,by-30,142,52,10);c.stroke();
+  c.fillStyle="#1d2433";c.font="700 13px Fredoka,system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText("🧹 PULIZIE IN CORSO",bx-1,by-16);c.font="600 11px Fredoka,system-ui";c.fillText("Torna più tardi · "+Math.ceil(S.raceCool)+" s",bx-1,by+4)}
+ else{const a=.5+.5*Math.sin(t/200);c.fillStyle=`rgba(255,154,46,${.5+.4*a})`;c.beginPath();c.moveTo(px-TS/2+4,py-9);c.lineTo(px-TS/2+4,py+9);c.lineTo(px-TS/2-8,py);c.fill();
+  c.fillStyle="#ff9a2e";rr(c,px-86,py-TS*1.08,100,24,10);c.fill();c.fillStyle="#fff";c.font="700 15px Fredoka,system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText("Parcheggio",px-36,py-TS*1.08+13)}}
+function dwellRing(c,x,y,f){if(f<.12)return;c.save();c.lineWidth=5;c.strokeStyle="rgba(0,0,0,.4)";c.beginPath();c.arc(x,y,10,0,7);c.stroke();c.strokeStyle=f>=1?"#4fe3b5":"#ffd23c";c.lineCap="round";c.beginPath();c.arc(x,y,10,-PI/2,-PI/2+PI*2*Math.min(1,f));c.stroke();c.restore()}
 
 /* ---------- audio: musica chiptune anni '80 ed effetti ---------- */
 const AU={ctx:null,on:true,song:null,timer:0,playing:-1,noise:null};
@@ -1554,6 +1706,7 @@ function onPhase(ph){
   $("bEnd").textContent="Gioca ancora";$("bEnd").disabled=false;$("enH").textContent="I punteggi sono entrati nella classifica.";$("ovEnd").hidden=false}
 }
 function missionText(){const m=S.mission,p=meP(),G=myG();
+ if(S.lvl===7&&S.race){const R=S.race;if(!p||p.watch)return"Gara in corso: tocca al compagno di turno";const pos=Math.max(1,R.top.indexOf(p.i)+1);return p.fin?`Traguardo! ${p.fin}° posto`:`Giro ${Math.min(RLAPS,p.wr)+(p.wr>=RLAPS?0:1)}/${RLAPS} · ${pos}° posto · ? = gadget`}
  if(m.kind==="hall"&&p&&p.carts>0)return`Carrelli agganciati ${p.carts}/3 · portali alla pensilina in basso (più ne porti, più ricompense)`;
  if(m.kind==="hall"){const left=[1,2,3,4].filter(l=>!G.done[l]).map(l=>LV[l].name);if(G.frags>=4)return sushiOpen()?"Volantino completo: entrate nel Sushi Samurai!":"Volantino completo! Il Sushi apre quando tutti avranno i 4 pezzi";return`Negozi da completare: ${left.join(", ")}`}
  if(S.items.some(i=>i.k==="frag")&&!G.done[S.lvl])return"Missione compiuta: prendi il pezzo del volantino!";if(G.done[S.lvl])return"Pezzo del volantino preso · uscite dalla porta HALL";
@@ -1581,8 +1734,9 @@ function syncUI(){
  const p=meP(),G=myG();
  $("lvl").textContent=`${S.lvl&&S.lvl<6?`Negozio ${S.lvl}/5 · `:""}${LV[S.lvl].name} — ${missionText()}${netLost?" · collegamento perso!":""}`;
  $("hud").innerHTML=hudHTML();
- const scene=S.lvl===6;const cI=!scene&&!!p&&(p.carts|0)>0;if(scene!==iconScene||cI!==cartIco){iconScene=scene;cartIco=cI;wIcons(scene)}
- if(p)document.querySelectorAll(".wb").forEach(b=>{const i=+b.dataset.w,am=scene?-2:i===1?(cartIco?p.carts:G.ammo.soap):i===2?G.ammo.gum:-1;b.classList.toggle("sel",!scene&&p.w===i);b.classList.toggle("empty",am===0);b.querySelector("small").textContent=scene?["Lancia","Sciò","Esci"][i]:am<0?"∞":am});
+ const scene=S.lvl===6;const cI=!scene&&S.lvl!==7&&!!p&&(p.carts|0)>0;if(scene!==iconScene||cI!==cartIco){iconScene=scene;cartIco=cI;wIcons(scene)}
+ if(p)document.querySelectorAll(".wb").forEach(b=>{const i=+b.dataset.w,am=scene?-2:S.lvl===7?(i===1?p.up1|0:i===2?p.up2|0:-1):i===1?(cartIco?p.carts:G.ammo.soap):i===2?G.ammo.gum:-1;b.classList.toggle("sel",!scene&&p.w===i);b.classList.toggle("empty",am===0&&S.lvl!==7);b.querySelector("small").textContent=scene?["Lancia","Sciò","Esci"][i]:am<0?"∞":am});
+ {const rb=$("raceBig");if(rb){const t=S.lvl===7&&S.race?S.race.big:"";if(rb.textContent!==t)rb.textContent=t;rb.hidden=!t}}
  const free=!shopMode&&$("ovStat").hidden&&$("ovHelp").hidden&&$("ovSave").hidden&&$("ovPause").hidden;
  if(p&&S.phase==="play"){
   if(!(p.kT>0))shopLock=false;else if(p.kT>1&&!shopLock&&free&&!p.down){shopLock=true;openShop()}
