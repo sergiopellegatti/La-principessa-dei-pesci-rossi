@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>La Principessa dei Pesci Rossi</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#120c2a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pesci Rossi">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* VOICE: avventura comica e colorata per famiglie, ritmo da gioco mobile
+   IDEA: un centro commerciale visto dall'alto, un negozio per livello, come un volantino di offerte animato
+   PICTURE: il negozio stesso, pieno di scaffali, forni e acquari, con gli eroi e la boccia del pesce rosso
+   COLOUR and TYPE: viola notte del menu, rosa e oro delle insegne, ogni negozio coi suoi colori; Fredoka + Nunito
+   LAYOUT: gioco a tutta larghezza con joystick e pulsanti sopra; menu, negozio e aiuto in finestre sovrapposte */
+:root{--fd:Fredoka,system-ui,sans-serif;color-scheme:dark;--bg:#120c2a;--ink:#f6f2ff;--dim:#b2abd3;--pink:#ff6fae;--gold:#ffc93c;--mint:#4fe3b5;--red:#ff5d6c;--blue:#5ab8ff;--card:rgba(30,22,66,.86);--line:rgba(255,255,255,.1)}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;background:radial-gradient(90% 60% at 15% 0%,#3a1f6e 0%,transparent 70%),radial-gradient(70% 50% at 100% 100%,#5a1f4a 0%,transparent 70%),var(--bg);background-attachment:fixed;color:var(--ink);font:16px/1.5 Nunito,system-ui,sans-serif;overflow-x:clip;min-height:100vh}
+h1,h2,h3,button,.f{font-family:var(--fd)}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+.stage{position:fixed;inset:0;background:#7c83a3;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+#game{display:block;position:absolute;inset:0;width:100%;height:100%}
+.shake #game{animation:sh .25s}@keyframes sh{0%,100%{transform:scale(1.03)}25%{transform:scale(1.03) translate(-5px,2px)}55%{transform:scale(1.03) translate(5px,-2px)}80%{transform:scale(1.03) translate(-2px,1px)}}
+.top{position:absolute;top:max(6px,env(safe-area-inset-top));left:max(8px,env(safe-area-inset-left));right:142px;pointer-events:none;display:grid;gap:3px;justify-items:start}
+.lvl{font:600 11.5px/1.25 var(--fd);color:rgba(255,255,255,.92);text-shadow:0 1px 3px rgba(0,0,0,.8);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hudrow{display:flex;gap:10px;align-items:center;background:rgba(14,10,34,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border-radius:99px;padding:3px 10px;font:600 13px/1.2 var(--fd);white-space:nowrap;max-width:100%;overflow:hidden}
+.hudrow>*{flex:none}.hudrow b{font-weight:600}.hudrow .on{color:var(--gold)}
+.corner{position:absolute;top:max(6px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));display:flex;gap:6px}
+.ic{width:38px;height:38px;min-height:38px;padding:0;border-radius:50%;background:rgba(14,10,34,.45);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);font:700 18px var(--fd);opacity:.8;display:grid;place-items:center}
+.ic svg{width:20px;height:20px}
+.toast{position:absolute;left:50%;top:max(58px,calc(env(safe-area-inset-top) + 52px));transform:translateX(-50%);font:700 clamp(14px,3.8vw,19px)/1.15 var(--fd);text-align:center;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.5),0 0 14px rgba(0,0,0,.7);pointer-events:none;opacity:0;transition:opacity .3s;width:88%}
+.toast.on{opacity:1}
+.joy{position:absolute;left:0;bottom:0;width:50%;height:62%}
+.ring{position:absolute;width:118px;height:118px;margin:-59px;border-radius:50%;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 2px rgba(255,255,255,.16);pointer-events:none}
+.knob{position:absolute;left:50%;top:50%;width:50px;height:50px;margin:-25px;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.5),rgba(255,255,255,.2))}
+.wpn{position:absolute;right:0;bottom:0;width:190px;height:190px;pointer-events:none}
+.wb{position:absolute;width:66px;height:66px;min-height:0;padding:0;border-radius:50%;background:rgba(14,10,34,.45);box-shadow:inset 0 0 0 2px rgba(255,255,255,.28),0 4px 14px rgba(0,0,0,.35);pointer-events:auto;touch-action:none;display:grid;place-items:center}
+.wb canvas{width:44px;height:44px;pointer-events:none}
+.wb small{position:absolute;bottom:-2px;right:-2px;min-width:24px;padding:1px 5px;border-radius:99px;background:#1a1236;font:700 12px var(--fd);color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.3);pointer-events:none}
+.wb.sel{background:rgba(255,201,60,.42);box-shadow:inset 0 0 0 3px var(--gold),0 0 18px rgba(255,201,60,.5)}
+.wb.on{transform:scale(.92)}.wb.empty{opacity:.45}
+.wb[data-w="0"]{right:calc(14px + env(safe-area-inset-right));bottom:calc(112px + env(safe-area-inset-bottom))}
+.wb[data-w="1"]{right:calc(78px + env(safe-area-inset-right));bottom:calc(78px + env(safe-area-inset-bottom))}
+.wb[data-w="2"]{right:calc(112px + env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom))}
+.modal.modal{position:relative}
+.x{position:absolute;top:10px;right:10px;width:42px;height:42px;min-height:42px;padding:0;border-radius:50%;font-size:18px;background:rgba(255,255,255,.12);z-index:2}
+.menu{padding:16px 16px 14px;max-width:480px}.menu h2{font-size:clamp(22px,6vw,30px);margin:0}.menu .sub{margin:4px 0 10px;font-size:14px}
+#ovProf,#ovLogin{z-index:80}.who{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin:2px 0 8px;font-size:14px}.who button{min-height:32px;font-size:13px;padding:0 10px}
+.fld{display:block;text-align:left;font-size:13px;margin:8px 0 0;color:var(--dim)}.fld input,.newg input{width:100%;font:600 15px var(--fd);padding:9px 10px;border-radius:12px;border:0;box-shadow:inset 0 0 0 1px var(--line);background:rgba(0,0,0,.25);color:var(--ink);margin-top:4px}
+.picker{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}.picker button{padding:4px;border-radius:14px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 2px rgba(255,255,255,.08);min-height:0}.picker button.sel{box-shadow:inset 0 0 0 3px var(--pink);background:rgba(255,111,174,.14)}.picker canvas{display:block;width:100%;height:92px;pointer-events:none}
+.games{margin-top:10px;text-align:left}.newg{display:flex;gap:6px;align-items:stretch}.newg input{margin:0;flex:1;min-width:0}.newg button{flex:none}
+.games h3{margin:10px 0 4px;font-size:14px}.grow{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:12px;background:rgba(255,255,255,.06);margin-top:4px}.gi{flex:1;min-width:0;cursor:pointer}.gi b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.gi small{display:block;font-size:11px;opacity:.75}.grow button{min-height:34px;padding:0 10px;font-size:13px}.grow .del{background:rgba(230,57,70,.28)}.gnone{font-size:12px;opacity:.7;margin:2px 0}
+.heroes.one{grid-template-columns:minmax(0,150px);justify-content:center}.hero[hidden]{display:none!important}.hero input[readonly]{opacity:.85}
+.heroes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.hero{position:relative;border-radius:16px;padding:5px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 2px rgba(255,255,255,.08);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.hero canvas{display:block;width:100%;height:min(17svh,124px);pointer-events:none}
+.hero input{width:100%;font:600 14px var(--fd);padding:6px 4px;border-radius:12px;border:0;box-shadow:inset 0 0 0 1px var(--line);background:rgba(0,0,0,.25);color:var(--ink);text-align:center;margin-top:4px}
+.hero.sel{box-shadow:inset 0 0 0 3px var(--pink),0 0 20px rgba(255,111,174,.35);background:rgba(255,111,174,.12)}
+.hero:not(.sel){opacity:.62}
+.modes{margin-top:10px}.modes button{min-height:48px;line-height:1.05}.modes small{display:block;font:600 11.5px Nunito;color:var(--dim)}
+.menu .row{margin-top:10px}.menu .hint{margin:6px 0 0}
+.rules{margin-top:6px}.rules[hidden]{display:none}.rules button{min-height:36px;font-size:13px;line-height:1.05}
+.tb{position:absolute;top:4px;left:50%;transform:translateX(-50%);min-height:0;padding:2px 7px;border-radius:99px;font:700 10.5px var(--fd);background:#1d5f8f;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);white-space:nowrap;z-index:1}.tb.p{background:#8a6a10}.tb[hidden]{display:none}
+.arcade{background:#000;border-radius:10px;padding:12px 10px 10px;margin:12px auto 0;max-width:380px;font-family:"Press Start 2P",ui-monospace,monospace;box-shadow:inset 0 0 0 3px #2a2a2a,0 0 0 2px #ff4f9a,0 0 22px rgba(255,79,154,.4);position:relative;overflow:hidden}
+.arcade:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px);pointer-events:none}
+.arT{color:#ffe14d;font-size:14px;letter-spacing:2px;text-shadow:0 0 8px #ff9a2e;animation:blk 1s steps(2) infinite}@keyframes blk{50%{color:#ff3b5c}}
+.arcade ol{list-style:none;margin:10px 0 6px;padding:0;text-align:left}.arcade li{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:6px;font-size:11px;line-height:2;text-shadow:0 0 6px currentColor}
+.arcade li span:nth-child(2){overflow:hidden;white-space:nowrap}.arcade li.me{animation:blk2 .8s steps(2) infinite}@keyframes blk2{50%{opacity:.35}}
+.arE{color:#3ff0ff;font-size:10px;line-height:2;margin:12px 0}.arI{color:#888;font-size:9px;margin-top:4px;animation:blk2 1.2s steps(2) infinite}
+.lobby .tags{justify-content:center;margin-top:6px}
+.shop{max-width:600px}.shelves{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px;margin-top:12px}
+.shelf{display:grid;justify-items:center;gap:2px;padding:6px 4px 8px;min-height:84px;border-radius:12px;background:linear-gradient(180deg,rgba(185,132,84,.35),rgba(138,90,43,.35));box-shadow:inset 0 -6px 0 rgba(90,55,25,.6),inset 0 0 0 1px rgba(255,255,255,.08);font:600 13px/1.1 var(--fd);color:var(--ink)}
+.shelf canvas{width:40px;height:40px}.shelf.sel{box-shadow:inset 0 -6px 0 rgba(90,55,25,.6),inset 0 0 0 3px var(--gold)}
+.stat{text-align:left}.modal.stat h2{text-align:center}.stat h3{color:var(--mint);font-size:17px;margin:14px 0 6px}
+.sr{display:grid;grid-template-columns:96px minmax(0,1fr) 44px;gap:8px;align-items:center;margin:5px 0;font-size:14.5px}.sr span:last-child{text-align:right;font:600 14px var(--fd)}
+.sb{height:10px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden}.sb i{display:block;height:100%;border-radius:9px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:rgba(255,255,255,.07);border-radius:99px;padding:3px 10px;font:600 13.5px var(--fd);white-space:nowrap}
+button{color:var(--ink);background:rgba(255,255,255,.08);border:0;box-shadow:inset 0 0 0 1px var(--line);border-radius:14px;min-height:44px;padding:0 16px;font-size:15px;font-weight:600;cursor:pointer;touch-action:manipulation}
+button:hover{background:rgba(255,255,255,.14)}button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}button:disabled{opacity:.4;cursor:default}
+.big{background:linear-gradient(180deg,#ff8cc0,#ff4f9a);color:#2b0016;box-shadow:0 8px 22px rgba(255,79,154,.35);font-size:17px}
+.big:hover{background:linear-gradient(180deg,#ffa2cd,#ff63a7)}
+.ok{background:linear-gradient(180deg,#7ff0c8,#2fcf98);color:#00261a}
+.overlay{position:fixed;inset:0;background:rgba(8,5,20,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;padding:14px;z-index:9;overflow:auto}
+.overlay[hidden]{display:none}
+.modal{background:linear-gradient(170deg,#2b1d5e,#160f34);box-shadow:0 0 0 1px var(--line),0 30px 80px rgba(0,0,0,.6);border-radius:24px;max-width:560px;width:100%;padding:20px;text-align:center;max-height:94svh;overflow:auto}
+.modal h2{margin:0 0 6px;font-size:clamp(24px,6vw,34px);line-height:1.05;color:var(--gold);text-wrap:balance}
+.modal p{color:#d9d3f2;margin:8px 0}
+.modal canvas.poster{width:100%;max-width:420px;height:180px}
+.modes{display:grid;gap:8px;margin-top:12px}
+.mode{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:center;text-align:left;padding:10px 12px;min-height:64px;border-radius:16px}
+.mode.sel{box-shadow:inset 0 0 0 2px var(--pink);background:rgba(255,111,174,.14)}
+.mode svg{width:40px;height:40px}.mode span small{display:block;font:600 13px Nunito;color:var(--dim)}
+.names{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px;text-align:left}
+.names label{font-size:13px;color:var(--dim);font-weight:700}
+.names input{width:100%;font:600 16px var(--fd);padding:10px 12px;border-radius:12px;border:0;box-shadow:inset 0 0 0 1px var(--line);background:rgba(255,255,255,.07);color:var(--ink);margin-top:4px}
+.seg{display:flex;gap:6px;margin-top:6px}.seg button{flex:1;min-height:38px;font-size:14px;padding:0 6px}.seg .sel{background:rgba(255,111,174,.25);box-shadow:inset 0 0 0 2px var(--pink)}
+.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.shopgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px;text-align:left}
+@media(max-width:420px){.shopgrid{grid-template-columns:minmax(0,1fr)}}
+.it{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:8px;align-items:center;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--line)}
+.it b{font:600 15px var(--fd);display:block;line-height:1.15}.it small{color:var(--dim);font-size:12.5px;line-height:1.2;display:block}
+.it button{min-height:40px;padding:0 10px;font-size:14px;white-space:nowrap;background:rgba(255,201,60,.18);box-shadow:inset 0 0 0 1px rgba(255,201,60,.5);color:var(--gold)}
+.it canvas{width:40px;height:40px}
+.it.own{opacity:.55}
+.wallet{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
+.wallet span{background:rgba(255,255,255,.07);border-radius:99px;padding:4px 12px;font:600 14px var(--fd);white-space:nowrap}
+.flyer{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;max-width:300px;margin:10px auto 0}
+.flyer i{aspect-ratio:3/4;border-radius:6px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px var(--line);display:grid;place-items:center;font:700 13px var(--fd);color:var(--dim);font-style:normal}
+.flyer i.got{background:linear-gradient(160deg,#ff5d6c,#ffb03a);color:#fff}
+.help{text-align:left;display:flex;flex-direction:column;overflow:hidden}.help .hbody{overflow:auto;flex:1;min-height:0;padding-right:2px}.help .hbody>h3:first-child{margin-top:8px}
+.htabs{flex:none;display:flex;gap:4px;overflow-x:auto;margin:8px 0 2px;padding-bottom:4px;scrollbar-width:none}.htabs::-webkit-scrollbar{display:none}
+.htabs button{flex:0 0 auto;min-height:48px;min-width:56px;padding:2px 6px;border-radius:12px;display:grid;justify-items:center;gap:0;font:600 10px/1.1 var(--fd)}.htabs button b{font-size:19px;line-height:1.2}.htabs button.sel{background:rgba(255,201,60,.22);box-shadow:inset 0 0 0 2px var(--gold)}
+.hnav{flex:none;display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}.hnav .pg{font:600 13px var(--fd);color:var(--dim)}.hnav button{min-height:42px}.hnav .big{flex:1;max-width:150px}
+.help h2{margin-bottom:0}.help h3{color:var(--mint);font-size:17px;margin:16px 0 6px}.help ul{margin:0;padding-left:20px}.help li{margin:4px 0;color:#d9d3f2}
+.help table{width:100%;border-collapse:collapse;font-size:14.5px}.help td,.help th{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}.help th{color:var(--dim);font-size:13px}
+kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;padding:1px 6px;white-space:nowrap}
+.qr{display:block;margin:8px auto;width:min(330px,84vw);height:auto;image-rendering:pixelated;border-radius:10px;background:#fff;cursor:zoom-in}
+.qrbig{position:fixed;inset:0;z-index:20;background:#fff;display:grid;place-items:center;align-content:center;gap:8px;padding:10px}.qrbig[hidden]{display:none}.qrbig canvas{width:min(96vw,86vh);height:auto;image-rendering:pixelated}.qrbig p{color:#333;font:600 15px var(--fd);margin:0}
+.net .status{position:sticky;top:-20px;z-index:2;margin:10px -6px 0;padding:6px 10px;border-radius:12px;background:#1d1546}.net .status:empty{display:none}
+.scan p{margin:0;color:#fff;font-weight:700;text-align:center}
+.scan{position:absolute;inset:0;z-index:3;background:rgba(10,6,24,.96);border-radius:24px;display:grid;place-items:center;align-content:center;gap:10px;padding:16px}.scan video{width:100%;max-width:360px;border-radius:14px;background:#000}.scan[hidden]{display:none}
+.net textarea{width:100%;height:80px;resize:vertical;font:12px/1.35 ui-monospace,monospace;color:var(--ink);background:rgba(255,255,255,.06);border:0;border-radius:12px;padding:10px;box-shadow:inset 0 0 0 1px var(--line);word-break:break-all}
+.net h3{font-size:16px;text-align:left;margin:14px 0 6px;color:var(--mint)}
+.status{min-height:22px;font-weight:700;color:var(--dim)}.status.good{color:var(--mint)}.status.bad{color:var(--red)}
+.hint{font-size:13px;color:var(--dim)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+#game3{z-index:0}
+#bAbandon.arm{background:#e63946;color:#fff}#bAbandon[hidden]{display:none}
+#raceBig{position:fixed;left:0;right:0;top:26%;text-align:center;font:800 min(22vw,150px) Fredoka,system-ui;color:#ffe36b;-webkit-text-stroke:6px #2b1a4a;paint-order:stroke fill;text-shadow:0 8px 0 rgba(0,0,0,.25);pointer-events:none;z-index:30}#raceBig[hidden]{display:none}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <canvas id="game" aria-label="Il negozio del centro commerciale"></canvas>
+  <div class="top">
+    <div class="lvl" id="lvl"></div>
+    <div class="hudrow" id="hud"></div>
+    <div id="raceBig" hidden></div>
+  </div>
+  <div class="corner"><button class="ic" id="b3d" aria-label="Grafica 3D">3D</button><button class="ic" id="bAbandon" aria-label="Abbandona" hidden>🚪</button><button class="ic" id="bPause" aria-label="Pausa">❚❚</button><button class="ic" id="bMute" aria-label="Musica on/off"></button><button class="ic" id="bHelp" aria-label="Aiuto e pausa">?</button></div>
+  <div class="toast" id="toast"></div>
+  <div class="joy" id="joy"><div class="ring" id="ring"><div class="knob" id="knob"></div></div></div>
+  <div class="wpn" id="wpn">
+    <button class="wb" data-w="0" aria-label="Asciugamano"><canvas width="88" height="88"></canvas><small>∞</small></button>
+    <button class="wb" data-w="1" aria-label="Saponette"><canvas width="88" height="88"></canvas><small></small></button>
+    <button class="wb" data-w="2" aria-label="Chewing-gum esplosivo"><canvas width="88" height="88"></canvas><small></small></button>
+  </div>
+</div>
+
+<div class="overlay" id="ovLogin" hidden><div class="modal login">
+  <h2>La Principessa dei Pesci Rossi</h2>
+  <div class="seg" id="lgTab"><button data-t="in" class="sel">Accedi</button><button data-t="up">Iscriviti</button></div>
+  <label class="fld">Nome utente<input id="lgN" maxlength="14" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
+  <label class="fld">Password<input id="lgP" type="password" autocomplete="current-password"></label>
+  <div id="lgUp" hidden><label class="fld">Ripeti la password<input id="lgP2" type="password" autocomplete="new-password"></label>
+   <p class="sub">Scegli il tuo personaggio</p><div class="picker" id="pkR" data-sel="0"></div>
+   <p class="hint">Il nome utente sarà il tuo nome nel gioco e non si potrà più cambiare. Personaggio e password si cambiano da «Dati personali».</p></div>
+  <p class="status" id="lgS" role="alert"></p>
+  <div class="row"><button class="big" id="bLogin">Accedi</button></div>
+  <p class="hint">Gli account e i salvataggi restano su questo dispositivo: chi usa il sito da qui vede solo i propri.</p>
+</div></div>
+<div class="overlay" id="ovProf" hidden><div class="modal"><button class="x" id="bProfX" aria-label="Chiudi">✕</button><h2>Dati personali</h2>
+  <p class="sub">Nome utente: <b id="pfId"></b> (non si può cambiare)</p>
+  <p class="sub">Il tuo personaggio</p><div class="picker" id="pkP" data-sel="0"></div>
+  <h3>Cambia password</h3>
+  <label class="fld">Password attuale<input id="pfO" type="password" autocomplete="current-password"></label>
+  <label class="fld">Nuova password<input id="pfN" type="password" autocomplete="new-password"></label>
+  <label class="fld">Ripeti la nuova password<input id="pfN2" type="password" autocomplete="new-password"></label>
+  <p class="status" id="pfS" role="status"></p>
+  <div class="row"><button class="big" id="bProfSave">Salva</button><button id="bProfClose">Chiudi</button></div>
+</div></div>
+<div class="overlay" id="ovMenu" hidden>
+  <div class="modal menu">
+    <h2>La Principessa dei Pesci Rossi</h2>
+    <div class="who">👤 <b id="whoN"></b><button id="bProf">Dati personali</button><button id="bOut">Esci</button></div>
+    <div class="seg modes" id="modes"><button data-m="solo" class="sel">Da solo</button><button data-m="coop">Più telefoni<small>da 2 a 4</small></button><button data-m="hot">A turno<small>stesso telefono, 2-4</small></button></div>
+    <div class="seg rules" id="rules" hidden><button data-r="insieme" class="sel">Insieme</button><button data-r="sfida">Ognuno per sé</button><button data-r="squadre">Foche vs Pinguini</button></div>
+    <p class="sub" id="menuSub">Tocca il tuo personaggio e scrivi il nome</p>
+    <div class="heroes">
+      <div class="hero sel" data-h="0" role="button" tabindex="0" aria-label="Ragazzo con la felpa"><button class="tb" hidden></button><canvas id="hc0"></canvas><input id="n1" maxlength="14" value="Tommy" autocomplete="off" aria-label="Nome del ragazzo con la felpa"></div>
+      <div class="hero" data-h="1" role="button" tabindex="0" aria-label="Ragazza dai capelli viola"><button class="tb" hidden></button><canvas id="hc1"></canvas><input id="n2" maxlength="14" value="Viola" autocomplete="off" aria-label="Nome della ragazza dai capelli viola"></div>
+      <div class="hero" data-h="2" role="button" tabindex="0" aria-label="Mamma con le trecce bionde"><button class="tb" hidden></button><canvas id="hc2"></canvas><input id="n3" maxlength="14" value="Mamma" autocomplete="off" aria-label="Nome della mamma con le trecce bionde"></div>
+      <div class="hero" data-h="3" role="button" tabindex="0" aria-label="Papà muscoloso del fai da te"><button class="tb" hidden></button><canvas id="hc3"></canvas><input id="n4" maxlength="14" value="Papà" autocomplete="off" aria-label="Nome del papà del fai da te"></div>
+    </div>
+    <div class="games" id="gamesBox" hidden><div class="newg"><input id="gAlias" maxlength="24" placeholder="Alias della partita" aria-label="Alias della nuova partita" autocomplete="off"><button class="big" id="bNew">Nuova partita</button></div><div id="gList"></div></div>
+    <div class="row"><button class="big" id="bPlay">Gioca!</button><button class="ok" id="bCont" hidden>Continua</button><button id="bRank">Classifica</button><button id="bHelp2">Aiuto</button><button id="bInst" hidden>Installa</button></div>
+    <p class="hint" id="menuHint"></p>
+  </div>
+</div>
+<div class="overlay" id="ovPause" hidden><div class="modal"><h2>Pausa</h2><p>Il gioco è fermo. Tocca Riprendi quando sei pronto.</p><div class="row"><button class="big" id="bResume">Riprendi</button></div><div class="row"><button id="bPHelp">Come si gioca</button><button id="bPMute"></button><button id="bPMenu">Esci dal gioco</button></div></div></div>
+<div class="overlay" id="ovStat" hidden><div class="modal stat"><button class="x" id="bStatX" aria-label="Chiudi">✕</button><h2>Stato della squadra</h2><div id="stB"></div><div class="row"><button id="bMute2"></button></div><p class="hint">Il gioco è in pausa mentre questa finestra è aperta (in due contemporaneamente il tuo eroe è al sicuro).</p></div></div>
+<div class="overlay" id="ovSave" hidden><div class="modal"><button class="x" id="bSaveX" aria-label="Chiudi">✕</button><h2>Fontana dei Desideri</h2><p>Getta una monetina immaginaria e salva la partita: dal menu potrai ripartire da qui (<b>Continua</b>, o dall'elenco delle tue partite).</p><div class="wallet" id="svW"></div><div class="flyer" id="svF"></div><div class="row"><button class="big" id="bSave">Salva la partita</button><button id="bQuit">Esci dal gioco</button></div><p class="hint" id="svH"></p><div id="svR"></div></div></div>
+<div class="overlay" id="ovRank" hidden><div class="modal"><button class="x" id="bRankX" aria-label="Chiudi">✕</button><h2>Classifica</h2><p>I migliori punteggi di questo telefono. Si aggiorna ogni volta che qualcuno salva alla fontana.</p><div id="rkB"></div></div></div>
+<div class="overlay" id="ovShop" hidden><div class="modal shop"><button class="x" id="bShopX" aria-label="Chiudi il negozio">✕</button><h2 id="shT">Tutto a Tutti Pure i Tetti</h2><div class="wallet" id="shW"></div><div class="shelves" id="shC"></div><div class="shopgrid" id="shG"></div><p class="hint" id="shH"></p></div></div>
+<div class="overlay" id="ovTurn" hidden><div class="modal"><h2 id="tuT"></h2><p id="tuP"></p><div class="row"><button class="big" id="bTurn">Sono pronto/a!</button></div></div></div>
+<div class="overlay" id="ovEnd" hidden><div class="modal"><canvas class="poster" id="poster2"></canvas><h2 id="enT"></h2><p id="enP"></p><div class="row"><button class="big" id="bEnd"></button><button id="bMenu">Menu</button></div><p class="hint" id="enH"></p></div></div>
+<div class="overlay" id="ovNet" hidden>
+  <div class="modal net">
+    <button class="x" id="bNetX" aria-label="Annulla">✕</button>
+    <h2 id="netT">Più telefoni insieme</h2>
+    <div class="seg" id="netRole"><button data-r="host" class="sel">Creo io la partita</button><button data-r="guest">Mi unisco</button></div>
+    <p class="status" id="netS"></p>
+    <p class="hint">Fino a 4 telefoni sulla stessa rete Wi-Fi. Tenete questa pagina aperta finché non siete collegati.</p>
+    <div id="netHost">
+      <div class="lobby"><h3>Giocatori collegati</h3><div class="tags" id="netList"></div><div class="row"><button class="big" id="bStart" disabled>Inizia la partita</button></div></div>
+      <div id="netStep">
+      <h3>1 · Fai inquadrare questo QR a chi si unisce</h3>
+      <p class="hint">Con la fotocamera si apre il gioco già pronto per unirsi. <b>Tocca il QR per ingrandirlo.</b> In alternativa mandate il codice con WhatsApp.</p>
+      <canvas class="qr" id="qrOut" hidden></canvas>
+      <textarea id="codeOut" readonly aria-label="Codice partita"></textarea>
+      <div class="row"><button id="cpOut">Copia</button><button id="shOut">Condividi</button><button id="bRedo">Ricrea</button></div>
+      <h3>2 · Inquadra il QR di risposta</h3>
+      <div class="row"><button class="big" id="bScanH">Scansiona la risposta</button></div>
+      <p class="hint">oppure incolla qui il codice di risposta ricevuto:</p>
+      <textarea id="codeIn" placeholder="Incolla il codice di risposta (inizia con PESCE2)" aria-label="Codice di risposta"></textarea>
+      <div class="row"><button class="ok" id="bLink">Collega</button></div>
+      <p class="hint">Dopo ogni collegamento compare un nuovo QR per il giocatore successivo.</p>
+      </div>
+    </div>
+    <div id="netGuest">
+      <h3>1 · Inquadra il QR della partita</h3>
+      <div class="row"><button class="big" id="bScanG">Scansiona il QR</button></div>
+      <p class="hint">oppure incolla qui il codice ricevuto:</p>
+      <textarea id="gIn" placeholder="Incolla il codice della partita (inizia con PESCE2)" aria-label="Codice partita"></textarea>
+      <div class="row"><button class="ok" id="bAnswer">Crea la risposta</button></div>
+      <h3>2 · Fai inquadrare la risposta a chi ha creato la partita</h3>
+      <p class="hint">Tocca il QR per ingrandirlo.</p>
+      <canvas class="qr" id="qrG" hidden></canvas>
+      <textarea id="gOut" readonly aria-label="Codice di risposta"></textarea>
+      <div class="row"><button id="cpG">Copia</button><button id="shG2">Condividi</button></div>
+    </div>
+    <div class="scan" id="scanBox" hidden><video id="scanV" playsinline muted autoplay></video><p id="scanS">Inquadra il QR dell'altro telefono</p><button id="bScanX">Annulla</button></div>
+  </div>
+</div>
+<div class="qrbig" id="qrBig" hidden><canvas id="qrBigC"></canvas><p>Tocca per chiudere</p></div>
+<div class="overlay" id="ovHelp" hidden>
+  <div class="modal help" role="dialog" aria-label="Come si gioca">
+    <h2>Come si gioca</h2>
+    <p>Il Cuoco del Sushi vuole cucinare la principessa dei pesci rossi. Completate le missioni di 4 negozi e ritrovate i 4 pezzi del volantino: insieme aprono il ristorante Sushi Samurai.</p>
+    <h3>La hall del centro commerciale</h3>
+    <ul><li>Si parte dalla <b>hall</b>: al centro c'è la fontana con il grande pesce, tutto intorno le vetrine e le porte dei negozi, compreso Il Mondo dei Pesci dove si pesca per guadagnare monete.</li>
+    <li>Per entrare in un negozio camminate sulla sua porta; per tornare nella hall usate la porta <b>HALL</b> del negozio. Si può uscire e rientrare quando si vuole: ogni negozio ricorda la missione da dove l'avete lasciata.</li>
+    <li>I negozi si possono fare nell'ordine che preferite, ma il Sushi Samurai resta chiuso finché non avete i 4 pezzi del volantino. Sulle porte dei negozi completati compare una spunta verde.</li>
+    <li>Nella hall e nei negozi passeggiano i <b>clienti</b>: non tolgono energia ma bisogna girarci intorno. Una frustata d'asciugamano li sposta.</li>
+    <li>Fermatevi davanti alla <b>fontana</b> per salvare la partita.</li>
+    <li><b>Carrelli e pensilina</b> (solo nella hall): se sconfiggete il <b>bambino nel carrello</b> della hall non lascia monete ma il suo carrello. Il carrello si aggancia da solo passandoci vicino e vi segue; riportatelo alla <b>pensilina dei carrelli</b> in basso al centro per avere le ricompense (monete, punti, pappa e acqua per il pesce).</li>
+    <li>Nella hall trovate anche dei <b>carrelli abbandonati</b> (con un cerchio azzurro): se ne avete già uno, passandoci vicino li agganciate. Più carrelli portate insieme, più ricompense avete (<b>massimo 3 alla volta</b>), ma andate un po' più piano. Se vi colpiscono e andate KO, i carrelli si perdono.</li>
+    <li>Se avete più carrelli dei posti liberi se ne depositano solo quanti ne entrano; gli altri restano agganciati.</li>
+    <li>Con almeno un carrello agganciato il pulsante delle saponette <b>lancia un carrello</b> (uno alla volta, danno molto più alto): poi il carrello resta a terra e si può riagganciare.</li>
+    <li><b>Parcheggio e gara</b>: dalla hall, la porta <b>Parcheggio</b> (a destra) porta fuori: salite sul carrello e fate <b>3 giri</b>. Guidate col joystick (accelera da solo). I <b>?</b> danno gadget: saponette-razzo (cercano l'avversario), gomma gigante, turbo, bolla scudo. Il pulsante <b>asciugamano</b> fa girare chi ti sta vicino, la <b>gomma</b> si lascia dietro. Chi viene colpito gira su se stesso e rallenta. Vince chi taglia il traguardo per primo (+25 monete); i nemici corrono ma <b>non possono vincere</b>. Dopo la gara la porta resta chiusa 1 minuto (pulizie in corso).</li>
+    <li><b>Gara a turni</b> (un telefono per tutti): ogni giocatore corre da solo contro i concorrenti, il turno finisce a fine gara e vince il <b>miglior tempo</b>. Nel parcheggio ci sono anche il <b>poliziotto</b> e la <b>vecchietta</b> sui carrelli. Il tasto 🚪 (premilo due volte) permette di <b>abbandonare la corsa</b>.</li>
+    <li><b>Puzzle del parcheggio</b>: dopo aver sconfitto il Cuoco, la porta del parcheggio porta a 5 puzzle a incastro. Scegli un'auto con ◀ ▶, spostala con la levetta lungo la sua direzione e libera la macchina rossa fino alla strada. ↺ rimette a posto la schermata; 🚪 (due volte) esce.</li>
+    <li>Se la pensilina è <b>piena</b> non si possono agganciare i carrelli: aspettate la <b>mamma</b>: arriva col bambino per mano, lui sale su un carrello della pensilina e parte a razzo con la mamma che gli corre dietro, liberando un posto. Poi il bambino sul carrello è di nuovo in giro (da sconfiggere!) e la mamma torna a fare spese tra i negozi. Ogni tanto anche qualche cliente riporta un carrello.</li></ul>
+    <h3>Modalità</h3>
+    <p>Per giocare accedi con il tuo <b>nome utente</b> e la tua password (la prima volta ti iscrivi e scegli il personaggio). Ognuno vede solo i propri salvataggi. Nelle partite a più giocatori dai un <b>alias</b> a ogni partita: le trovi nell'elenco, divise per tipo, e puoi eliminarle con il cestino.</p>
+    <ul><li><b>Da solo</b>: un eroe a scelta tra il ragazzo con la felpa, la ragazza dai capelli viola, la mamma con le trecce bionde e il papà muscoloso con la maglietta del fai da te.</li>
+    <li><b>Più telefoni</b> (da 2 a 4, sulla stessa Wi-Fi): chi crea la partita mostra un QR, chi si unisce lo inquadra con la fotocamera e il gioco si apre pronto; poi mostra il QR di risposta e chi ha creato la partita lo inquadra con «Scansiona la risposta». Dopo ogni collegamento compare un nuovo QR per il giocatore successivo; quando ci siete tutti, tocca <b>Inizia la partita</b>.</li>
+    <li><b>A turno</b> (da 2 a 4 sullo stesso telefono): nel menu tocca i personaggi che giocano. Ogni turno dura 75 secondi, poi si passa il telefono.</li></ul>
+    <h3>Regole: insieme, ognuno per sé, a squadre</h3>
+    <ul><li><b>Insieme</b>: monete, munizioni, potenziamenti e 3 vite sono della squadra; chi cade viene rialzato dagli altri restandogli accanto.</li>
+    <li><b>Ognuno per sé</b>: è una sfida. Ognuno ha le sue monete, le sue munizioni, i suoi potenziamenti e il suo volantino; vince chi fa più punti.</li>
+    <li><b>Foche contro Pinguini</b>: due squadre (tocca il cartellino sopra il personaggio per cambiare squadra); monete e volantino sono della squadra, vince la squadra con più punti.</li>
+    <li>Nella sfida e a squadre non ci sono vite: chi va KO perde 5 monete e 100 punti e riparte dopo 3 secondi. Il pezzo del volantino resta finché tutti (o entrambe le squadre) non l'hanno preso: chi lo prende per primo guadagna di più.</li>
+    <li>In tutti i casi il <b>Sushi Samurai</b> apre solo quando tutti i giocatori (o entrambe le squadre) hanno completato i 4 negozi.</li>
+    <li><b>Punti</b>: monete raccolte, mostri sconfitti, consegne delle missioni, pezzi del volantino, pesci venduti e, alla fine, la principessa liberata. Ognuno ha il suo pesce rosso nella boccia, che lo segue e va nutrito.</li></ul>
+    <h3>Classifica</h3>
+    <ul><li>La classifica in stile sala giochi anni '80 si aggiorna ogni volta che si salva alla fontana (e alla fine della partita): salvando, si aggiornano i punteggi di tutti i giocatori, anche sugli altri telefoni collegati. Si vede dal menu con <b>Classifica</b>.</li>
+    <li>Dalla fontana si può anche <b>uscire dal gioco</b> e tornare al menu.</li></ul>
+    <h3>Comandi sul telefono</h3>
+    <ul><li><b>Muoversi</b>: appoggia il dito nella metà sinistra dello schermo e trascinalo, compare il joystick.</li>
+    <li><b>Attaccare</b>: le tre icone a semicerchio in basso a destra sono le armi. Tocca l'arma che vuoi per lanciarla, tieni premuto per continuare. La mira va da sola sul nemico più vicino.</li>
+    <li><b>Il pesce</b>: tocca la boccia per vedere lo stato di pesce ed eroi.</li>
+    <li><b>Negozio</b>: fermati davanti a una cassa e si apre da solo. I prodotti sono divisi in scaffali: tocca uno scaffale per vederne i prodotti, la ✕ in alto a destra chiude.</li>
+    <li><b>Pausa</b>: l'icona ❚❚ in alto a destra ferma il gioco (con più telefoni, ferma il tuo eroe, al sicuro); il punto di domanda apre questo aiuto e mette in pausa; l'altoparlante accende o spegne musica ed effetti.</li></ul>
+    <h3>Comandi da tastiera</h3>
+    <table><tr><th>Azione</th><th>Tasti</th></tr>
+    <tr><td>Muoversi</td><td><kbd>WASD</kbd> o frecce</td></tr>
+    <tr><td>Scegliere l'arma</td><td><kbd>1</kbd> asciugamano · <kbd>2</kbd> saponette · <kbd>3</kbd> chewing-gum · <kbd>Q</kbd> la successiva</td></tr>
+    <tr><td>Attaccare</td><td><kbd>Spazio</kbd> o <kbd>J</kbd> (tieni premuto)</td></tr>
+    <tr><td>Stato della squadra</td><td><kbd>F</kbd></td></tr>
+    <tr><td>Pausa</td><td><kbd>P</kbd> o <kbd>Esc</kbd></td></tr></table>
+    <p>Raccogliere, consegnare e prendere le cose avviene da solo, basta passarci sopra o accanto. La freccia gialla indica sempre il prossimo obiettivo; in alto c'è la missione del livello.</p>
+    <h3>Armi</h3>
+    <table><tr><th>Arma</th><th>Come funziona</th></tr>
+    <tr><td>Asciugamano</td><td>Frustata ravvicinata, infinita. Con l'Asciugamano Bagnato fa più danni.</td></tr>
+    <tr><td>Saponette</td><td>Si lanciano lontano, servono munizioni. Alla Lavanda attraversano i nemici.</td></tr>
+    <tr><td>Chewing-gum esplosivo</td><td>Si attacca a terra e dopo un attimo esplode colpendo tutto intorno. Il Mega fa un botto più grande.</td></tr></table>
+    <h3>Il pesce rosso nella boccia</h3>
+    <ul><li>Ogni giocatore ha il suo pesce: segue il suo eroe e spruzza sui mostri l'acqua della sua boccia. <b>Ogni spruzzo consuma un po' d'acqua</b>: il livello nella boccia si abbassa e la barretta azzurra sopra di essa scende. Quando ne resta poca il pesce non spara più finché non lo ricaricate con acqua pulita (bottiglie dei nemici o «Acqua fresca» alla cassa).</li>
+    <li>La barretta arancione sopra la boccia è il suo <b>cibo</b>. Il colore dell'acqua dice quanto è pulita: <b>azzurra</b> pulita, <b>verde</b> da cambiare, <b>marrone</b> sporca.</li>
+    <li>Cibo (sacchetti di mangime) e acqua pulita (bottiglie) <b>cadono dai nemici sconfitti</b>, al posto delle monete, e si comprano anche alla cassa nello scaffale <b>Per il pesce</b>. Oltre il 100% non si va.</li>
+    <li><b>Cibo o acqua sotto il 25%</b>: compare un avviso e il pesce spara più lentamente. <b>Acqua quasi finita</b>: il pesce non spara più finché non gli date acqua pulita.</li>
+    <li><b>Cibo o acqua a zero</b>: il pesce sta male (si capovolge e lo schermo lampeggia in arancione), non spara e il suo giocatore perde 3 di energia ogni 5 secondi. Se l'energia finisce si va KO: in «Insieme» costa una vita, nelle altre regole 5 monete e 100 punti. Si risolve subito con pappa o acqua, raccolte dai nemici o comprate alla cassa.</li>
+    <li>Cibo e acqua calano anche col tempo, quindi tenete d'occhio le due barrette sopra la boccia.</li>
+    <li>Le <b>pozioni</b> della cassa fanno brillare la boccia e cambiano lo spruzzo per 60 secondi: rossa bollente (doppio danno), blu gelata (rallenta), verde appiccicosa (danno continuo), oro (spara il doppio).</li></ul>
+    <h3>I livelli</h3>
+    <table><tr><th>Negozio</th><th>Missione</th><th>Nuovo mostro</th></tr>
+    <tr><td>1 · Moda &amp; Stile</td><td>Riporta ogni vestito sullo scaffale del suo colore</td><td>La commessa: se ti prende resti stordito e perdi il vestito. Colpiscila per stordirla.</td></tr>
+    <tr><td>2 · Pizzeria da Gennaro</td><td>Prendi le pizze dal forno e portale ai tavoli che le chiedono</td><td>Il pizzaiolo lancia pizze roteanti</td></tr>
+    <tr><td>3 · Pasticceria Dolce Vita</td><td>Raccogli 20 pasticcini; occhio alle bucce di banana</td><td>La pasticcera lancia torte che rallentano</td></tr>
+    <tr><td>4 · Zoo Planet</td><td>Libera le 10 coppie di animali dell'Arca di Noè: colpisci i commessi travestiti (criniera, orecchie da coniglio, guscio da tartaruga…) per farti dare la chiave dell'animale che ricordano e portala alla sua gabbia</td><td>I pappagalli volano e fanno la cacca: se ti colpisce o la calpesti l'acqua del pesce si sporca. I gatti non fanno male ma mangiano la pappa del pesce</td></tr>
+    <tr><td>5 · Sushi Samurai</td><td>Sconfiggi il Cuoco del Sushi e libera la principessa</td><td>Camerieri ninja e il cuoco coi coltelli</td></tr></table>
+    <p>Finita la missione compare il <b>pezzo del volantino</b>: prendetelo e tornate nella hall. In ogni negozio ci sono anche <b>la guardia col manganello, la vecchietta col bastone e il bambino nel carrello</b>: colpiteli finché non finisce la loro energia.</p>
+    <h3>Il Mondo dei Pesci (negozio di pesca)</h3>
+    <ul><li>È la porta accanto a Zoo Planet. Qui non ci sono i soliti nemici: si pesca dalla grande boccia di vetro per guadagnare monete.</li>
+    <li><b>Frecce / joystick</b>: orientano la canna (la riga tratteggiata mostra dove andrà l'amo). <b>Pulsante asciugamano</b> (qui con l'amo): lancia l'amo.</li>
+    <li>I pesci finiscono nel cesto accanto a te: più sono grandi, più valgono. Attenzione a cosa abbocca: la <b>murena</b> dà la scossa (−15 energia), il <b>topo</b> mangia la pappa del pesce rosso, lo <b>scarpone</b> toglie poca energia (−5), la <b>lattina di pelati</b> un po' di più (−10).</li>
+    <li>Arrivano i <b>gatti</b> a rubare i pesci dal cesto: il pulsante saponetta (qui «Sciò») li scaccia e se ne avevano già preso uno lo riporta nel cesto.</li>
+    <li>Il pulsante chewing-gum (qui «Esci») ti fa uscire nella hall vendendo tutti i pesci del cesto. Da tastiera: <kbd>Spazio</kbd> lancia, <kbd>2</kbd> scaccia, <kbd>3</kbd> esce.</li></ul>
+    <h3>Monete, negozio, vite ed energia</h3>
+    <ul><li>Le monete si trovano a terra, cadono dai mostri sconfitti e sono nascoste dentro piante, scaffali, appendiabiti e acquari: colpiteli per farle uscire.</li>
+    <li>In ogni negozio c'è una <b>cassa</b>: fermatevi davanti e si apre <b>Tutto a Tutti Pure i Tetti</b>, dove le monete servono per potenziare le armi e comprare munizioni, pappa e acqua per il pesce, pozioni, merende e vite. Mentre comprate i mostri non vi toccano.</li>
+    <li>La barretta sopra ogni eroe è la sua energia. Giocando insieme avete 3 vite; con più telefoni, se un eroe cade, un altro lo rialza restandogli accanto per 2 secondi.</li>
+    <li>Si salva alla fontana della hall; dal menu, <b>Continua</b> riparte dall'ultimo salvataggio. Con più telefoni la partita viene salvata sul telefono di chi l'ha creata, ma chiunque può salvare dalla fontana.</li></ul>
+    <h3>Installare il gioco sul telefono</h3>
+    <ul><li><b>Android (Chrome)</b>: nel menu iniziale tocca <b>Installa</b>, oppure dal menu ⋮ del browser scegli «Installa app» / «Aggiungi a schermata Home».</li>
+    <li><b>iPhone (Safari)</b>: tocca il pulsante Condividi e poi «Aggiungi alla schermata Home».</li>
+    <li>Dopo l'installazione il gioco si apre a tutto schermo dalla sua icona e funziona anche senza internet (per giocare in due serve comunque la stessa rete Wi-Fi).</li></ul>
+    <h3>Musica</h3>
+    <p>Ogni negozio ha la sua musica in stile videogiochi anni '80, con i suoni di lanci, colpi, monete ed esplosioni. Si spegne con l'altoparlante in alto a destra.</p>
+    <div class="row"><button class="big" id="bHelpOk">Ho capito!</button></div>
+  </div>
+</div>

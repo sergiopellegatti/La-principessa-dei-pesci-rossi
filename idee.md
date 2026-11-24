@@ -26,3 +26,6 @@ Sito dinamico che offre spazio di archiviazione a minigiochi come "La Principess
 - Verifica dei giochi caricati (sicurezza, contenuti adatti a tutti) e isolamento del codice caricato.
 - Infrastruttura: server con database per account e salvataggi; i giochi possono restare su archiviazione statica.
 - Funzioni multigiocatore condivise, come partite con alias e classifiche, offerte come servizio agli sviluppatori.
+
+## Branch 3d
+Prova grafica in 3D (Three.js, stile cartoon, vista dall'alto): per ora solo la hall. `r3.js` disegna la hall, i personaggi e gli oggetti in 3D sopra la stessa logica di gioco; il tasto "3D" in alto passa alla grafica 2D. Gli altri livelli restano in 2D.
