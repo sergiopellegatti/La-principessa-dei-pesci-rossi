@@ -21,3 +21,8 @@ Avventura d'azione in 5 livelli nei negozi di un centro commerciale: liberate la
 Tutto in un solo file `index.html`, grafica disegnata dal codice, nessuna immagine esterna. Il collegamento tra i telefoni usa WebRTC punto a punto.
 
 Librerie incluse: [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) (MIT) e [jsQR](https://github.com/cozmo/jsQR) (Apache-2.0).
+
+
+## Account e partite
+
+Accesso con nome utente e password (iscrizione la prima volta: personaggio e nome; poi «Dati personali» per cambiare personaggio e password). Account e salvataggi sono memorizzati **su questo dispositivo** (localStorage, password con hash+salt): chi usa il sito dallo stesso browser vede solo i propri. Le partite multigiocatore hanno un alias e un codice univoco con prefisso per tipo (`ON-` più telefoni, `TU-` a turno, `SO-` da solo), con elenco e cestino nel menu.

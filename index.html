@@ -52,6 +52,12 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 .modal.modal{position:relative}
 .x{position:absolute;top:10px;right:10px;width:42px;height:42px;min-height:42px;padding:0;border-radius:50%;font-size:18px;background:rgba(255,255,255,.12);z-index:2}
 .menu{padding:16px 16px 14px;max-width:480px}.menu h2{font-size:clamp(22px,6vw,30px);margin:0}.menu .sub{margin:4px 0 10px;font-size:14px}
+#ovProf,#ovLogin{z-index:80}.who{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin:2px 0 8px;font-size:14px}.who button{min-height:32px;font-size:13px;padding:0 10px}
+.fld{display:block;text-align:left;font-size:13px;margin:8px 0 0;color:var(--dim)}.fld input,.newg input{width:100%;font:600 15px var(--fd);padding:9px 10px;border-radius:12px;border:0;box-shadow:inset 0 0 0 1px var(--line);background:rgba(0,0,0,.25);color:var(--ink);margin-top:4px}
+.picker{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}.picker button{padding:4px;border-radius:14px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 2px rgba(255,255,255,.08);min-height:0}.picker button.sel{box-shadow:inset 0 0 0 3px var(--pink);background:rgba(255,111,174,.14)}.picker canvas{display:block;width:100%;height:92px;pointer-events:none}
+.games{margin-top:10px;text-align:left}.newg{display:flex;gap:6px;align-items:stretch}.newg input{margin:0;flex:1;min-width:0}.newg button{flex:none}
+.games h3{margin:10px 0 4px;font-size:14px}.grow{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:12px;background:rgba(255,255,255,.06);margin-top:4px}.gi{flex:1;min-width:0;cursor:pointer}.gi b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.gi small{display:block;font-size:11px;opacity:.75}.grow button{min-height:34px;padding:0 10px;font-size:13px}.grow .del{background:rgba(230,57,70,.28)}.gnone{font-size:12px;opacity:.7;margin:2px 0}
+.heroes.one{grid-template-columns:minmax(0,150px);justify-content:center}.hero[hidden]{display:none!important}.hero input[readonly]{opacity:.85}
 .heroes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .hero{position:relative;border-radius:16px;padding:5px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 2px rgba(255,255,255,.08);cursor:pointer;transition:transform .15s,box-shadow .15s}
 .hero canvas{display:block;width:100%;height:min(17svh,124px);pointer-events:none}
@@ -144,9 +150,32 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
   </div>
 </div>
 
-<div class="overlay" id="ovMenu">
+<div class="overlay" id="ovLogin" hidden><div class="modal login">
+  <h2>La Principessa dei Pesci Rossi</h2>
+  <div class="seg" id="lgTab"><button data-t="in" class="sel">Accedi</button><button data-t="up">Iscriviti</button></div>
+  <label class="fld">Nome utente<input id="lgN" maxlength="14" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
+  <label class="fld">Password<input id="lgP" type="password" autocomplete="current-password"></label>
+  <div id="lgUp" hidden><label class="fld">Ripeti la password<input id="lgP2" type="password" autocomplete="new-password"></label>
+   <p class="sub">Scegli il tuo personaggio</p><div class="picker" id="pkR" data-sel="0"></div>
+   <p class="hint">Il nome utente sarà il tuo nome nel gioco e non si potrà più cambiare. Personaggio e password si cambiano da «Dati personali».</p></div>
+  <p class="status" id="lgS" role="alert"></p>
+  <div class="row"><button class="big" id="bLogin">Accedi</button></div>
+  <p class="hint">Gli account e i salvataggi restano su questo dispositivo: chi usa il sito da qui vede solo i propri.</p>
+</div></div>
+<div class="overlay" id="ovProf" hidden><div class="modal"><button class="x" id="bProfX" aria-label="Chiudi">✕</button><h2>Dati personali</h2>
+  <p class="sub">Nome utente: <b id="pfId"></b> (non si può cambiare)</p>
+  <p class="sub">Il tuo personaggio</p><div class="picker" id="pkP" data-sel="0"></div>
+  <h3>Cambia password</h3>
+  <label class="fld">Password attuale<input id="pfO" type="password" autocomplete="current-password"></label>
+  <label class="fld">Nuova password<input id="pfN" type="password" autocomplete="new-password"></label>
+  <label class="fld">Ripeti la nuova password<input id="pfN2" type="password" autocomplete="new-password"></label>
+  <p class="status" id="pfS" role="status"></p>
+  <div class="row"><button class="big" id="bProfSave">Salva</button><button id="bProfClose">Chiudi</button></div>
+</div></div>
+<div class="overlay" id="ovMenu" hidden>
   <div class="modal menu">
     <h2>La Principessa dei Pesci Rossi</h2>
+    <div class="who">👤 <b id="whoN"></b><button id="bProf">Dati personali</button><button id="bOut">Esci</button></div>
     <div class="seg modes" id="modes"><button data-m="solo" class="sel">Da solo</button><button data-m="coop">Più telefoni<small>da 2 a 4</small></button><button data-m="hot">A turno<small>stesso telefono, 2-4</small></button></div>
     <div class="seg rules" id="rules" hidden><button data-r="insieme" class="sel">Insieme</button><button data-r="sfida">Ognuno per sé</button><button data-r="squadre">Foche vs Pinguini</button></div>
     <p class="sub" id="menuSub">Tocca il tuo personaggio e scrivi il nome</p>
@@ -156,13 +185,14 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
       <div class="hero" data-h="2" role="button" tabindex="0" aria-label="Mamma con le trecce bionde"><button class="tb" hidden></button><canvas id="hc2"></canvas><input id="n3" maxlength="14" value="Mamma" autocomplete="off" aria-label="Nome della mamma con le trecce bionde"></div>
       <div class="hero" data-h="3" role="button" tabindex="0" aria-label="Papà muscoloso del fai da te"><button class="tb" hidden></button><canvas id="hc3"></canvas><input id="n4" maxlength="14" value="Papà" autocomplete="off" aria-label="Nome del papà del fai da te"></div>
     </div>
+    <div class="games" id="gamesBox" hidden><div class="newg"><input id="gAlias" maxlength="24" placeholder="Alias della partita" aria-label="Alias della nuova partita" autocomplete="off"><button class="big" id="bNew">Nuova partita</button></div><div id="gList"></div></div>
     <div class="row"><button class="big" id="bPlay">Gioca!</button><button class="ok" id="bCont" hidden>Continua</button><button id="bRank">Classifica</button><button id="bHelp2">Aiuto</button><button id="bInst" hidden>Installa</button></div>
     <p class="hint" id="menuHint"></p>
   </div>
 </div>
 <div class="overlay" id="ovPause" hidden><div class="modal"><h2>Pausa</h2><p>Il gioco è fermo. Tocca Riprendi quando sei pronto.</p><div class="row"><button class="big" id="bResume">Riprendi</button></div><div class="row"><button id="bPHelp">Come si gioca</button><button id="bPMute"></button><button id="bPMenu">Esci dal gioco</button></div></div></div>
 <div class="overlay" id="ovStat" hidden><div class="modal stat"><button class="x" id="bStatX" aria-label="Chiudi">✕</button><h2>Stato della squadra</h2><div id="stB"></div><div class="row"><button id="bMute2"></button></div><p class="hint">Il gioco è in pausa mentre questa finestra è aperta (in due contemporaneamente il tuo eroe è al sicuro).</p></div></div>
-<div class="overlay" id="ovSave" hidden><div class="modal"><button class="x" id="bSaveX" aria-label="Chiudi">✕</button><h2>Fontana dei Desideri</h2><p>Getta una monetina immaginaria e salva la partita: dal menu potrai ripartire da qui con <b>Continua</b>.</p><div class="wallet" id="svW"></div><div class="flyer" id="svF"></div><div class="row"><button class="big" id="bSave">Salva la partita</button><button id="bQuit">Esci dal gioco</button></div><p class="hint" id="svH"></p><div id="svR"></div></div></div>
+<div class="overlay" id="ovSave" hidden><div class="modal"><button class="x" id="bSaveX" aria-label="Chiudi">✕</button><h2>Fontana dei Desideri</h2><p>Getta una monetina immaginaria e salva la partita: dal menu potrai ripartire da qui (<b>Continua</b>, o dall'elenco delle tue partite).</p><div class="wallet" id="svW"></div><div class="flyer" id="svF"></div><div class="row"><button class="big" id="bSave">Salva la partita</button><button id="bQuit">Esci dal gioco</button></div><p class="hint" id="svH"></p><div id="svR"></div></div></div>
 <div class="overlay" id="ovRank" hidden><div class="modal"><button class="x" id="bRankX" aria-label="Chiudi">✕</button><h2>Classifica</h2><p>I migliori punteggi di questo telefono. Si aggiorna ogni volta che qualcuno salva alla fontana.</p><div id="rkB"></div></div></div>
 <div class="overlay" id="ovShop" hidden><div class="modal shop"><button class="x" id="bShopX" aria-label="Chiudi il negozio">✕</button><h2 id="shT">Tutto a Tutti Pure i Tetti</h2><div class="wallet" id="shW"></div><div class="shelves" id="shC"></div><div class="shopgrid" id="shG"></div><p class="hint" id="shH"></p></div></div>
 <div class="overlay" id="ovTurn" hidden><div class="modal"><h2 id="tuT"></h2><p id="tuP"></p><div class="row"><button class="big" id="bTurn">Sono pronto/a!</button></div></div></div>
@@ -222,6 +252,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <li>Con almeno un carrello agganciato il pulsante delle saponette <b>lancia un carrello</b> (uno alla volta, danno molto più alto): poi il carrello resta a terra e si può riagganciare.</li>
     <li>Se la pensilina è <b>piena</b> non si possono agganciare i carrelli: aspettate la <b>mamma</b>: arriva col bambino per mano, lui sale su un carrello della pensilina e parte a razzo con la mamma che gli corre dietro, liberando un posto. Poi il bambino sul carrello è di nuovo in giro (da sconfiggere!) e la mamma torna a fare spese tra i negozi. Ogni tanto anche qualche cliente riporta un carrello.</li></ul>
     <h3>Modalità</h3>
+    <p>Per giocare accedi con il tuo <b>nome utente</b> e la tua password (la prima volta ti iscrivi e scegli il personaggio). Ognuno vede solo i propri salvataggi. Nelle partite a più giocatori dai un <b>alias</b> a ogni partita: le trovi nell'elenco, divise per tipo, e puoi eliminarle con il cestino.</p>
     <ul><li><b>Da solo</b>: un eroe a scelta tra il ragazzo con la felpa, la ragazza dai capelli viola, la mamma con le trecce bionde e il papà muscoloso con la maglietta del fai da te.</li>
     <li><b>Più telefoni</b> (da 2 a 4, sulla stessa Wi-Fi): chi crea la partita mostra un QR, chi si unisce lo inquadra con la fotocamera e il gioco si apre pronto; poi mostra il QR di risposta e chi ha creato la partita lo inquadra con «Scansiona la risposta». Dopo ogni collegamento compare un nuovo QR per il giocatore successivo; quando ci siete tutti, tocca <b>Inizia la partita</b>.</li>
     <li><b>A turno</b> (da 2 a 4 sullo stesso telefono): nel menu tocca i personaggi che giocano. Ogni turno dura 75 secondi, poi si passa il telefono.</li></ul>
@@ -1544,7 +1575,7 @@ function syncUI(){
  if(S&&S.phase!==lastPhase){lastPhase=S.phase;onPhase(S.phase)}
  updateInput();
  if(AU.ctx){const want=S&&S.phase==="play"?S.lvl:-1;if(want!==AU.playing){if(want>=0)musicStart(want);else musicStop()}}
- drawMenuHeroes();
+ drawMenuHeroes();drawPickers();
  const now=performance.now();if(now-uiT<120)return;uiT=now;if(!S)return;
  const p=meP(),G=myG();
  $("lvl").textContent=`${S.lvl&&S.lvl<6?`Negozio ${S.lvl}/5 · `:""}${LV[S.lvl].name} — ${missionText()}${netLost?" · collegamento perso!":""}`;
@@ -1607,14 +1638,26 @@ function openSave(){const sv=loadSave(),G=myG();
  $("svH").textContent=role==="guest"?"Salvando aggiorni la classifica di tutti; la partita si salva sul telefono di chi l'ha creata.":sv&&sv.when?`Ultimo salvataggio: ${new Date(sv.when).toLocaleString("it-IT",{dateStyle:"short",timeStyle:"short"})}`:"Nessun salvataggio precedente.";
  $("ovSave").hidden=false;setSafe(true);sfx("spray")}
 function closeSave(){$("ovSave").hidden=true;setSafe(false)}
-const SAVEK="ppr-save4";
-function save(){try{const s=JSON.parse(JSON.stringify(S));s.phase="play";s.paused=false;s.players.forEach(p=>p.shop=false);s.proj=[];localStorage.setItem(SAVEK,JSON.stringify({when:Date.now(),S:s}));hsUpdate(scoreEntries());return true}catch(e){return false}}
+/* ---------- account (su questo dispositivo) e partite ---------- */
+const UK="ppr-users",SSK="ppr-session",TP={ON:{n:"Più telefoni",e:"📱",m:"coop"},TU:{n:"A turno",e:"👥",m:"hot"},SO:{n:"Da solo",e:"🎮",m:"solo"}},typeOf=m=>m==="coop"?"ON":m==="hot"?"TU":"SO";
+let USER=null;
+const jget=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},jset=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}};
+const ukey=n=>String(n).trim().toLowerCase(),users=()=>jget(UK,{}),games=()=>USER?jget("ppr-games:"+USER.key,{}):{},putGames=g=>USER&&jset("ppr-games:"+USER.key,g);
+async function hashPw(pw,salt){const t=new TextEncoder().encode(salt+":"+pw);if(window.crypto&&crypto.subtle){const h=await crypto.subtle.digest("SHA-256",t);return[...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,"0")).join("")}let x=5381;for(const b of t)x=((x<<5)+x+b)>>>0;return"f"+x.toString(16)}
+function newGid(type){const g=games(),A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let id;do{id=type+"-"+Array.from({length:6},()=>A[Math.random()*A.length|0]).join("")}while(g[id]);return id}
+function createGame(type,alias){const g=games(),id=newGid(type);g[id]={id,type,alias:alias||TP[type].n,rule:CFG.rule,when:Date.now(),S:null,members:[]};putGames(g);return id}
+function bindGame(){if(!S||!USER)return;S.gid=CFG.gid;S.alias=CFG.alias;const g=games(),r=g[S.gid];if(r){r.rule=S.rule;r.members=S.players.map(p=>({name:p.name,hero:p.hero,team:p.team|0}));r.when=Date.now();putGames(g)}}
+function save(){try{const s=JSON.parse(JSON.stringify(S));s.phase="play";s.paused=false;s.players.forEach(p=>p.shop=false);s.proj=[];
+ const g=games();if(!s.gid){S.gid=s.gid=newGid(typeOf(S.mode))}
+ const r=g[s.gid]||{id:s.gid,type:typeOf(S.mode),alias:S.alias||TP[typeOf(S.mode)].n};
+ r.S=s;r.when=Date.now();r.rule=S.rule;r.members=s.players.map(p=>({name:p.name,hero:p.hero,team:p.team|0}));g[r.id]=r;
+ if(!putGames(g))return false;hsUpdate(scoreEntries());return true}catch(e){return false}}
 function migrate(sv){const s=sv&&sv.S;if(!s||s.grp)return sv;
  s.rule="insieme";s.grp=[{coins:s.coins|0,lives:s.lives||3,frags:s.frags|0,done:{...(s.done||{})},ammo:s.ammo||{soap:20,gum:3},up:s.up||{},score:0}];
  const f=s.fish||newFish();s.players.forEach((p,i)=>{p.fish={...f};p.score=0;p.team=i%2;p.away=false});
  for(const k of["coins","lives","frags","ammo","up","fish"])delete s[k];const fixB=o=>{if(o&&o.baskets)while(o.baskets.length<4)o.baskets.push([])};fixB(s);for(const k in s.shops||{})fixB(s.shops[k]);return sv}
-function loadSave(){try{const a=JSON.parse(localStorage.getItem(SAVEK));if(a)return a;return migrate(JSON.parse(localStorage.getItem("ppr-save3")))}catch(e){return null}}
-function savedMsg(ok){sfx(ok?"save":"empty");$("svH").textContent=ok?"Partita salvata e classifica aggiornata! Dal menu potrai ripartire con Continua.":"Non è stato possibile salvare su questo dispositivo.";$("bSave").textContent=ok?"Salvata ✓":"Riprova";$("svR").innerHTML=rankHTML(5,inPlay().map(p=>p.name));exitArm=true}
+function loadSave(){const id=(S&&S.gid)||CFG.gid,r=id&&games()[id];return r&&r.S?{when:r.when,S:r.S}:null}
+function savedMsg(ok){sfx(ok?"save":"empty");$("svH").textContent=ok?"Partita salvata e classifica aggiornata! Dal menu potrai riaprirla.":"Non è stato possibile salvare su questo dispositivo.";$("bSave").textContent=ok?"Salvata ✓":"Riprova";$("svR").innerHTML=rankHTML(5,inPlay().map(p=>p.name));exitArm=true}
 $("bSave").onclick=()=>{if(role==="guest"){send({t:"save"});$("bSave").textContent="Salvataggio…";return}const ok=save();savedMsg(ok);if(ok&&role==="host")sendAll({t:"saved"})};
 $("bQuit").onclick=()=>{if(!exitArm){exitArm=true;$("bQuit").textContent="Non hai salvato: tocca ancora per uscire";return}toMenu()};
 $("bSaveX").onclick=closeSave;$("bShopX").onclick=closeShop;$("bStatX").onclick=closeStat;
@@ -1629,21 +1672,43 @@ function toMenu(){closePeer();role=null;S=null;MYI=0;lastPhase=null;shopMode=nul
 
 /* ---------- menu ---------- */
 function heroSelected(i){return CFG.mode==="hot"?CFG.sel.includes(i):CFG.solo===i}
-function refreshMenu(){document.querySelectorAll("#modes button").forEach(b=>b.classList.toggle("sel",b.dataset.m===CFG.mode));
+function refreshMenu(){if(!USER)return;document.querySelectorAll("#modes button").forEach(b=>b.classList.toggle("sel",b.dataset.m===CFG.mode));
  document.querySelectorAll("#rules button").forEach(b=>b.classList.toggle("sel",b.dataset.r===CFG.rule));
  $("rules").hidden=CFG.mode==="solo"||!!CFG.join;
- document.querySelectorAll(".hero").forEach(h=>{const i=+h.dataset.h;h.classList.toggle("sel",heroSelected(i));const tb=h.querySelector(".tb");tb.hidden=CFG.mode==="solo"||CFG.rule!=="squadre"||!heroSelected(i);tb.textContent=CFG.teams[i]?"🐧 Pinguini":"🦭 Foche";tb.classList.toggle("p",!!CFG.teams[i])});
+ $("whoN").textContent=USER.id;{const hot=CFG.mode==="hot";if(hot&&!CFG.sel.includes(USER.hero)){CFG.sel.push(USER.hero);CFG.sel.sort()}CFG.solo=USER.hero;$("n"+(USER.hero+1)).value=USER.id;$("n"+(USER.hero+1)).readOnly=true;document.querySelectorAll(".heroes").forEach(e=>e.classList.toggle("one",!hot))}
+ document.querySelectorAll(".hero").forEach(h=>{const i=+h.dataset.h;h.hidden=CFG.mode!=="hot"&&i!==USER.hero;h.classList.toggle("sel",heroSelected(i));const tb=h.querySelector(".tb");tb.hidden=CFG.mode==="solo"||CFG.rule!=="squadre"||!heroSelected(i);tb.textContent=CFG.teams[i]?"🐧 Pinguini":"🦭 Foche";tb.classList.toggle("p",!!CFG.teams[i])});
  const nm=names();
- $("menuSub").textContent=CFG.mode==="hot"?"Tocca i personaggi che giocano (da 2 a 4) e scrivete i nomi":"Tocca il tuo personaggio e scrivi il nome";
+ $("menuSub").textContent=CFG.mode==="hot"?"Tu giochi con il tuo personaggio: tocca gli altri che giocano (da 2 a 4) e scrivete i loro nomi":`Giochi come ${USER.id}`;
  $("menuHint").textContent=CFG.mode==="coop"?`Fino a 4 telefoni sulla stessa Wi-Fi: ognuno sceglie il suo personaggio sul proprio telefono. Regola: ${RULEN[CFG.rule]}.`:CFG.mode==="hot"?`Giocano ${CFG.sel.map(i=>nm[i]).join(", ")}; ogni turno dura 75 secondi. Regola: ${RULEN[CFG.rule]}.`:"";
  if(CFG.mode!=="solo"&&CFG.rule!=="insieme")$("menuHint").textContent+=" Il Sushi apre solo quando "+(CFG.rule==="squadre"?"entrambe le squadre hanno":"tutti hanno")+" completato i 4 negozi.";
- if(CFG.join){$("menuSub").textContent="Ti hanno invitato a una partita: scegli il tuo personaggio e il nome";$("menuHint").textContent="Poi tocca «Unisciti» e fai inquadrare il QR di risposta a chi ti ha invitato."+(CFG.rule==="squadre"?" Tocca il cartellino per scegliere la squadra.":"")}
+ if(CFG.join){$("menuSub").textContent="Ti hanno invitato a una partita: giochi come "+USER.id;$("menuHint").textContent="Poi tocca «Unisciti» e fai inquadrare il QR di risposta a chi ti ha invitato."+(CFG.rule==="squadre"?" Tocca il cartellino per scegliere la squadra.":"")}
  if(CFG.reloaded)$("menuHint").textContent="La pagina si è ricaricata mentre vi stavate collegando: rifate lo scambio dei codici tenendo il gioco aperto.";
  $("bPlay").textContent=CFG.join&&CFG.mode==="coop"?"Unisciti":"Gioca!";
- const sv=loadSave();$("bCont").hidden=!sv||!!(CFG.join&&CFG.mode==="coop");if(sv)$("bCont").textContent="Continua"}
+ const multi=CFG.mode!=="solo"&&!CFG.join,sr=soloRec();$("bPlay").hidden=multi;$("bCont").hidden=multi||CFG.mode!=="solo"||!sr||!sr.S;if(sr&&sr.S)$("bCont").textContent="Continua";renderGames()}
+function soloRec(){return Object.values(games()).find(r=>r.type==="SO")}
+function fmtD(t){return new Date(t).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}
+const gEsc=x=>String(x).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function renderGames(){const box=$("gamesBox");box.hidden=CFG.mode==="solo"||!!CFG.join;if(box.hidden)return;const all=Object.values(games());let h="";
+ for(const ty of["ON","TU"]){const l=all.filter(r=>r.type===ty).sort((a,b)=>b.when-a.when);h+=`<h3>${TP[ty].e} ${TP[ty].n}</h3>`;
+  if(!l.length)h+='<p class="gnone">Nessuna partita aperta</p>';
+  for(const r of l)h+=`<div class="grow" data-id="${r.id}"><div class="gi"><b>${gEsc(r.alias)}</b><small>${r.id} · ${RULEN[r.rule]||""} · ${fmtD(r.when)}${r.guest?" · ospite":r.S?"":" · da iniziare"}${r.members&&r.members.length?" · "+r.members.map(m=>gEsc(m.name)).join(", "):""}</small></div><button class="ok go">${r.guest?"Unisciti":"Apri"}</button><button class="del" aria-label="Elimina la partita ${gEsc(r.alias)}">🗑</button></div>`}
+ $("gList").innerHTML=h}
+$("gList").addEventListener("click",e=>{const row=e.target.closest(".grow");if(!row)return;const id=row.dataset.id;
+ if(e.target.closest(".del")){const b=e.target.closest(".del");if(!b.dataset.arm){b.dataset.arm=1;b.textContent="Sicuro?";setTimeout(()=>{if(b.isConnected){delete b.dataset.arm;b.textContent="🗑"}},3000);return}const g=games();delete g[id];putGames(g);if(CFG.gid===id)CFG.gid=null;renderGames();return}
+ openGame(id)});
+function newMulti(){const alias=$("gAlias").value.trim().slice(0,24);if(!alias){$("gAlias").focus();showToast("Dai un nome (alias) alla partita");return}
+ CFG.gid=createGame(CFG.mode==="coop"?"ON":"TU",alias);CFG.alias=alias;$("gAlias").value="";auInit();CFG.reloaded=false;CFG.cont=null;
+ if(CFG.mode==="coop"){$("ovMenu").hidden=true;openNet("host")}else startLocal()}
+$("bNew").onclick=newMulti;$("gAlias").addEventListener("keydown",e=>{if(e.key==="Enter")newMulti()});
+function openGame(id){const r=games()[id];if(!r)return;auInit();CFG.reloaded=false;CFG.join=null;CFG.gid=r.id;CFG.alias=r.alias;CFG.mode=TP[r.type].m;if(r.rule)CFG.rule=r.rule;
+ if(r.guest){$("ovMenu").hidden=true;openNet("guest");return}
+ const ms=r.members||[];
+ if(CFG.mode==="hot"){CFG.sel=[...new Set([USER.hero,...ms.map(m=>m.hero)])].sort();if(CFG.sel.length<2)CFG.sel.push(USER.hero===0?1:0),CFG.sel.sort();ms.forEach(m=>{if(m.hero!==USER.hero)$("n"+(m.hero+1)).value=m.name;if(m.team!=null)CFG.teams[m.hero]=m.team})}
+ if(r.S){const sv={when:r.when,S:r.S};if(CFG.mode==="coop"){CFG.cont=sv;$("ovMenu").hidden=true;openNet("host")}else{role=null;restoreGame(sv,"hot");S.gid=r.id;S.alias=r.alias;$("ovMenu").hidden=true;showToast("Partita ripresa: "+r.alias)}}
+ else if(CFG.mode==="coop"){CFG.cont=null;$("ovMenu").hidden=true;openNet("host")}else startLocal()}
 document.querySelectorAll("#modes button").forEach(b=>b.onclick=()=>{CFG.mode=b.dataset.m;refreshMenu()});
 document.querySelectorAll("#rules button").forEach(b=>b.onclick=()=>{CFG.rule=b.dataset.r;refreshMenu()});
-document.querySelectorAll(".hero").forEach(h=>{const i=+h.dataset.h,pick=()=>{if(CFG.mode==="hot"){const k=CFG.sel.indexOf(i);if(k<0)CFG.sel.push(i);else if(CFG.sel.length>2)CFG.sel.splice(k,1);CFG.sel.sort()}else CFG.solo=i;refreshMenu()};
+document.querySelectorAll(".hero").forEach(h=>{const i=+h.dataset.h,pick=()=>{if(CFG.mode==="hot"){const k=CFG.sel.indexOf(i);if(k<0)CFG.sel.push(i);else if(CFG.sel.length>2&&i!==USER.hero)CFG.sel.splice(k,1);CFG.sel.sort()}refreshMenu()};
  h.querySelector(".tb").addEventListener("click",e=>{e.stopPropagation();CFG.teams[i]=CFG.teams[i]?0:1;refreshMenu()});
  h.addEventListener("click",e=>{if(e.target.tagName!=="INPUT")pick()});h.querySelector("input").addEventListener("focus",()=>{if(!heroSelected(i))pick()});h.querySelector("input").addEventListener("input",refreshMenu);h.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target===h)pick()})});
 function drawMenuHeroes(){if($("ovMenu").hidden)return;const t=performance.now();for(const i of[0,1,2,3]){const el=$("hc"+i),w=el.clientWidth,h=el.clientHeight;if(!w)continue;
@@ -1651,7 +1716,7 @@ function drawMenuHeroes(){if($("ovMenu").hidden)return;const t=performance.now()
  const sel=heroSelected(i),s=Math.min(h/64,w/40);c.save();c.translate(w/2,h*.64);c.scale(s*(i%2?-1:1),s);drawKid(c,t+i*400,{hero:i,look:"boy",walk:sel?t/140:0});c.restore();
  if(sel){c.save();c.translate(w/2+(i%2?-1:1)*w*.3,h*.22+Math.sin(t/400)*3);c.scale(s*.45,s*.45);drawBowl(c,t,95,null,false);c.restore()}}}
 function localList(){const nm=names(),ids=CFG.mode==="hot"?CFG.sel.slice():[CFG.solo];return ids.map(h=>({hero:h,name:nm[h],team:CFG.teams[h]}))}
-function startLocal(){role=null;MYI=0;lastPhase=null;newRun({mode:CFG.mode,rule:CFG.rule,list:localList()});$("ovMenu").hidden=true}
+function startLocal(){role=null;MYI=0;lastPhase=null;if(CFG.mode==="solo"){const r=soloRec();CFG.gid=r?r.id:createGame("SO","Partita singola");CFG.alias=r?r.alias:"Partita singola"}newRun({mode:CFG.mode,rule:CFG.rule,list:localList()});bindGame();$("ovMenu").hidden=true}
 function restoreGame(sv,mode,joined){const s=sv.S;S=s;S.phase="play";S.paused=false;S.gv=(S.gv||0)+1;S.proj=[];if(!S.seen)S.seen={};if(!S.grp)migrate(sv);
  for(const k in S.shops)if(!S.shops[k].G)S.shops[k].G=baseGrid(+k);if(!S.G)S.G=baseGrid(S.lvl);
  S.players.forEach(p=>{p.away=false;p.hidden=false;p.carts=p.carts|0;if(!p.fish)p.fish=newFish()});if(S.cartCap==null)Object.assign(S,{cartN:2,cartCap:5,abn:2,abT:30,momT:10});if(S.lvl===0&&!S.shelter){const pp=S.players.map(p=>[p.x,p.y]);loadLevel(0);S.players.forEach((p,i)=>{p.x=pp[i][0];p.y=pp[i][1]})}
@@ -1666,7 +1731,7 @@ function restoreGame(sv,mode,joined){const s=sv.S;S=s;S.phase="play";S.paused=fa
  if(S.mode!==mode){S.mode=mode;S.cfg.mode=mode}
  lastPhase=null;shopMode=null;saveLock=true;shopLock=true;return slots}
 $("bPlay").onclick=()=>{auInit();CFG.reloaded=false;if(CFG.mode==="coop"){CFG.cont=null;$("ovMenu").hidden=true;if(CFG.join){const c=CFG.join;CFG.join=null;openNet("guest",c)}else openNet("host")}else{CFG.join=null;startLocal()}};
-$("bCont").onclick=()=>{auInit();const sv=loadSave();if(!sv)return;if(CFG.mode==="coop"){CFG.cont=sv;$("ovMenu").hidden=true;openNet("host")}else{role=null;restoreGame(sv,CFG.mode);$("ovMenu").hidden=true;showToast("Partita ripresa dall'ultimo salvataggio")}};
+$("bCont").onclick=()=>{auInit();const r=soloRec();if(!r||!r.S)return;CFG.gid=r.id;CFG.alias=r.alias;role=null;restoreGame({when:r.when,S:r.S},"solo");S.gid=r.id;S.alias=r.alias;$("ovMenu").hidden=true;showToast("Partita ripresa dall'ultimo salvataggio")};
 const openHelp=()=>{helpGo(0);$("ovHelp").hidden=false;if(S&&S.phase==="play")setSafe(true)},closeHelp=()=>{$("ovHelp").hidden=true;if(S&&S.phase==="play"&&!shopMode&&$("ovStat").hidden&&$("ovSave").hidden&&$("ovPause").hidden)setSafe(false)};
 const openPause=()=>{if(!S||S.phase!=="play"||!$("ovMenu").hidden)return;$("bPMute").textContent=AU.on?"Spegni musica":"Accendi musica";$("ovPause").hidden=false;setSafe(true)},
  closePause=()=>{$("ovPause").hidden=true;if(S&&S.phase==="play"&&!shopMode&&$("ovStat").hidden&&$("ovSave").hidden&&$("ovHelp").hidden)setSafe(false);};
@@ -1762,7 +1827,7 @@ function wirePc(){pc.onconnectionstatechange=()=>{const s=pc&&pc.connectionState
 function wireDc(){dc.onopen=()=>{netLost=false;netMark(null);stopScan();netStatus("Collegato! Aspetta che chi ha creato la partita la faccia partire.","good");send({t:"hello",name:names()[CFG.solo],hero:CFG.solo,team:CFG.teams[CFG.solo]})};
  const my=dc;dc.onmessage=e=>{if(my!==dc)return;let m;try{m=JSON.parse(e.data)}catch(_){return}guestMsg(m)};dc.onclose=()=>{if(S){netLost=true;showToast("Collegamento perso con chi ha creato la partita")}}}
 function guestMsg(m){if(role!=="guest")return;
- if(m.t==="you")MYI=m.i|0;
+ if(m.t==="you"){MYI=m.i|0;if(m.gid&&USER){const g=games();if(!g[m.gid]){g[m.gid]={id:m.gid,type:"ON",alias:m.alias||"Partita",rule:m.rule,when:Date.now(),S:null,members:[],guest:true}}else g[m.gid].when=Date.now();putGames(g)}}
  else if(m.t==="lobby")netStatus(`Collegato! Siete in ${m.n|0}. Aspetta che chi ha creato la partita la faccia partire.`,"good");
  else if(m.t==="grid")GRID={G:m.G,gv:m.gv};
  else if(m.t==="snap"){const s=m.s;s.G=GRID&&GRID.gv===s.gv?GRID.G:(S?S.G:null);if(!s.G)return;S=s;if(!$("ovNet").hidden||!$("ovMenu").hidden)hide("ovNet","ovMenu");(m.ev||[]).forEach(playFx)}
@@ -1807,7 +1872,7 @@ function startNet(){const ready=PEERS.filter(p=>p.hello&&p.dc.readyState==="open
  const nm=names(),want=[{hero:CFG.solo,name:nm[CFG.solo],team:CFG.teams[CFG.solo]}].concat(ready.map(p=>({hero:p.hero,name:p.name,team:p.team})));
  const seen={};want.forEach(w=>{const k=w.name.toLowerCase();if(seen[k])w.name=(w.name+" "+(++seen[k])).slice(0,14);else seen[k]=1});
  let slots;if(CFG.cont){slots=restoreGame(CFG.cont,"coop",want);CFG.cont=null}else{newRun({mode:"coop",rule:CFG.rule,list:want});slots=want.map((w,k)=>k)}
- MYI=slots[0];PEERS=ready;ready.forEach((p,k)=>{p.slot=slots[k+1];p.gv=-1;sendTo(p,{t:"you",i:p.slot})});
+ MYI=slots[0];bindGame();PEERS=ready;ready.forEach((p,k)=>{p.slot=slots[k+1];p.gv=-1;sendTo(p,{t:"you",i:p.slot,gid:S.gid,alias:S.alias,rule:S.rule})});
  lastPhase=null;netMark(null);hide("ovNet","ovMenu")}
 let linkT=0;
 async function guestAnswer(){{const rq=(/&r=(\w+)/.exec($("gIn").value)||[])[1];if(RULEN[rq])CFG.rule=rq}let off;try{off=await unpack($("gIn").value)}catch(e){return netStatus(codeErr(e),"bad")}
@@ -1853,6 +1918,42 @@ $("bNetX").onclick=()=>{closePeer();netMark(null);role=null;$("ovNet").hidden=tr
 /* invito tramite link (#join=...) e avviso se la pagina si è ricaricata durante il collegamento */
 (()=>{const h=location.hash;if(h.startsWith("#join=")){{const[cd,rq]=h.slice(6).split("&r=");CFG.join=cd.replace(/~$/,".");if(RULEN[rq])CFG.rule=rq}CFG.mode="coop";try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}
  let mk=null;try{mk=sessionStorage.getItem("ppr-net")}catch(e){}if(mk&&!CFG.join){netMark(null);CFG.reloaded=true}})();
+
+/* ---------- accesso, iscrizione, dati personali ---------- */
+const HEROP=["Ragazzo con la felpa","Ragazza dai capelli viola","Mamma con le trecce bionde","Papà del fai da te"];
+document.querySelectorAll(".picker").forEach(pk=>{pk.innerHTML=HEROP.map((n,i)=>`<button type="button" aria-label="${n}"><canvas></canvas></button>`).join("");
+ pk.querySelectorAll("button").forEach((b,i)=>b.onclick=()=>{pk.dataset.sel=i})});
+function drawPickers(){const t=performance.now();document.querySelectorAll(".picker").forEach(pk=>{if(!pk.offsetParent)return;const sel=+pk.dataset.sel;pk.querySelectorAll("button").forEach((b,i)=>{b.classList.toggle("sel",i===sel);const el=b.firstElementChild,w=el.clientWidth,h=el.clientHeight;if(!w)return;
+ const px=Math.round(w*dpr),py=Math.round(h*dpr);if(el.width!==px||el.height!==py){el.width=px;el.height=py}const c=el.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);const s=Math.min(h/64,w/40);c.save();c.translate(w/2,h*.7);c.scale(s*(i%2?-1:1),s);drawKid(c,t+i*400,{hero:i,look:"boy",walk:i===sel?t/140:0});c.restore()})})}
+let lgMode="in";
+function lgSet(m){lgMode=m;document.querySelectorAll("#lgTab button").forEach(b=>b.classList.toggle("sel",b.dataset.t===m));$("lgUp").hidden=m!=="up";$("lgP").autocomplete=m==="up"?"new-password":"current-password";$("bLogin").textContent=m==="up"?"Iscriviti e gioca":"Accedi";$("lgS").textContent="";$("lgS").className="status"}
+document.querySelectorAll("#lgTab button").forEach(b=>b.onclick=()=>lgSet(b.dataset.t));
+const lgErr=m=>{$("lgS").textContent=m;$("lgS").className="status bad"};
+function showLogin(){USER=null;$("ovMenu").hidden=true;hide("ovProf");$("lgP").value="";$("lgP2").value="";$("ovLogin").hidden=false;lgSet(Object.keys(users()).length?"in":"up")}
+function setUser(u){const old=USER&&USER.id;USER={id:u.id,key:ukey(u.id),hero:u.hero};try{localStorage.setItem(SSK,USER.key)}catch(e){}CFG.solo=u.hero;
+ for(let i=0;i<4;i++){const el=$("n"+(i+1));if(i===u.hero){el.value=u.id;el.readOnly=true}else{el.readOnly=false;if(old&&el.value===old)el.value=DEFN[i]}}
+ CFG.sel=old?[u.hero,...CFG.sel.filter(h=>h!==u.hero)].slice(0,4):[u.hero,u.hero===0?1:0];if(CFG.sel.length<2)CFG.sel.push(u.hero===0?1:0);CFG.sel.sort()}
+function enterMenu(){$("ovLogin").hidden=true;CFG.gid=null;CFG.alias=null;$("ovMenu").hidden=false;refreshMenu()}
+function adoptLegacy(){let sv=null;try{sv=JSON.parse(localStorage.getItem("ppr-save4"))||migrate(JSON.parse(localStorage.getItem("ppr-save3")))}catch(e){}
+ if(!sv||!sv.S)return;const S0=sv.S,ty=typeOf(S0.mode||"solo"),id=newGid(ty);S0.gid=id;S0.alias="Partita salvata";const g=games();
+ g[id]={id,type:ty,alias:"Partita salvata",rule:S0.rule||"insieme",when:sv.when||Date.now(),S:S0,members:(S0.players||[]).map(p=>({name:p.name,hero:p.hero,team:p.team|0}))};putGames(g);try{localStorage.removeItem("ppr-save4");localStorage.removeItem("ppr-save3")}catch(e){}}
+async function doLogin(){const id=$("lgN").value.trim().replace(/\s+/g," "),pw=$("lgP").value,key=ukey(id),us=users();
+ if(id.length<2)return lgErr("Scrivi il nome utente (almeno 2 lettere).");if(/[<>&"]/.test(id))return lgErr("Nel nome non si possono usare i simboli < > & \".");
+ if(pw.length<4)return lgErr("La password deve avere almeno 4 caratteri.");
+ $("bLogin").disabled=true;try{
+  if(lgMode==="up"){if(us[key])return lgErr("Questo nome utente esiste già: scegline un altro oppure accedi.");if(pw!==$("lgP2").value)return lgErr("Le due password non sono uguali.");
+   const salt=Math.random().toString(36).slice(2),hash=await hashPw(pw,salt),first=!Object.keys(us).length;us[key]={id,hero:+$("pkR").dataset.sel,salt,hash,created:Date.now()};
+   if(!jset(UK,us))return lgErr("Non riesco a salvare l'account su questo dispositivo.");setUser(us[key]);if(first)adoptLegacy();enterMenu()}
+  else{const u=us[key];if(!u||u.hash!==await hashPw(pw,u.salt))return lgErr("Nome utente o password non corretti.");setUser(u);enterMenu()}}finally{$("bLogin").disabled=false}}
+$("bLogin").onclick=doLogin;for(const id of["lgN","lgP","lgP2"])$(id).addEventListener("keydown",e=>{if(e.key==="Enter")doLogin()});
+$("bOut").onclick=()=>{try{localStorage.removeItem(SSK)}catch(e){}USER=null;CFG.gid=null;CFG.join=null;showLogin();$("lgN").value=""};
+function openProf(){const u=users()[USER.key];$("pfId").textContent=USER.id;$("pkP").dataset.sel=u.hero;for(const i of["pfO","pfN","pfN2"])$(i).value="";$("pfS").textContent="";$("pfS").className="status";$("ovProf").hidden=false}
+$("bProf").onclick=openProf;$("bProfX").onclick=$("bProfClose").onclick=()=>{$("ovProf").hidden=true};
+$("bProfSave").onclick=async()=>{const us=users(),u=us[USER.key],op=$("pfO").value,np=$("pfN").value,np2=$("pfN2").value,say=(m,ok)=>{$("pfS").textContent=m;$("pfS").className="status "+(ok?"good":"bad")};
+ if(np||np2||op){if(!op)return say("Scrivi la password attuale per cambiarla.");if(u.hash!==await hashPw(op,u.salt))return say("La password attuale non è corretta.");if(np.length<4)return say("La nuova password deve avere almeno 4 caratteri.");if(np!==np2)return say("Le due nuove password non sono uguali.");
+  u.salt=Math.random().toString(36).slice(2);u.hash=await hashPw(np,u.salt)}
+ u.hero=+$("pkP").dataset.sel;us[USER.key]=u;if(!jset(UK,us))return say("Non riesco a salvare su questo dispositivo.");setUser(u);refreshMenu();say("Dati salvati ✓",true);for(const i of["pfO","pfN","pfN2"])$(i).value=""};
+(()=>{let k=null;try{k=localStorage.getItem(SSK)}catch(e){}const u=k&&users()[k];if(u){setUser(u);enterMenu()}else showLogin()})();
 
 /* ---------- app installabile (PWA) ---------- */
 let instEvt=null;
