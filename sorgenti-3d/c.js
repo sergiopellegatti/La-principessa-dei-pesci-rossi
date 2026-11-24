@@ -509,7 +509,7 @@ function raceFire(o,kind,own){const R=S.race,c=Math.cos(o.kh),s=Math.sin(o.kh);
  ev({k:"sfx",s:kind==="soap"?"soap":"gum",x:o.x,y:o.y})}
 function raceAttack(p){if(p.cd>0||p.spin>0||p.fin)return;
  if(p.w===0){p.cd=.5;p.swing=.22;ev({k:"sfx",s:"towel",x:p.x,y:p.y});ev({k:"swing",id:p.id,ax:Math.cos(p.kh),ay:Math.sin(p.kh),wet:false});
-  for(const o of raceKarts()){if(o===p)continue;const dx=o.x-p.x,dy=o.y-p.y,d=Math.hypot(dx,dy);if(d<1.9)spinKart(o,p)}}
+  let hit=0;for(const o of raceKarts()){if(o===p)continue;const dx=o.x-p.x,dy=o.y-p.y,d=Math.hypot(dx,dy);if(d<2.3){spinKart(o,p);hit++}}p.towelHit=hit}
  else if(p.w===1){p.cd=p.up1>0?.55:1;raceFire(p,"soap",true)}
  else{p.cd=1.3;raceFire(p,"gum",true)}}
 function kartAI(e,dt){const R=S.race,go=R.st==="go"||R.st==="end";rkAdv(e);

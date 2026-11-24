@@ -120,6 +120,9 @@ function r3Frame(t,dt){
  for(const p of S.players){if(p.hidden||p.away)continue;const o=get("p"+p.id,()=>{const L=Object.assign({},HC3[p.hero]||HC3[0]);const g=makeChar(L);const ring=new THREE.Mesh(new THREE.RingGeometry(.42,.5,24),new THREE.MeshBasicMaterial({color:p.hero===1?"#ffd23c":"#4fe3b5",transparent:true,opacity:.8,side:THREE.DoubleSide}));ring.rotation.x=-PI/2;ring.position.y=.02;g.add(ring);g.userData.ring=ring;g.userData.ring.visible=false;return{g}});
   place(o,p.x,p.y);const mv=o.sp>.35;o.walk=(o.walk||0)+dt*(mv?10:0);o.g.userData.ring.visible=!!me&&me.i===p.i;
   const fx=Math.abs(p.fx)+Math.abs(p.fy)>.05?p.fx:o.dx,fz=Math.abs(p.fx)+Math.abs(p.fy)>.05?p.fy:o.dz;faceChar(o.g,fx,fz,dt);animChar(o.g,o.walk,mv,dt,t,!!p.down);
+  {const sw=FX.sw[p.id],age=sw?(performance.now()-sw.b)/1000:9;
+  if(!o.tw){o.tw=new THREE.Mesh(new THREE.RingGeometry(.45,1.55,28,1,0,2.4),new THREE.MeshBasicMaterial({color:"#dff4ff",transparent:true,side:THREE.DoubleSide,depthWrite:false}));o.tw.rotation.x=-PI/2;o.tw.position.y=.55;o.g.parent?0:0;sc.add(o.tw)}
+  if(age<.28){const q=age/.28;o.tw.visible=true;o.tw.position.set(o.px,.55,o.pz);o.tw.rotation.z=Math.atan2(-sw.ay,sw.ax)-1.2+(q-.5)*1.4;o.tw.scale.setScalar(.7+q*.45);o.tw.material.opacity=.85*(1-q);o.tw.material.color.set(sw.wet?"#7fd3ff":"#ffffff");const u=o.g.userData;u.aR.rotation.x=-2.2+q*1.6;u.aL.rotation.x=-1.2}else o.tw.visible=false}
   o.g.visible=!(p.inv>0&&Math.floor(t/90)%2&&!p.down);if(R3.view==="fps"&&me&&me.i===p.i)o.g.visible=false;
   if(S.mode!=="solo"){if(!o.tag){o.tag=new THREE.Sprite(new THREE.SpriteMaterial({map:r3Text(p.name,{w:256,h:64,fs:30}),transparent:true,depthTest:false}));o.tag.scale.set(1.6,.4,1);o.tag.position.set(0,1.7,0);o.g.add(o.tag)}}}
  // persone
@@ -155,7 +158,7 @@ function r3Frame(t,dt){
    else if(m.st==="load"){const p=1-m.t/(m.T||2.2),cx=m.x+d*.95;o.cart.visible=true;o.cart.position.set(cx,p<.4?(1-p/.4)*0:0,m.y);o.cart.rotation.y=d>0?0:PI;o.kid.visible=true;if(p<.4){o.kid.position.set(.62,0,0)}else if(p<.72){const kk=(p-.4)/.32;o.kid.position.set(.62+(.95-.62)*kk,Math.sin(kk*PI)*.5,0)}else{o.kid.position.set(.95,.14,0)}}}}
  // carrelli nella pensilina
  if(R3.shel&&R3.cartKey!==(S.cartN|0)){R3.cartKey=S.cartN|0;if(R3.shelG)R3.root.remove(R3.shelG);const g=R3.shelG=new THREE.Group(),s=R3.shel,cap=S.cartCap|0,w=(s.x1-s.x0)/cap;for(let i=0;i<R3.cartKey;i++){const c=makeCart(1);c.position.set(s.x0+(i+.5)*w,0,s.y0+.7);c.rotation.y=PI/2;g.add(c)}R3.root.add(g)}
- for(const[id,o]of R3.objs)if(!alive.has(id)){sc.remove(o.g);R3.objs.delete(id)}
+ for(const[id,o]of R3.objs)if(!alive.has(id)){sc.remove(o.g);if(o.tw)sc.remove(o.tw);R3.objs.delete(id)}
  // fontana
  if(R3.jets){const[fx,fz]=R3.fc;for(const j of R3.jets){const u=j.userData,ph=(t/900+u.ph)%1,r=.12+ph*.55;j.position.set(fx+Math.cos(u.a)*r,1.3+Math.sin(ph*PI)*.7,fz+Math.sin(u.a)*r)}R3.water.material.emissiveIntensity=.3+Math.sin(t/400)*.08}
  // camera

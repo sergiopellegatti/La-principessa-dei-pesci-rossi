@@ -334,6 +334,9 @@ function drawKartP(c,p,r,t,now){c.save();c.translate(r.x*TS,r.y*TS-4);
  if(p.shield>0){c.fillStyle="rgba(120,220,255,.2)";c.strokeStyle="rgba(180,240,255,.9)";c.lineWidth=2;c.beginPath();c.arc(0,-10,32+Math.sin(t/120)*1.5,0,7);c.fill();c.stroke()}
  if(p.inv>0&&Math.floor(t/90)%2)c.globalAlpha=.6;
  const me=meP();kart3D(c,t,{h:(p.kh||0)+spinAng(p.spin),hero:p.hero,plook:p.look,look:"hero",boost:p.boost>0,inside:!!me&&me.i===p.i});c.globalAlpha=1;
+ if(p.swing>0&&p.w===0){const q=1-Math.min(1,p.swing/.22),a0=(p.kh||0)-1.9,R=2.1*TS;c.save();c.translate(0,2);c.scale(1,.72);c.lineCap="round";
+  for(let i=0;i<3;i++){c.strokeStyle=`rgba(${i?255:170},${i?255:225},255,${.75-i*.22})`;c.lineWidth=16-i*5;c.beginPath();c.arc(0,0,R*(1-i*.05),a0,a0+q*3.8);c.stroke()}
+  const ea=a0+q*3.8;c.translate(Math.cos(ea)*R,Math.sin(ea)*R);c.rotate(ea+PI/2);c.fillStyle="#fff";rr(c,-20,-8,40,16,6);c.fill();c.fillStyle="#7fd3ff";c.fillRect(-20,-3,40,6);c.restore()}
  if(p.spin>0){c.save();c.translate(0,-50);stars(c,t,0);c.restore()}
  c.restore();if(S.mode!=="solo")nameTag(c,p,r.x*TS,r.y*TS+30)}
 /* carrello in pseudo-3D: modello a rete ruotato col verso di marcia, visto in prospettiva */
