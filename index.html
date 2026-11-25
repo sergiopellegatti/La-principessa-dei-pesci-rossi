@@ -1065,7 +1065,7 @@ function updPeople(dt){for(const q of S.people){
  if(q.cu==="go"){const tb=S.tables[q.tb],dx=q.sx-q.x,dy=q.sy-q.y,d=Math.hypot(dx,dy);q.t-=dt;
   if(d<.3){q.x=q.sx;q.y=q.sy;q.cu="wait";q.wt=45;tb.want=true;q.face=q.sf;continue}
   if(q.t<=0){tb.cust=null;q.cu=null;q.t=1;continue}
-  moveCircle(q,dx/d*q.spd*1.2*dt,dy/d*q.spd*1.2*dt,.3);q.walk+=dt*10;if(Math.abs(dx)>.1)q.face=Math.sign(dx);continue}
+  const ox=q.x,oy=q.y;moveCircle(q,dx/d*q.spd*1.2*dt,dy/d*q.spd*1.2*dt,.3);q.walk+=dt*10;q.stk=dist(ox,oy,q.x,q.y)<q.spd*1.2*dt*.3?(q.stk||0)+dt:0;if(q.stk>=3){tb.cust=null;q.cu=null;q.stk=0;q.t=1;continue}if(Math.abs(dx)>.1)q.face=Math.sign(dx);continue}
  q.t-=dt;
  if(q.mode==="look"){if(q.t<=0){q.mode="walk";q.t=rnd(4,9);[q.tx,q.ty]=freeSpot(0)}continue}
  const dx=q.tx-q.x,dy=q.ty-q.y,d=Math.hypot(dx,dy);
@@ -1093,7 +1093,7 @@ function recolorMerch(){const ms=S.items.filter(i=>i.k==="merch");if(!ms.length)
 function missionTick(dt){const m=S.mission;S.spawnT-=dt;if(m.kind==="hall"||m.kind==="fishing"||S.lvl===6)return;
  if(m.kind==="pizza"){S.custT=(S.custT||0)-dt;
   if(S.custT<=0){S.custT=rnd(3,7);if(S.people.filter(q=>q.cu).length<4){const free=S.tables.filter(t=>!t.occ&&!t.cust),cs=S.people.filter(q=>!q.cu&&!q.kx&&!q.ky);
-   if(free.length&&cs.length){const q=cs[ri(0,cs.length-1)],tb=free[ri(0,free.length-1)],[sx,sy,f]=seatSpot(tb);q.cu="go";q.tb=S.tables.indexOf(tb);q.sx=sx;q.sy=sy;q.sf=f;q.t=30;q.mode="walk";tb.cust=q.id}}}
+   if(free.length&&cs.length){const q=cs[ri(0,cs.length-1)],tb=free[ri(0,free.length-1)],[sx,sy,f]=seatSpot(tb);q.cu="go";q.tb=S.tables.indexOf(tb);q.sx=sx;q.sy=sy;q.sf=f;q.t=30;q.stk=0;q.mode="walk";tb.cust=q.id}}}
   for(const tb of S.tables)if(tb.coin>0)for(const p of vis())if(!p.down&&tb.cells.some(c=>dist(p.x,p.y,c[0]+.5,c[1]+.5)<1.3)){GR(p).coins+=tb.coin;float(tb.cx,tb.cy,"+"+tb.coin+" monete","#ffd23c");ev({k:"sfx",s:"pick"});tb.coin=0;break}}
  if(m.kind==="pastry"&&S.spawnT<=0){S.spawnT=2;const on=S.items.filter(i=>i.k==="pastry").length;if(on<6&&m.n+on<m.need+4){const[x,y]=freeSpot(4);S.items.push({id:S.nid++,k:"pastry",v:ri(0,2),x,y})}}
  if(m.kind==="ark"&&S.spawnT<=0){S.spawnT=6;const on=S.enemies.filter(e=>e.t==="k"&&!e.flee).length;if(on<2&&S.catSpawns.length){const s=S.catSpawns[ri(0,S.catSpawns.length-1)];if(!S.players.some(p=>dist(p.x,p.y,s[0],s[1])<3))addEnemy("k",s[0],s[1])}}
