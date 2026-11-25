@@ -336,7 +336,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 </script>
 <script>
 {
-const MAPS=[["##############################","#@...m......P....m......R....#","#.....1111.......2222........#","#..m.................m....m..#","#.....................c......#","#..R....###....###.......R...#","#.......#.......#...m........#","#..m....#.......#.....$......#","#.......#..f....#....3333....#","#..4444.#.......#............#","#.......####.####...m....m...#","#..m.....................b...#","#....v.........g.............#","#.......m..R.......m.....g...#","#..R.....................P...#","#....$........c.......$......#","#.......2222.....1111......m.#","#..K.......m.....3333...4444.#","#....$.................m....E#","##############################"],["##############################","#.......OO........OO.........#","#..z.........................#","#.....$......................#","#CCCCCC..CCCCCCCCCC..CCCCCCCC#","#............................#","#..TT.....TT.....TT.....TT...#","#..TT.....TT.....TT.....TT...#","#............................#","#.....P.........g.......P....#","#..TT.....TT.....TT.....TT...#","#..TT.....TT.....TT.....TT...#","#............................#","#............v...........$...#","#..$.....P..........P........#","#....TT.........TT......f....#","#....TT.........TT...........#","#.@........K.................#","#.....................$.....E#","##############################"],["##############################","#@..p....x....p.....p....x...#","#.......CCCCCC....CCCCCC.....#","#..p.......t.........p.......#","#....x.........p.........p...#","#..CC....p.........x.....CC..#","#..CC.........P..........CC..#","#.......x.....P.....p....b...#","#..p.......CCCCCCCC......x...#","#.....b.................p....#","#..x....p......g.....x.......#","#.......CCCC.......CCCC..p...#","#..p.........v.........g.....#","#.....x.....p.......t....x...#","#..CC...........p.........CC.#","#..CC..p...x.........p....CC.#","#.......$.......f.....$......#","#..K....x...p........x...p...#","#....$......v...........$...E#","##############################"],["##############################","#.G...G...G...G...G.....AAAA.#","#............................#","#..w.....w..........w....k...#","#....P.........$.......P.....#","#..AA....###.....###....AA...#","#..AA....#.........#....AA...#","#........#....w....#.........#","#..w.....#....f....#.....w...#","#........###.....###.........#","#....g...................v...#","#..AA.......w....w.......AA..#","#..AA.....$........$.....AA..#","#.....b..........g...........#","#..k...........P.......w.....#","#.......CCCCC.......P........#","#.......CCKCC...........$....#","#..P.....w...................#","#.G...G...G...G...G.........E#","##############################"],["##############################","#@.....L.......L.......L.....#","#..........................n.#","#..======================....#","#............................#","#..n.......TT......TT........#","#..........TT......TT.....$..#","#....P.....................P.#","#.......g...........v....b...#","####.#########..#########.####","#............................#","#..L......................L..#","#.......n.....g......n.......#","#....b.......................#","#.......CCCCCCCCCCCCC....v...#","#............B...............#","#..K.........................#","#.............F..............#","#.$......................$...#","##############################"]];
+const MAPS=[["##############################","#@...m......P....m......R....#","#.....1111.......2222........#","#..m.................m....m..#","#.....................c......#","#..R....###....###.......R...#","#.......#.......#...m........#","#..m....#.......#.....$......#","#.......#..f....#....3333....#","#..4444.#.......#............#","#.......####.####...m....m...#","#..m.....................b...#","#....v.........g.............#","#.......m..R.......m.....g...#","#..R.....................P...#","#....$........c.......$......#","#.......2222.....1111......m.#","#..K.......m.....3333...4444.#","#....$.................m....E#","##############################"],["##############################","#.......OO........OO.........#","#..z.........................#","#.....$......................#","#CCCCCC..CCCCCCCCCC..CCCCCCCC#","#............................#","#..TT.....TT.....TT.....TT...#","#..TT.....TT.....TT.....TT...#","#............................#","#.....P.........g.......P....#","#..TT.....TT.....TT.....TT...#","#..TT.....TT.....TT.....TT...#","#............................#","#............v...........$...#","#..$.....P..........P........#","#....TT.........TT......f....#","#....TT.........TT.....y.....#","#.@........K.................#","#.....................$.....E#","##############################"],["##############################","#@..p....x....p.....p....x...#","#.......CCCCCC....CCCCCC.....#","#..p.......t.........p.......#","#....x.........p.........p...#","#..CC....p.........x.....CC..#","#..CC.........P..........CC..#","#.......x.....P.....p....b...#","#..p.......CCCCCCCC......x...#","#.....b.................p....#","#..x....p......g.....x.......#","#.......CCCC.......CCCC..p...#","#..p.........v.........g.....#","#.....x.....p.......t....x...#","#..CC...........p.........CC.#","#..CC..p...x.........p....CC.#","#.......$.......f.....$......#","#..K....x...p........x...p...#","#....$......v...........$...E#","##############################"],["##############################","#.G...G...G...G...G.....AAAA.#","#............................#","#..w.....w..........w....k...#","#....P.........$.......P.....#","#..AA....###.....###....AA...#","#..AA....#.........#....AA...#","#........#....w....#.........#","#..w.....#....f....#.....w...#","#........###.....###.........#","#....g...................v...#","#..AA.......w....w.......AA..#","#..AA.....$........$.....AA..#","#.....b..........g...........#","#..k...........P.......w.....#","#.......CCCCC.......P........#","#.......CCKCC...........$....#","#..P.....w...................#","#.G...G...G...G...G.........E#","##############################"],["##############################","#@.....L.......L.......L.....#","#..........................n.#","#..======================....#","#............................#","#..n.......TT......TT........#","#..........TT......TT.....$..#","#....P.....................P.#","#.......g...........v....b...#","####.#########..#########.####","#............................#","#..L......................L..#","#.......n.....g......n.......#","#....b.......................#","#.......CCCCCCCCCCCCC....v...#","#............B...............#","#..K.........................#","#.............F..............#","#.$......................$...#","##############################"]];
 const HALL=["##############################","#VVVVQVVVV#VVVVUVVVV#VVVVYVVV#","#............................#","#..h.....P..........P.....h..#","#............................#","#.....P..............P.......#","#.....g......................#","#............................#","#...h......WWWWWW......h.....#","#..........WWWWWW............#","#..........WWWWWW............N","#..........WWWWWW............#","#............................#","#.....P..............P.......#","#.............@.........b....#","#..h.....P..........P.....h..#","#..............JJJJJ.........#","#............................#","#VVVZVVVV#VVHVV#VVVVVVXVVVVVV#","##############################"];
 
 const TS=40,PI=Math.PI,SOLID="#SRPCOTALK=F1234VWhGJ",DOORS={Q:1,U:2,Y:3,Z:4,X:5,H:6,N:7};
@@ -366,6 +366,7 @@ LV[7]={name:"Parcheggio — Gara di carrelli",kind:"race",floor:["#4a4d57","#454
 LV[8]={name:"Parcheggio — Liberiamo l'uscita",kind:"puzzle",floor:["#4a4d57","#454852"],wall:"#2f7a45",top:"#3f8f55",acc:"#ffd23c",intro:"Il Cuoco è sconfitto, ma il parcheggio è pieno di auto! Sposta le macchine per far passare quella rossa fino alla strada: 5 posti, ognuno con un puzzle diverso."};
 /* Enemy definitions (valori al livello 1) */
 const EN={
+ y:{name:"Bambino col cappello rosso",type:"melee",hp:45,spd:1.7,dmg:9,cd:1.2,aggro:7,coins:[2,4],r:.28},
  g:{name:"Guardia",type:"melee",hp:60,spd:2.1,dmg:12,cd:1.3,aggro:7,coins:[3,5],r:.34},
  v:{name:"Vecchietta",type:"melee",hp:40,spd:1.3,dmg:10,cd:1.5,aggro:6,coins:[2,4],r:.32},
  b:{name:"Bambino nel carrello",type:"cart",hp:50,spd:1.4,dmg:15,cd:1,aggro:8,coins:[3,6],r:.38},
@@ -779,7 +780,7 @@ function loadLevel(L){
  const m=S.mission;m.need={hall:0,shelves:S.items.filter(i=>i.k==="merch").length,pizza:10,pastry:20,ark:10,boss:1}[m.kind];
  if(m.kind==="ark")S.parrots.push(newParrot(S.W/2,S.H/2));
  if(L===0){S.momT=Math.min(S.momT,8);for(let i=0;i<(S.abn|0);i++){const[x,y]=freeSpot(3);S.items.push({id:S.nid++,k:"cart",ab:true,x,y})}}
- const np=L===0?14:L===5?2:3;for(let i=0;i<np;i++){const[x,y]=freeSpot(3);newPerson(x,y)}
+ const np=L===0?14:L===5?2:L===2?6:3;for(let i=0;i<np;i++){const[x,y]=freeSpot(3);newPerson(x,y)}
 }
 const OFFS=[[-.55,0],[.55,0],[-.55,.65],[.55,.65],[-.55,-.65],[.55,-.65],[-1.1,0],[1.1,0],[0,.7],[0,-.7],[-1.1,.7],[1.1,.7],[0,0]];
 function freeNear(pos,p,k){const others=vis().filter(q=>q!==p&&!q.placing);for(let j=0;j<OFFS.length;j++){const o=OFFS[(k+j)%OFFS.length],x=pos[0]+o[0],y=pos[1]+o[1];
@@ -959,7 +960,7 @@ function attack(p){const G=GR(p);
  if(p.w===0){p.cd=.38;p.swing=.22;ev({k:"swing",id:p.id,ax,ay,wet:!!G.up.towel});const dmg=G.up.towel?32:18;
   for(const e of S.enemies){if(e.dead)continue;const dx=e.x-p.x,dy=e.y-p.y,d=Math.hypot(dx,dy);if(d<1.65&&(d<.9||(dx*ax+dy*ay)/d>.1))hitE(e,dmg,ax,ay,null,p)}
   revealNear(p.x+ax*.9,p.y+ay*.9,1.1);
-  for(const q of S.people){const dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy);if(d<1.65&&(d<.9||(dx*ax+dy*ay)/d>.1)){const n=d||1;q.kx=dx/n*7;q.ky=dy/n*7;q.mode="walk";q.t=rnd(2,5);[q.tx,q.ty]=freeSpot(0);
+  for(const q of S.people){if(q.cu==="wait"||q.cu==="eat")continue;const dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy);if(d<1.65&&(d<.9||(dx*ax+dy*ay)/d>.1)){const n=d||1;q.kx=dx/n*7;q.ky=dy/n*7;q.mode="walk";q.t=rnd(2,5);[q.tx,q.ty]=freeSpot(0);
    float(q.x,q.y-.2,["Ehi!","Scusi!","Che modi!","Ops!","Faccio strada!"][ri(0,4)],"#fff");ev({k:"sfx",s:"bump",x:q.x,y:q.y})}}}
  else if(p.w===1){G.ammo.soap--;p.cd=.42;p.swing=.12;S.proj.push({id:S.nid++,k:"soap",x:p.x+ax*.4,y:p.y+ay*.4,vx:ax*9.5,vy:ay*9.5,own:"p",by:p.i,dmg:G.up.lav?22:14,life:.85,r:.2,pierce:!!G.up.lav,hit:[]})}
  else{G.ammo.gum--;p.cd=.7;p.swing=.15;const d=tg?Math.min(dist(p.x,p.y,tg.x,tg.y),5):3;let tx=p.x+ax*d,ty=p.y+ay*d;
@@ -1023,8 +1024,9 @@ function interact(p){
    else for(const k of[-1,1])S.critters.push({id:"a"+(S.nid++),sp:cg.sp,x:cg.x+k*.35,y:cg.y+dy*.9,t:6,walk:0,face:1});break}}
  if(m.kind==="pizza"){
   if(!p.carry){for(const o of S.ovens)if(dist(p.x,p.y,o[0],o[1])<1.25){p.carry={k:"pizza"};float(p.x,p.y,"Pizza calda!","#ffc93c");ev({k:"sfx",s:"pick"});break}}
-  else if(p.carry.k==="pizza"){for(const tb of S.tables)if(tb.occ&&!tb.want&&tb.cells.some(c=>dist(p.x,p.y,c[0]+.5,c[1]+.5)<1.3)&&S.time-(p.noT||-9)>2.5){p.noT=S.time;float(p.x,p.y-.5,"Non è un cliente: niente pizza!","#ff9a2e");ev({k:"sfx",s:"empty"})}
-  if(p.carry&&p.carry.k==="pizza")for(const tb of S.tables)if(tb.want&&tb.cells.some(c=>dist(p.x,p.y,c[0]+.5,c[1]+.5)<1.2)){tb.want=false;tb.t=rnd(14,22);p.carry=null;m.n++;G.coins+=3;p.score=(p.score|0)+100;ev({k:"sfx",s:"deliver"});ev({k:"burst",x:tb.cx,y:tb.cy,col:"#ffc93c",n:16});float(tb.cx,tb.cy,`Buon appetito! ${m.n}/${m.need}`,"#fff");break}}}
+  else if(p.carry.k==="pizza"){const near=tb=>tb.cells.some(c=>dist(p.x,p.y,c[0]+.5,c[1]+.5)<1.3);
+   let done=false;for(const tb of S.tables)if(tb.want&&tb.cust&&near(tb)){const q=S.people.find(o=>o.id===tb.cust);if(!q)continue;tb.want=false;q.cu="eat";q.et=6;p.carry=null;m.n++;p.score=(p.score|0)+100;ev({k:"sfx",s:"deliver"});ev({k:"burst",x:tb.cx,y:tb.cy,col:"#ffc93c",n:16});float(tb.cx,tb.cy,`Buon appetito! ${m.n}/${m.need}`,"#fff");done=true;break}
+   if(!done)for(const tb of S.tables)if(tb.occ&&near(tb)){const e=S.enemies.find(o=>o.id===tb.occ);if(e&&e.sit){e.wake=true}break}}}
  p.nearK=S.kiosks.some(k=>dist(p.x,p.y,k[0],k[1])<1.35);
  const doors=S.lvl===0?S.hallDoors:S.exit?[{x:S.exit[0],y:S.exit[1],to:0}]:[];let nearD=false;
  let inD=null;for(const d of doors){const dd=dist(p.x,p.y,d.x,d.y);if(dd<1.15)nearD=true;if(dd<.78&&!p.doorLock)inD=d}
@@ -1055,7 +1057,15 @@ function updZoo(dt){if(!S.parrots)return;
   if(dd>.3){moveCircle(a,(tx-a.x)/dd*3.4*dt,(ty-a.y)/dd*3.4*dt,.25);a.walk+=dt*16;if(Math.abs(tx-a.x)>.1)a.face=Math.sign(tx-a.x)}
   if(a.t<=0||dd<1){ev({k:"burst",x:a.x,y:a.y,col:"#ffe36b",n:10});S.critters.splice(i,1)}}}
 function updPeople(dt){for(const q of S.people){
+ if(q.cu==="wait"||q.cu==="eat"){q.walk=0;q.face=q.sf;const tb=S.tables[q.tb];
+  if(q.cu==="eat"){q.et-=dt;if(q.et<=0){tb.coin=3;tb.cust=null;q.cu=null;q.mode="walk";q.t=rnd(1,3);[q.tx,q.ty]=freeSpot(0)}}
+  else{q.wt-=dt;if(q.wt<=0){tb.want=false;tb.cust=null;q.cu=null;q.mode="walk";q.t=rnd(1,3);[q.tx,q.ty]=freeSpot(0)}}
+  continue}
  if(q.kx||q.ky){moveCircle(q,q.kx*dt,q.ky*dt,.3);const f=Math.pow(.02,dt);q.kx*=f;q.ky*=f;if(Math.abs(q.kx)+Math.abs(q.ky)<.1)q.kx=q.ky=0;q.walk+=dt*14;continue}
+ if(q.cu==="go"){const tb=S.tables[q.tb],dx=q.sx-q.x,dy=q.sy-q.y,d=Math.hypot(dx,dy);q.t-=dt;
+  if(d<.3){q.x=q.sx;q.y=q.sy;q.cu="wait";q.wt=45;tb.want=true;q.face=q.sf;continue}
+  if(q.t<=0){tb.cust=null;q.cu=null;q.t=1;continue}
+  moveCircle(q,dx/d*q.spd*1.2*dt,dy/d*q.spd*1.2*dt,.3);q.walk+=dt*10;if(Math.abs(dx)>.1)q.face=Math.sign(dx);continue}
  q.t-=dt;
  if(q.mode==="look"){if(q.t<=0){q.mode="walk";q.t=rnd(4,9);[q.tx,q.ty]=freeSpot(0)}continue}
  const dx=q.tx-q.x,dy=q.ty-q.y,d=Math.hypot(dx,dy);
@@ -1063,16 +1073,28 @@ function updPeople(dt){for(const q of S.people){
  for(const p of vis())if(dist(p.x,p.y,q.x,q.y)<.75){q.t=Math.min(q.t,.6)}
  const ox=q.x,oy=q.y;moveCircle(q,dx/d*q.spd*dt,dy/d*q.spd*dt,.3);q.walk+=dt*9;if(Math.abs(dx)>.15)q.face=Math.sign(dx);if(dist(ox,oy,q.x,q.y)<q.spd*dt*.3)q.t-=dt*3}}
 function bumpPeople(p){for(const q of S.people){const d=dist(p.x,p.y,q.x,q.y),m=.6;if(d<m&&d>.001){const k=(m-d)/d;moveCircle(p,(p.x-q.x)*k,(p.y-q.y)*k,.3)}}}
-function seatEnemies(){const idx=S.tables.map((_,i)=>i).sort(()=>Math.random()-.5);let k=0;
- for(const t of["g","v"]){const e=S.enemies.find(q=>q.t===t);if(!e||k>=idx.length)continue;const tb=S.tables[idx[k++]];const xs=tb.cells.map(c=>c[0]),ys=tb.cells.map(c=>c[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys);
-  const cand=[[x0-1,y0],[x1+1,y0],[x0-1,y0+1],[x1+1,y0+1]].filter(([a,b])=>S.G[b]&&S.G[b][a]==="."&&!S.enemies.some(o=>o!==e&&o.sit&&Math.abs(o.x-a-.5)<.4&&Math.abs(o.y-b-.5)<.4));
-  const[a,b]=cand[0]||[x0-1,y0];e.x=e.hx=a+.5;e.y=e.hy=b+.5;e.sit=true;e.face=a<x0?1:-1;tb.occ=e.id}}
-function wakeSeated(e){const[tp,td]=targetFor(e);if(e.hp<e.max||e.stun>0||tp&&td<2.3){e.sit=false;for(const tb of S.tables)if(tb.occ===e.id){tb.occ=null;tb.t=rnd(6,12)}toast(e.t==="g"?"La guardia si alza dal tavolo!":"La vecchietta si alza dal tavolo!",2.5);return true}return false}
+function seatSpot(tb){const xs=tb.cells.map(c=>c[0]),ys=tb.cells.map(c=>c[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys);
+ const cand=[[x0-1,y0],[x1+1,y0],[x0-1,y0+1],[x1+1,y0+1]].filter(([a,b])=>S.G[b]&&S.G[b][a]==="."&&!solidAt(a,b));
+ const[a,b]=cand.length?cand[ri(0,cand.length-1)]:[x0-1,y0];return[a+.5,b+.5,a<x0?1:-1]}
+function seatEnemies(){for(const e of S.enemies)if(e.t==="g"||e.t==="v"||e.t==="y")e.sleepCd=rnd(4,10)}
+function startSeat(e){const free=S.tables.filter(t=>!t.occ&&!t.cust&&!t.want);if(!free.length)return false;const tb=free[ri(0,free.length-1)],[x,y,f]=seatSpot(tb);e.goSeat={tb:S.tables.indexOf(tb),x,y,f};tb.occ=e.id;return true}
+function relSeat(e){for(const tb of S.tables)if(tb.occ===e.id)tb.occ=null}
+function wakeSeated(e,dt){const[tp,td]=targetFor(e);e.nearT=tp&&td<2.3?(e.nearT||0)+dt:Math.max(0,(e.nearT||0)-dt);e.sT-=dt;
+ const dist_=e.hp<e.sh||e.stun>0||e.wake||e.nearT>2.5;
+ if(dist_||e.sT<=0){e.sit=false;e.wake=false;e.nearT=0;relSeat(e);e.sleepCd=rnd(20,35);if(dist_)toast(e.t==="g"?"La guardia si sveglia!":e.t==="v"?"La vecchietta si sveglia!":"Il bambino si sveglia!",2.2);return true}return false}
+function goSeatStep(e,dt){const g=e.goSeat,d=EN[e.t],[tp,td]=targetFor(e);
+ if(e.stun>0||e.hp<(e.sh0||e.hp)||(tp&&td<3)){relSeat(e);e.goSeat=null;e.sleepCd=rnd(8,14);return false}
+ const dx=g.x-e.x,dy=g.y-e.y,dd=Math.hypot(dx,dy);
+ if(dd<.3){e.x=e.hx=g.x;e.y=e.hy=g.y;e.sit=true;e.face=g.f;e.sh=e.hp;e.sT=rnd(12,22);e.nearT=0;e.goSeat=null;return true}
+ const sp=d.spd*.8*(S.diff===0?.7:1);moveCircle(e,dx/dd*sp*dt,dy/dd*sp*dt,d.r);e.walk+=dt*8;if(Math.abs(dx)>.1)e.face=Math.sign(dx);return true}
 function recolorMerch(){const ms=S.items.filter(i=>i.k==="merch");if(!ms.length)return;const per=Math.ceil(ms.length/4),cnt=[0,0,0,0,0],order=ms.slice().sort(()=>Math.random()-.5);
  const dmin=c=>{let d=1e9;for(const s of S.shelves)if(s.c===c){d=Math.min(d,Math.hypot(s.x-this_x,s.y-this_y))}return d};let this_x=0,this_y=0;
  for(const it of order){this_x=it.x;this_y=it.y;let best=1,bd=-1;for(let c=1;c<=4;c++){if(cnt[c]>=per)continue;const d=dmin(c);if(d>bd){bd=d;best=c}}it.c=best;cnt[best]++}}
 function missionTick(dt){const m=S.mission;S.spawnT-=dt;if(m.kind==="hall"||m.kind==="fishing"||S.lvl===6)return;
- if(m.kind==="pizza"){let w=S.tables.filter(t=>t.want).length;for(const t of S.tables)if(!t.want&&!t.occ){t.t-=dt;if(t.t<=0&&w<4){t.want=true;w++}}}
+ if(m.kind==="pizza"){S.custT=(S.custT||0)-dt;
+  if(S.custT<=0){S.custT=rnd(3,7);if(S.people.filter(q=>q.cu).length<4){const free=S.tables.filter(t=>!t.occ&&!t.cust),cs=S.people.filter(q=>!q.cu&&!q.kx&&!q.ky);
+   if(free.length&&cs.length){const q=cs[ri(0,cs.length-1)],tb=free[ri(0,free.length-1)],[sx,sy,f]=seatSpot(tb);q.cu="go";q.tb=S.tables.indexOf(tb);q.sx=sx;q.sy=sy;q.sf=f;q.t=30;q.mode="walk";tb.cust=q.id}}}
+  for(const tb of S.tables)if(tb.coin>0)for(const p of vis())if(!p.down&&tb.cells.some(c=>dist(p.x,p.y,c[0]+.5,c[1]+.5)<1.3)){GR(p).coins+=tb.coin;float(tb.cx,tb.cy,"+"+tb.coin+" monete","#ffd23c");ev({k:"sfx",s:"pick"});tb.coin=0;break}}
  if(m.kind==="pastry"&&S.spawnT<=0){S.spawnT=2;const on=S.items.filter(i=>i.k==="pastry").length;if(on<6&&m.n+on<m.need+4){const[x,y]=freeSpot(4);S.items.push({id:S.nid++,k:"pastry",v:ri(0,2),x,y})}}
  if(m.kind==="ark"&&S.spawnT<=0){S.spawnT=6;const on=S.enemies.filter(e=>e.t==="k"&&!e.flee).length;if(on<2&&S.catSpawns.length){const s=S.catSpawns[ri(0,S.catSpawns.length-1)];if(!S.players.some(p=>dist(p.x,p.y,s[0],s[1])<3))addEnemy("k",s[0],s[1])}}
  if(!m.done){const ok=m.kind!=="boss"&&m.kind!=="hall"&&!!S.fragSpot&&m.need>0&&m.n>=m.need;
@@ -1088,7 +1110,9 @@ function wander(e,spd,dt,r){e.wt-=dt;if(e.wt<=0){e.wt=rnd(1,2.5);const a=rnd(0,P
  if(e.wx||e.wy){moveCircle(e,e.wx*spd*dt,e.wy*spd*dt,r);e.walk+=dt*8;if(Math.abs(e.wx)>.2)e.face=Math.sign(e.wx);if(e.bx||e.by)e.wt=0}}
 function shoot(e,k,tx,ty,spd,dmg,spread){if(!spread||spread<0)ev({k:"sfx",s:"throw",x:e.x,y:e.y});const a=Math.atan2(ty-e.y,tx-e.x)+(spread||0);S.proj.push({id:S.nid++,k,x:e.x,y:e.y-.1,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,own:"e",dmg,life:2.4,r:k==="knife"?.15:.25,rot:0})}
 function updEnemy(e,dt){const d=EN[e.t],r=d.r;
- if(e.sit&&!wakeSeated(e))return;
+ if(e.sit){if(!wakeSeated(e,dt))return}
+ else if(e.goSeat){e.sh0=e.sh0||e.hp;if(goSeatStep(e,dt))return}
+ else if(e.sleepCd!=null&&S.mission&&S.mission.kind==="pizza"&&!e.flee){e.sh0=e.hp;e.sleepCd-=dt;if(e.sleepCd<=0){const[tp,td]=targetFor(e);if(tp&&td<6)e.sleepCd=2;else if(!startSeat(e))e.sleepCd=5}}
  if(d.type==="cart"&&!e.dead){e.sk=(e.sk||0)+dt;if(e.sk>=2.5){e.sk=0;const[tp0,td0]=targetFor(e);if(e.px!==undefined&&dist(e.x,e.y,e.px,e.py)<.3&&e.stun<=0&&!e.charge&&tp0&&td0<d.aggro){
    for(let rad=1.2;rad<=4;rad+=.8){let ok=false;for(let a=0;a<12;a++){const x=e.x+Math.cos(a*.52)*rad,y=e.y+Math.sin(a*.52)*rad;if(!hitsSolid(x,y,r+.35)&&!S.enemies.some(o=>o!==e&&!o.dead&&dist(o.x,o.y,x,y)<.8)){e.x=x;e.y=y;e.hx=x;e.hy=y;ok=true;break}}if(ok)break}e.unst=0}
   e.px=e.x;e.py=e.y}}
@@ -1423,7 +1447,7 @@ function objective(m){const p=m;if(!p||!S)return null;const M=S.mission,near=(ar
  if(M.kind==="pastry")return near(S.items.filter(i=>i.k==="pastry").map(i=>[i.x,i.y]));
  if(M.kind==="ark"){if(p.carry&&p.carry.k==="key")return near(S.cages.filter(c=>!c.open&&c.sp===p.carry.sp).map(c=>[c.x,c.y]));const k=S.items.filter(i=>i.k==="key");if(k.length)return near(k.map(i=>[i.x,i.y]));return near(S.enemies.filter(e=>e.t==="w").map(e=>[e.x,e.y]))}
  if(M.kind==="boss")return M.boss?S.cage:near(S.enemies.filter(e=>e.t==="B").map(e=>[e.x,e.y]));return null}
-const DRAW={g:drawGuard,v:drawGranny,b:drawCart,c:drawClerk,z:drawPizzaiolo,t:drawBaker,k:drawCat,n:drawNinja,B:drawChef};
+const DRAW={y:(c,t,o)=>{c.scale(.8,.8);drawShopper(c,t,{walk:o.walk,shirt:'#4fb8ff',pants:'#3b3f6b',hair:'#6b3f1f',skin:'#f6cfae',cap:'#e03030'})},g:drawGuard,v:drawGranny,b:drawCart,c:drawClerk,z:drawPizzaiolo,t:drawBaker,k:drawCat,n:drawNinja,B:drawChef};
 let last=0,acc=0,netAcc=0;
 function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/1000||0);last=t;
  if(S&&role!=="guest"){acc+=dt;while(acc>=1/30){tick(1/30);acc-=1/30}
@@ -1450,6 +1474,8 @@ function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/100
   else if(ch==="K"){const b=Math.sin(t/300)*2;c.fillStyle="rgba(79,227,181,.25)";c.beginPath();c.arc(px,py,24+b,0,7);c.fill()}
   else if(S.hidden[x+","+y]&&hash(x,y+Math.floor(t/2600))>.72){const p=(t%2600)/2600;if(p<.3)star(c,px+8,py-10,3*Math.sin(p/.3*PI),"rgba(255,240,180,.95)")}}
  if(m&&m.carry&&m.carry.k==="merch")for(const s of S.shelves)if(s.c===m.carry.c){c.strokeStyle=`rgba(255,255,255,${.5+.4*Math.sin(t/160)})`;c.lineWidth=3;rr(c,s.x*TS-TS/2+1,s.y*TS-TS/2+1,TS-2,TS-2,5);c.stroke()}
+ for(const tb of S.tables){if(tb.coin>0){const bx=tb.cx*TS,by=tb.cy*TS-6+Math.sin(t/200+tb.cx)*2;c.fillStyle='#ffd23c';c.strokeStyle='#b8860b';c.lineWidth=2;c.beginPath();c.arc(bx,by,10,0,7);c.fill();c.stroke();c.fillStyle='#b8860b';c.font='700 12px Fredoka,system-ui';c.textAlign='center';c.fillText('$',bx,by+4)}
+  if(tb.cust&&!tb.want&&S.people.some(q=>q.id===tb.cust&&q.cu==='eat')){c.save();c.translate(tb.cx*TS,tb.cy*TS-4);drawPizzaShape(c,9);c.restore()}}
  for(const tb of S.tables)if(tb.want){const bx=tb.cx*TS,by=tb.cy*TS-TS*.9+Math.sin(t/250+tb.cx)*3;c.fillStyle="#fff";rr(c,bx-16,by-14,32,26,10);c.fill();c.beginPath();c.moveTo(bx-4,by+11);c.lineTo(bx,by+18);c.lineTo(bx+4,by+11);c.fill();c.save();c.translate(bx,by-1);drawPizzaShape(c,9);c.restore()}
  for(const it of S.items){if(it.x<x0-1||it.x>x1+1||it.y<y0-1||it.y>y1+1)continue;c.save();c.translate(it.x*TS,it.y*TS);drawItem(c,it,t);c.restore()}
  if(S.lvl===7&&false);
@@ -1491,11 +1517,7 @@ function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/100
   const fr=rp({id:"fish"+p.id,x:F.x,y:F.y});list.push({y:fr.y+.3,f:()=>{c.save();c.translate(fr.x*TS,fr.y*TS+Math.sin(t/400)*3);drawBowl(c,t,F.water,F.pot,F.food<=0||F.water<=0);c.restore();
   const bw=30,by=fr.y*TS-24+Math.sin(t/400)*3;c.fillStyle="rgba(0,0,0,.55)";rr(c,fr.x*TS-bw/2,by,bw,5,2.5);c.fill();c.fillStyle=F.food<25?"#ff5d6c":"#ffb347";rr(c,fr.x*TS-bw/2+1,by+1,(bw-2)*cl(F.food,0,100)/100,3,1.5);c.fill();
   c.fillStyle="rgba(0,0,0,.55)";rr(c,fr.x*TS-bw/2,by+7,bw,5,2.5);c.fill();c.fillStyle=F.water<WCOST+2?"#ff5d6c":"#5ab8ff";rr(c,fr.x*TS-bw/2+1,by+8,(bw-2)*cl(F.water,0,100)/100,3,1.5);c.fill()}})}
- if(S.lvl===2)S.tables.forEach((tb,ti)=>{if(!tb.want)return;const xs=tb.cells.map(c=>c[0]),ys=tb.cells.map(c=>c[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys);
-  [[x0-.5,y0+.9],[x1+1.5,y0+.9]].forEach(([px,py],k)=>list.push({y:py,f:()=>{const SH=["#e9758a","#4fb8ff","#ffd23c","#2fcf98","#c9a5ff","#ff9a2e"],HR=["#2a1d16","#6b3f1f","#d9b24c","#8a8a92"];
-   c.save();c.translate(px*TS,py*TS-4);c.fillStyle="#8a5a2b";rr(c,-15,2,30,13,5);c.fill();c.beginPath();c.rect(-40,-90,80,95);c.clip();c.scale(k?-1:1,1);
-   drawShopper(c,t+ti*37,{walk:0,shirt:SH[(ti*2+k)%6],pants:"#4a5d8a",hair:HR[(ti+k*2)%4],skin:["#f6cfae","#e8b48f","#c98d63"][(ti+k)%3],long:(ti+k)%2===0,bag:null,old:false,cap:null});c.restore()}}))});
- for(const q of S.people||[]){const r=rp(q);if(r.x<x0-2||r.x>x1+2||r.y<y0-2||r.y>y1+2)continue;list.push({y:r.y,f:()=>{c.save();c.translate(r.x*TS,r.y*TS-4);c.scale(q.face<0?-1:1,1);if(q.zoo!=null)drawZooClerk(c,t+r.x*150,{sp:q.zoo,walk:q.walk});else drawShopper(c,t+r.x*150,q);c.restore()}})}
+ for(const q of S.people||[]){const r=rp(q);if(r.x<x0-2||r.x>x1+2||r.y<y0-2||r.y>y1+2)continue;list.push({y:r.y+(q.cu==='wait'||q.cu==='eat'?.3:0),f:()=>{c.save();c.translate(r.x*TS,r.y*TS-4);if(q.cu==='wait'||q.cu==='eat'){c.fillStyle='#8a5a2b';rr(c,-15,2,30,13,5);c.fill();c.beginPath();c.rect(-40,-90,80,95);c.clip()}c.scale(q.face<0?-1:1,1);if(q.zoo!=null)drawZooClerk(c,t+r.x*150,{sp:q.zoo,walk:q.walk});else drawShopper(c,t+r.x*150,q);c.restore()}})}
  if(S.fount){const f=S.fount;list.push({y:f[1]+(f[3]-f[1])*.6,f:()=>drawFountain(c,t,f)})}
  for(const cg of S.cages||[])list.push({y:cg.y+.45,f:()=>drawCage(c,cg,t)});
  for(const a of S.critters||[]){const r=rp(a);list.push({y:r.y,f:()=>{c.save();c.translate(r.x*TS,r.y*TS);c.scale(a.face<0?-1:1,1);drawAnimal(c,a.sp,t+r.x*90,true);c.restore()}})}
