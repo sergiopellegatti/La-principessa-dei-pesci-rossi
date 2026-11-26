@@ -311,7 +311,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <tr><td>Finale · Sushi Samurai</td><td>Sconfiggi il Cuoco del Sushi e libera la principessa</td><td>Camerieri ninja e il cuoco coi coltelli</td></tr></table>
     <p>Finita la missione compare il <b>pezzo del volantino</b>: prendetelo e tornate nella hall. In ogni negozio ci sono anche <b>la guardia col manganello, la vecchietta col bastone e il bambino nel carrello</b>: colpiteli finché non finisce la loro energia.</p>
     <h3>Il Mondo dei Pesci (negozio di pesca)</h3>
-    <ul><li>È la porta accanto a Zoo Planet. Qui non ci sono i soliti nemici: si pesca dalla grande boccia di vetro. Pescati <b>20 pesci</b> ricevi subito il pezzo del volantino (il 6°); i pesci in più, come tutti quelli nel cesto, si vendono per monete.</li>
+    <ul><li>È la porta accanto a Zoo Planet. Qui non ci sono i soliti nemici: si pesca dalla grande boccia di vetro. Quando nel cesto ci sono <b>20 pesci</b> ricevi subito il pezzo del volantino (il 6°): se i gatti ne rubano prima di arrivarci il numero scende, ma dopo averlo preso il volantino non si perde più. I pesci nel cesto, anche quelli in più, si vendono per monete.</li>
     <li><b>Frecce / joystick</b>: orientano la canna (la riga tratteggiata mostra dove andrà l'amo). <b>Pulsante asciugamano</b> (qui con l'amo): lancia l'amo.</li>
     <li>I pesci finiscono nel cesto accanto a te: più sono grandi, più valgono. Attenzione a cosa abbocca: la <b>murena</b> dà la scossa (−15 energia), il <b>topo</b> mangia la pappa del pesce rosso, lo <b>scarpone</b> toglie poca energia (−5), la <b>lattina di pelati</b> un po' di più (−10).</li>
     <li>Arrivano i <b>gatti</b> a rubare i pesci dal cesto: il pulsante saponetta (qui «Sciò») li scaccia e se ne avevano già preso uno lo riporta nel cesto.</li>
@@ -859,7 +859,7 @@ function sceneTick(dt){const t=S.time;
    if(Math.abs(d)<.15){const b=bk(p);if(b.length){c.fish=b.pop();float(c.x,c.y-.5,"Il gatto ruba un pesce!","#ff9a2e");ev({k:"sfx",s:"meow",x:c.x,y:c.y})}c.st="run"}}
   else{c.x+=c.side*4.5*dt;if(c.x<-1.5||c.x>S.W+1.5)S.scats.splice(i,1)}}}
 function rodTip(p){const r=p.rod||{ang:0};return[p.x+.35+Math.sin(r.ang)*1.3,2.45+Math.cos(r.ang)*1.3]}
-function shooCats(p){let n=0;for(const c of S.scats){if(Math.abs(c.x-p.x)<4.2&&c.st!=="flee"){if(c.fish){bk(p).push(c.fish);c.fish=null;float(c.x,c.y-.6,"Pesce recuperato!","#4fe3b5")}c.st="run";c.side=c.x<p.x?-1:1;n++}}
+function shooCats(p){let n=0;for(const c of S.scats){if(Math.abs(c.x-p.x)<4.2&&c.st!=="flee"){if(c.fish){bk(p).push(c.fish);fishCount(p);c.fish=null;float(c.x,c.y-.6,"Pesce recuperato!","#4fe3b5")}c.st="run";c.side=c.x<p.x?-1:1;n++}}
  ev({k:"sfx",s:"soap",x:p.x,y:p.y});float(p.x,p.y-.8,n?"Sciò!":"Nessun gatto vicino","#ffc93c")}
 function sceneDmg(p,n,msg){p.hp-=n;float(p.x,p.y-.9,msg+" -"+n,"#ff5d6c");ev({k:"hurt",id:p.id});
  if(p.hp<=0){p.hp=p.max;if(S.rule!=="insieme"){koPenalty(p);return}const g=S.grp[0];g.lives--;ev({k:"sfx",s:"life"});if(g.lives<=0){S.phase="over";return}toast(`Vita persa! Ne restano ${g.lives}`)}}
@@ -871,7 +871,7 @@ function landCatch(p,o){const back=k=>S.respawn.push({k,at:S.time+(k==="fish"?2.
  else if(o.k==="boot")sceneDmg(p,5,"Uno scarpone vecchio!");
  else if(o.k==="can")sceneDmg(p,10,"Una lattina di pelati!")}
 function FXshock(p){ev({k:"burst",x:p.x,y:p.y-.3,col:"#ffe36b",n:24})}
-function fishCount(p){const G=GR(p);G.caught=(G.caught|0)+1;if(G.caught===20&&!G.done[6]){G.done[6]=true;G.frags++;G.coins+=20;p.score=(p.score|0)+500;S.done[6]=true;ev({k:"sfx",s:"frag"});ev({k:"burst",x:p.x+.9,y:3.2,col:"#ffc93c",n:30});toast(`🐟 20 pesci pescati! Pezzo del volantino preso (${G.frags}/6): i pesci in più valgono monete`,5)}else if(G.caught<20&&G.caught%5===0)float(p.x,p.y-1.2,`${G.caught}/20 pesci`,"#9be0ff")}
+function fishCount(p){const G=GR(p),n=bk(p).length;if(n>=20&&!G.done[6]){G.done[6]=true;G.frags++;G.coins+=20;p.score=(p.score|0)+500;S.done[6]=true;ev({k:"sfx",s:"frag"});ev({k:"burst",x:p.x+.9,y:3.2,col:"#ffc93c",n:30});toast(`🐟 20 pesci nel cesto! Pezzo del volantino preso (${G.frags}/6): resta tuo anche se i gatti rubano, i pesci in più valgono monete`,5)}else if(!G.done[6]&&n%5===0&&n>0)float(p.x,p.y-1.2,`${n}/20 pesci`,"#9be0ff")}
 function sellAndExit(){let n=0,v=0;for(const p of S.players){const b=bk(p),pv=b.reduce((s,f)=>s+f.v,0);n+=b.length;v+=pv;GR(p).coins+=pv;p.score=(p.score|0)+pv*10;S.baskets[p.i]=[]}
  S.players.forEach(p=>{if(p.rod){p.rod.st="idle";p.rod.len=0;p.rod.obj=null}});
  enterArea(0);if(n){toast(`Venduti ${n} pesci: +${v} monete!`,3);ev({k:"sfx",s:"sell"})}}
@@ -2358,7 +2358,7 @@ function missionText(){const m=S.mission,p=meP(),G=myG();
  case"pizza":return`Pizze servite ${m.n}/${m.need}${p&&p.carry?" · portala a un tavolo col fumetto":""}`;
  case"pastry":return`Pasticcini ${Math.min(m.n,m.need)}/${m.need}`;
  case"ark":return`Animali dell'Arca liberati ${m.n}/${m.need} coppie${p&&p.carry&&p.carry.k==="key"?` · porta la chiave alla gabbia dei ${SP[p.carry.sp].n}`:" · colpisci i commessi travestiti per avere le chiavi"}`;
- case"fishing":{const b=p?bk(p):[],n=b.length,v=b.reduce((s,f)=>s+f.v,0);return`Pescati ${(G.caught|0)}/20 per il volantino · cesto ${n} pesci (${v} monete) · esci col chewing-gum per venderli`}
+ case"fishing":{const b=p?bk(p):[],n=b.length,v=b.reduce((s,f)=>s+f.v,0);return`${G.done[6]?"Volantino preso":`Pesci nel cesto ${n}/20`} · valgono ${v} monete · esci col chewing-gum per venderli`}
  case"boss":return m.boss?"Libera la principessa nella gabbia!":(()=>{const b=S.enemies.find(e=>e.t==="B");return b?`Sconfiggi il Cuoco del Sushi · energia ${Math.max(0,Math.ceil(b.hp/b.max*100))}%`:"Trova il Cuoco del Sushi"})()}return""}
 const WNAME=["Asciugamano","Saponette","Chewing-gum"];
 let shopLock=false,saveLock=false;
