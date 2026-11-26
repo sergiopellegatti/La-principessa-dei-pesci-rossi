@@ -244,11 +244,11 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
 <div class="overlay" id="ovHelp" hidden>
   <div class="modal help" role="dialog" aria-label="Come si gioca">
     <h2>Come si gioca</h2>
-    <p>Il Cuoco del Sushi vuole cucinare la principessa dei pesci rossi. Completate le missioni di 5 negozi e ritrovate i 5 pezzi del volantino: insieme aprono il ristorante Sushi Samurai.</p>
+    <p>Il Cuoco del Sushi vuole cucinare la principessa dei pesci rossi. Completate le missioni di 6 negozi e ritrovate i 6 pezzi del volantino: insieme aprono il ristorante Sushi Samurai.</p>
     <h3>La hall del centro commerciale</h3>
     <ul><li>Si parte dalla <b>hall</b>: al centro c'è la fontana con il grande pesce, tutto intorno le vetrine e le porte dei negozi, compreso Il Mondo dei Pesci dove si pesca per guadagnare monete.</li>
     <li>Per entrare in un negozio camminate sulla sua porta; per tornare nella hall usate la porta <b>HALL</b> del negozio. Si può uscire e rientrare quando si vuole: ogni negozio ricorda la missione da dove l'avete lasciata.</li>
-    <li>I negozi si possono fare nell'ordine che preferite, ma il Sushi Samurai resta chiuso finché non avete i 5 pezzi del volantino. Sulle porte dei negozi completati compare una spunta verde.</li>
+    <li>I negozi si possono fare nell'ordine che preferite, ma il Sushi Samurai resta chiuso finché non avete i 6 pezzi del volantino. Sulle porte dei negozi completati compare una spunta verde.</li>
     <li>Nella hall e nei negozi passeggiano i <b>clienti</b>: non tolgono energia ma bisogna girarci intorno. Una frustata d'asciugamano li sposta.</li>
     <li>Fermatevi davanti alla <b>fontana</b> per salvare la partita.</li>
     <li><b>Carrelli e pensilina</b> (solo nella hall): se sconfiggete il <b>bambino nel carrello</b> della hall non lascia monete ma il suo carrello. Il carrello si aggancia da solo passandoci vicino e vi segue; riportatelo alla <b>pensilina dei carrelli</b> in basso al centro per avere le ricompense (monete, punti, pappa e acqua per il pesce).</li>
@@ -269,7 +269,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <li><b>Ognuno per sé</b>: è una sfida. Ognuno ha le sue monete, le sue munizioni, i suoi potenziamenti e il suo volantino; vince chi fa più punti.</li>
     <li><b>Foche contro Pinguini</b>: due squadre (tocca il cartellino sopra il personaggio per cambiare squadra); monete e volantino sono della squadra, vince la squadra con più punti.</li>
     <li>Nella sfida e a squadre non ci sono vite: chi va KO perde 5 monete e 100 punti e riparte dopo 3 secondi. Il pezzo del volantino resta finché tutti (o entrambe le squadre) non l'hanno preso: chi lo prende per primo guadagna di più.</li>
-    <li>In tutti i casi il <b>Sushi Samurai</b> apre solo quando tutti i giocatori (o entrambe le squadre) hanno completato i 5 negozi.</li>
+    <li>In tutti i casi il <b>Sushi Samurai</b> apre solo quando tutti i giocatori (o entrambe le squadre) hanno completato i 6 negozi.</li>
     <li><b>Punti</b>: monete raccolte, mostri sconfitti, consegne delle missioni, pezzi del volantino, pesci venduti e, alla fine, la principessa liberata. Ognuno ha il suo pesce rosso nella boccia, che lo segue e va nutrito.</li></ul>
     <h3>Classifica</h3>
     <ul><li>La classifica in stile sala giochi anni '80 si aggiorna ogni volta che si salva alla fontana (e alla fine della partita): salvando, si aggiornano i punteggi di tutti i giocatori, anche sugli altri telefoni collegati. Si vede dal menu con <b>Classifica</b>.</li>
@@ -311,7 +311,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <tr><td>Finale · Sushi Samurai</td><td>Sconfiggi il Cuoco del Sushi e libera la principessa</td><td>Camerieri ninja e il cuoco coi coltelli</td></tr></table>
     <p>Finita la missione compare il <b>pezzo del volantino</b>: prendetelo e tornate nella hall. In ogni negozio ci sono anche <b>la guardia col manganello, la vecchietta col bastone e il bambino nel carrello</b>: colpiteli finché non finisce la loro energia.</p>
     <h3>Il Mondo dei Pesci (negozio di pesca)</h3>
-    <ul><li>È la porta accanto a Zoo Planet. Qui non ci sono i soliti nemici: si pesca dalla grande boccia di vetro per guadagnare monete.</li>
+    <ul><li>È la porta accanto a Zoo Planet. Qui non ci sono i soliti nemici: si pesca dalla grande boccia di vetro. Pescati <b>20 pesci</b> ricevi subito il pezzo del volantino (il 6°); i pesci in più, come tutti quelli nel cesto, si vendono per monete.</li>
     <li><b>Frecce / joystick</b>: orientano la canna (la riga tratteggiata mostra dove andrà l'amo). <b>Pulsante asciugamano</b> (qui con l'amo): lancia l'amo.</li>
     <li>I pesci finiscono nel cesto accanto a te: più sono grandi, più valgono. Attenzione a cosa abbocca: la <b>murena</b> dà la scossa (−15 energia), il <b>topo</b> mangia la pappa del pesce rosso, lo <b>scarpone</b> toglie poca energia (−5), la <b>lattina di pelati</b> un po' di più (−10).</li>
     <li>Arrivano i <b>gatti</b> a rubare i pesci dal cesto: il pulsante saponetta (qui «Sciò») li scaccia e se ne avevano già preso uno lo riporta nel cesto.</li>
@@ -865,12 +865,13 @@ function sceneDmg(p,n,msg){p.hp-=n;float(p.x,p.y-.9,msg+" -"+n,"#ff5d6c");ev({k:
  if(p.hp<=0){p.hp=p.max;if(S.rule!=="insieme"){koPenalty(p);return}const g=S.grp[0];g.lives--;ev({k:"sfx",s:"life"});if(g.lives<=0){S.phase="over";return}toast(`Vita persa! Ne restano ${g.lives}`)}}
 function koPenalty(p){const g=GR(p),lost=Math.min(5,g.coins);g.coins-=lost;p.score=Math.max(0,(p.score|0)-100);ev({k:"sfx",s:"life"});toast(`${p.name} è KO: −${lost} monete e −100 punti`,2.5)}
 function landCatch(p,o){const back=k=>S.respawn.push({k,at:S.time+(k==="fish"?2.5:rnd(5,9))});back(o.k);
- if(o.k==="fish"){bk(p).push({col:o.col,v:o.v});float(p.x+.9,2.6,`Pesce! vale ${o.v}`,o.col);ev({k:"sfx",s:"pick"});ev({k:"burst",x:p.x+.9,y:3.2,col:o.col,n:12})}
+ if(o.k==="fish"){bk(p).push({col:o.col,v:o.v});fishCount(p);float(p.x+.9,2.6,`Pesce! vale ${o.v}`,o.col);ev({k:"sfx",s:"pick"});ev({k:"burst",x:p.x+.9,y:3.2,col:o.col,n:12})}
  else if(o.k==="eel"){sceneDmg(p,15,"Zzzt! La murena dà la scossa");ev({k:"sfx",s:"shock"});FXshock(p)}
  else if(o.k==="mouse"){p.fish.food=Math.max(0,p.fish.food-15);float(p.x,p.y-.9,"Il topo mangia la pappa del pesce rosso!","#ff9a2e");ev({k:"sfx",s:"squeak"})}
  else if(o.k==="boot")sceneDmg(p,5,"Uno scarpone vecchio!");
  else if(o.k==="can")sceneDmg(p,10,"Una lattina di pelati!")}
 function FXshock(p){ev({k:"burst",x:p.x,y:p.y-.3,col:"#ffe36b",n:24})}
+function fishCount(p){const G=GR(p);G.caught=(G.caught|0)+1;if(G.caught===20&&!G.done[6]){G.done[6]=true;G.frags++;G.coins+=20;p.score=(p.score|0)+500;S.done[6]=true;ev({k:"sfx",s:"frag"});ev({k:"burst",x:p.x+.9,y:3.2,col:"#ffc93c",n:30});toast(`🐟 20 pesci pescati! Pezzo del volantino preso (${G.frags}/6): i pesci in più valgono monete`,5)}else if(G.caught<20&&G.caught%5===0)float(p.x,p.y-1.2,`${G.caught}/20 pesci`,"#9be0ff")}
 function sellAndExit(){let n=0,v=0;for(const p of S.players){const b=bk(p),pv=b.reduce((s,f)=>s+f.v,0);n+=b.length;v+=pv;GR(p).coins+=pv;p.score=(p.score|0)+pv*10;S.baskets[p.i]=[]}
  S.players.forEach(p=>{if(p.rod){p.rod.st="idle";p.rod.len=0;p.rod.obj=null}});
  enterArea(0);if(n){toast(`Venduti ${n} pesci: +${v} monete!`,3);ev({k:"sfx",s:"sell"})}}
@@ -1052,7 +1053,7 @@ function interact(p){
    if(groupsInPlay().every(g=>S.grp[g].done[S.lvl]))S.items.splice(i,1);
    ev({k:"burst",x:it.x,y:it.y,col:"#ffc93c",n:30});ev({k:"sfx",s:"frag"});
    const who=S.rule==="insieme"?"":`${grpName(gi(p))}: `;
-   toast(G.frags<5?`${who}pezzo ${G.frags} di 5 del volantino!${first&&S.rule!=="insieme"?" (primi! +500)":""} Uscite dalla porta HALL e cercate gli altri`:sushiOpen()?"Volantino completo per tutti: il Sushi Samurai è aperto!":`${who}volantino completo! Il Sushi apre quando tutti avranno i 5 pezzi`,5)}}
+   toast(G.frags<6?`${who}pezzo ${G.frags} di 6 del volantino!${first&&S.rule!=="insieme"?" (primi! +500)":""} Uscite dalla porta HALL e cercate gli altri`:sushiOpen()?"Volantino completo per tutti: il Sushi Samurai è aperto!":`${who}volantino completo! Il Sushi apre quando tutti avranno i 6 pezzi`,5)}}
  if(m.kind==="shelves"&&p.carry&&p.carry.k==="merch"){for(const s of S.shelves)if(s.c===p.carry.c&&dist(p.x,p.y,s.x,s.y)<1.2){m.n++;G.coins+=2;p.score=(p.score|0)+100;p.carry=null;ev({k:"sfx",s:"deliver"});ev({k:"burst",x:s.x,y:s.y,col:["","#ff4f6d","#4f8bff","#ffc93c","#3fcf7a"][s.c],n:14});float(s.x,s.y,`Riordinato! ${m.n}/${m.need}`,"#fff");break}}
  if(m.kind==="ark"&&p.carry&&p.carry.k==="key"){for(const cg of S.cages)if(!cg.open&&cg.sp===p.carry.sp&&dist(p.x,p.y,cg.x,cg.y)<1.3){cg.open=true;p.carry=null;m.n++;G.coins+=3;p.score=(p.score|0)+150;
    ev({k:"sfx",s:"free"});ev({k:"burst",x:cg.x,y:cg.y,col:SP[cg.sp].c,n:24});float(cg.x,cg.y,`Liberi i ${SP[cg.sp].n}! ${m.n}/${m.need}`,"#fff");
@@ -1071,15 +1072,15 @@ function interact(p){
  if(!nearD)p.doorLock=false;
  if(m.boss&&!m.freed&&S.cage&&dist(p.x,p.y,S.cage[0],S.cage[1])<1.5){m.freed=true;S.freer=p.i;p.score=(p.score|0)+3000;if(S.rule==="insieme")S.players.forEach(q=>{if(q!==p)q.score=(q.score|0)+1000});S.phase="win";ev({k:"burst",x:S.cage[0],y:S.cage[1],col:"#ffc93c",n:60})}
 }
-function sushiOpen(){return groupsInPlay().every(g=>S.grp[g].frags>=5)}
+function sushiOpen(){return groupsInPlay().every(g=>S.grp[g].frags>=6)}
 function useDoor(p,d){
  if(d.to===10&&(S.muCool||0)>0){p.doorLock=true;toast(`🧹 Il negozio di strumenti è chiuso per pulizie (vetri da spazzare): riapre tra ${Math.ceil(S.muCool)} s`,3);ev({k:"sfx",s:"empty"});p.ky=d.y>S.H/2?-3.5:3.5;return}
  if(d.to===9&&(S.fdCool||0)>0){p.doorLock=true;toast(`🧹 Il fast food è chiuso per pulizie: riapre tra ${Math.ceil(S.fdCool)} s`,3);ev({k:"sfx",s:"empty"});p.kx=4;return}
  if(d.to===7&&S.done[5])d={...d,to:8};
  if(d.to===7&&S.mode==="hot"&&S.raceTimes&&S.raceTimes[p.i]!==undefined){p.doorLock=true;toast("Hai già fatto la tua corsa: aspetta il turno degli altri",3);ev({k:"sfx",s:"empty"});p.kx=-4;return}
  if((d.to===7||d.to===8)&&(S.raceCool||0)>0){p.doorLock=true;toast(`🧹 Pulizie in corso nel parcheggio: torna più tardi (${Math.ceil(S.raceCool)} s)`,3);ev({k:"sfx",s:"empty"});p.kx=-4;return}
- if(d.to===5&&!sushiOpen()){p.doorLock=true;const miss=groupsInPlay().filter(g=>S.grp[g].frags<5);
-  toast(S.rule==="insieme"?`Il Sushi Samurai è chiuso: servono i 5 pezzi del volantino (${S.grp[0].frags}/5)`:`Il Sushi Samurai apre quando tutti hanno i 5 pezzi. Mancano: ${miss.map(g=>grpName(g)+" "+S.grp[g].frags+"/5").join(", ")}`,3.5);ev({k:"sfx",s:"empty"});p.ky=d.y>S.H/2?-3.5:3.5;return}
+ if(d.to===5&&!sushiOpen()){p.doorLock=true;const miss=groupsInPlay().filter(g=>S.grp[g].frags<6);
+  toast(S.rule==="insieme"?`Il Sushi Samurai è chiuso: servono i 6 pezzi del volantino (${S.grp[0].frags}/6)`:`Il Sushi Samurai apre quando tutti hanno i 6 pezzi. Mancano: ${miss.map(g=>grpName(g)+" "+S.grp[g].frags+"/5").join(", ")}`,3.5);ev({k:"sfx",s:"empty"});p.ky=d.y>S.H/2?-3.5:3.5;return}
  enterArea(d.to)}
 function fountDist(p){const f=S.fount;if(!f)return 99;const dx=Math.max(f[0]-p.x,0,p.x-f[2]),dy=Math.max(f[1]-p.y,0,p.y-f[3]);return Math.hypot(dx,dy)}
 function updZoo(dt){if(!S.parrots)return;
@@ -1505,7 +1506,7 @@ function musicTick(dt){const M=S.mu;if(!M)return;M.t+=dt;M.shake=Math.max(0,M.sh
   const tp=inp.tp|0;if(p.tpS==null)p.tpS=tp;const taps=tp!==p.tpS;p.tpS=tp;if(taps&&M.ph==="play"&&S.mu){p.mLast=key;p.mDw=0;playKey(p,M,key)}})}
 function leaveMusic(win,who){const M=S.mu;let msg;
  if(M){if(win){for(const p of S.players){if(p.hidden||p.away)continue;const G=GR(p);if(!G.done[10]){G.done[10]=true;G.frags++;G.coins+=20;p.score=(p.score|0)+500}}
-   S.done[10]=true;msg=`🎹 Concerto completo! Pezzo del volantino preso (${GR(S.players[0]).frags}/5) · il negozio chiude per pulizie 45 s`}
+   S.done[10]=true;msg=`🎹 Concerto completo! Pezzo del volantino preso (${GR(S.players[0]).frags}/6) · il negozio chiude per pulizie 45 s`}
   else msg=`${who?who.name+" è uscito dal negozio":M.msg||"Concerto interrotto"} · melodie fatte: ${S.muDone|0}/5 · il negozio chiude per pulizie 45 s`}
  S.muCool=45;S.mu=null;toast(msg||"Concerto finito",5);enterArea(0)}
 
@@ -1597,7 +1598,7 @@ function decor(c,ch,px,py,x,y,L){const cx=px+TS/2,cy=py+TS/2,h=hash(x*3,y*7);
  else if(ch==="E"||ch==="F"){}
 }
 function objective(m){const p=m;if(!p||!S)return null;const M=S.mission,near=(arr)=>{let b=null,bd=1e9;for(const a of arr){const d=dist(p.x,p.y,a[0],a[1]);if(d<bd){bd=d;b=a}}return b};
- const G=GR(p);if(M.kind==="hall"){const L=G.frags>=5?5:[1,2,3,4,10].find(l=>!G.done[l]);const d=S.hallDoors.find(d=>d.to===L);return d?[d.x,d.y]:null}
+ const G=GR(p);if(M.kind==="hall"){const L=G.frags>=6?5:[1,2,3,4,6,10].find(l=>!G.done[l]);const d=S.hallDoors.find(d=>d.to===L);return d?[d.x,d.y]:null}
  const frag=S.items.find(i=>i.k==="frag");if(frag&&!G.done[S.lvl])return[frag.x,frag.y];if(S.done[S.lvl])return S.exit;
  if(M.kind==="shelves")return p.carry?near(S.shelves.filter(s=>s.c===p.carry.c).map(s=>[s.x,s.y])):near(S.items.filter(i=>i.k==="merch").map(i=>[i.x,i.y]));
  if(M.kind==="pizza")return p.carry?near(S.tables.filter(t=>t.want).map(t=>[t.cx,t.cy])):near(S.ovens);
@@ -2351,13 +2352,13 @@ function missionText(){const m=S.mission,p=meP(),G=myG();
  if(S.lvl===8&&S.pz){const Z=S.pz;return`Posto ${Z.scr+1}/${PSCR} · mosse ${Z.moves} (record ${Z.best}) · ◀▶ cambia auto, levetta sposta, rossa verso la strada`}
  if(S.lvl===7&&S.race){const R=S.race;if(!p||p.watch)return"Gara in corso: tocca al compagno di turno";const pos=Math.max(1,R.top.indexOf(p.i)+1);return p.fin>0?`Traguardo! ${p.fin}° posto · ${fmtT(R.clock)}`:`⏱ ${fmtT(R.clock)} · Giro ${Math.min(RLAPS,p.wr)+(p.wr>=RLAPS?0:1)}/${RLAPS} · ${pos}° posto · ? = gadget`}
  if(m.kind==="hall"&&p&&p.carts>0)return`Carrelli agganciati ${p.carts}/3 · portali alla pensilina in basso (più ne porti, più ricompense)`;
- if(m.kind==="hall"){const left=[1,2,3,4,10].filter(l=>!G.done[l]).map(l=>LV[l].name);if(G.frags>=5)return sushiOpen()?"Volantino completo: entrate nel Sushi Samurai!":"Volantino completo! Il Sushi apre quando tutti avranno i 5 pezzi";return`Negozi da completare: ${left.join(", ")}`}
+ if(m.kind==="hall"){const left=[1,2,3,4,6,10].filter(l=>!G.done[l]).map(l=>LV[l].name);if(G.frags>=6)return sushiOpen()?"Volantino completo: entrate nel Sushi Samurai!":"Volantino completo! Il Sushi apre quando tutti avranno i 6 pezzi";return`Negozi da completare: ${left.join(", ")}`}
  if(S.items.some(i=>i.k==="frag")&&!G.done[S.lvl])return"Missione compiuta: prendi il pezzo del volantino!";if(G.done[S.lvl])return"Pezzo del volantino preso · uscite dalla porta HALL";
  switch(m.kind){case"shelves":return`Riordina gli scaffali ${m.n}/${m.need}${p&&p.carry?" · portalo allo scaffale del suo colore":""}`;
  case"pizza":return`Pizze servite ${m.n}/${m.need}${p&&p.carry?" · portala a un tavolo col fumetto":""}`;
  case"pastry":return`Pasticcini ${Math.min(m.n,m.need)}/${m.need}`;
  case"ark":return`Animali dell'Arca liberati ${m.n}/${m.need} coppie${p&&p.carry&&p.carry.k==="key"?` · porta la chiave alla gabbia dei ${SP[p.carry.sp].n}`:" · colpisci i commessi travestiti per avere le chiavi"}`;
- case"fishing":{const b=p?bk(p):[],n=b.length,v=b.reduce((s,f)=>s+f.v,0);return`Pesci nel tuo cesto ${n} (valgono ${v} monete) · esci col chewing-gum per venderli`}
+ case"fishing":{const b=p?bk(p):[],n=b.length,v=b.reduce((s,f)=>s+f.v,0);return`Pescati ${(G.caught|0)}/20 per il volantino · cesto ${n} pesci (${v} monete) · esci col chewing-gum per venderli`}
  case"boss":return m.boss?"Libera la principessa nella gabbia!":(()=>{const b=S.enemies.find(e=>e.t==="B");return b?`Sconfiggi il Cuoco del Sushi · energia ${Math.max(0,Math.ceil(b.hp/b.max*100))}%`:"Trova il Cuoco del Sushi"})()}return""}
 const WNAME=["Asciugamano","Saponette","Chewing-gum"];
 let shopLock=false,saveLock=false;
@@ -2365,7 +2366,7 @@ function hudHTML(){const G=myG(),p=meP(),bits=[];
  if(S.rule==="squadre")bits.push(...[0,1].filter(g=>groupsInPlay().includes(g)).map(g=>`<b style="color:${TEAMC[g]}">${g?"🐧":"🦭"} ${grpScore(g)}</b>`));
  else if(S.rule==="sfida"){const r=ranking(),me=p?gi(p):-1,pos=r.findIndex(x=>x.g===me)+1;bits.push(`<b>${S.mode==="hot"&&p?esc(p.name)+" ":""}★ ${p?p.score|0:0}</b>`,`<span>${pos}° su ${r.length}</span>`)}
  else{if(S.mode!=="solo")bits.push(S.players.filter(q=>!q.away).map(q=>`<b class="${S.mode==="hot"&&q.i===S.active?"on":""}">${esc(q.name)}${q.down?" (KO)":""}</b>`).join(" · "));bits.push(`<span style="color:#ff8cc0">♥ ${G.lives}</span>`,`<span>★ ${grpScore(0)}</span>`)}
- bits.push(`<span style="color:#ffc93c">● ${G.coins}</span>`,`<span style="color:#c9c2ff">📜 ${G.frags}/4</span>`);
+ bits.push(`<span style="color:#ffc93c">● ${G.coins}</span>`,`<span style="color:#c9c2ff">📜 ${G.frags}/6</span>`);
  if(S.mode==="hot")bits.push(`<span>${S.rule==="squadre"&&p?esc(p.name)+" · ":""}⏱ ${Math.max(0,Math.ceil(S.turnT))}s</span>`);
  return bits.join(" ")}
 function syncUI(){
@@ -2375,7 +2376,7 @@ function syncUI(){
  drawMenuHeroes();drawPickers();
  const now=performance.now();if(now-uiT<120)return;uiT=now;if(!S)return;
  const p=meP(),G=myG();
- $("lvl").textContent=`${S.lvl&&S.lvl<5?`Negozio ${S.lvl}/5 · `:S.lvl===10?"Negozio 5/5 · ":""}${LV[S.lvl].name} — ${missionText()}${netLost?" · collegamento perso!":""}`;
+ $("lvl").textContent=`${S.lvl&&S.lvl<5?`Negozio ${S.lvl}/6 · `:S.lvl===6?"Negozio 5/6 · ":S.lvl===10?"Negozio 6/6 · ":""}${LV[S.lvl].name} — ${missionText()}${netLost?" · collegamento perso!":""}`;
  $("hud").innerHTML=hudHTML();
  joy.classList.toggle("fast",S.lvl===9);const scene=S.lvl===6;const cI=!scene&&S.lvl<7&&!!p&&(p.carts|0)>0;const pzm=S.lvl>=8?S.lvl:0;const spk=!scene&&S.lvl<7&&p&&p.sp?(p.sp.chop>0?"c":"")+(p.sp.fish>0?"f":"")+(p.sp.cloud>0?"k":""):"";if(scene!==iconScene||cI!==cartIco||pzm!==pzIco||spk!==spKey){iconScene=scene;cartIco=cI;pzIco=pzm;spKey=spk;wIcons(scene)}
  {const ba=$("bAbandon");const show=!!p&&S.phase==="play"&&((S.lvl===7&&S.race&&!p.watch&&!p.fin)||S.lvl===8);if(ba.hidden===show)ba.hidden=!show}
@@ -2410,8 +2411,8 @@ function renderStat(){if(!S)return;const me=meP(),f=me.fish,bar=(v,col)=>`<div c
   `<div class="tags"><span>${f.pot?"Pozione "+POT[f.pot].name+" · "+Math.ceil(f.potT)+" s":"Nessuna pozione attiva"}</span><span>${f.food<=0||f.water<=0?"Sta male: non spruzza":f.food<25||f.water<25?"Affaticato: spruzza piano":"In forma: spruzza acqua"}</span></div>`;
  for(const q of inPlay())h+=`<h3>${S.rule==="squadre"?(q.team?"🐧 ":"🦭 "):""}${esc(q.name)}${S.mode==="hot"&&q.i===S.active?" (di turno)":""}</h3><div class="sr"><span>Energia</span>${bar(q.hp/q.max*100,"linear-gradient(90deg,#4fe3b5,#9dfbd8)")}<span>${q.down?"KO":Math.ceil(q.hp)}</span></div><div class="tags"><span>★ ${q.score|0} punti</span><span>Arma: ${WNAME[q.w]}</span>${q.carry?`<span>Sta portando ${q.carry.k==="pizza"?"una pizza":q.carry.k==="key"?"la chiave dei "+SP[q.carry.sp].n:"un vestito"}</span>`:""}</div>`;
  const ups=SHOP.filter(i=>i.up&&G.up[i.id]).map(i=>i.name);
- h+=`<h3>${S.rule==="insieme"?"Squadra":esc(grpName(gi(me)))}</h3><div class="tags">${S.rule==="insieme"?`<span>Vite ${G.lives}</span>`:""}<span>Monete ${G.coins}</span><span>Volantino ${G.frags}/5</span><span>Saponette ${G.ammo.soap}</span><span>Chewing-gum ${G.ammo.gum}</span><span>Mostri sconfitti ${S.kills}</span><span>${ups.length?"Potenziamenti: "+ups.join(", "):"Nessun potenziamento"}</span></div>`;
- if(S.rule!=="insieme")h+=`<h3>Classifica della partita</h3><div class="tags">${ranking().map((r,i)=>`<span>${i+1}° ${esc(r.name)} ${r.score} · volantino ${S.grp[r.g].frags}/5</span>`).join("")}</div>`;
+ h+=`<h3>${S.rule==="insieme"?"Squadra":esc(grpName(gi(me)))}</h3><div class="tags">${S.rule==="insieme"?`<span>Vite ${G.lives}</span>`:""}<span>Monete ${G.coins}</span><span>Volantino ${G.frags}/6</span><span>Saponette ${G.ammo.soap}</span><span>Chewing-gum ${G.ammo.gum}</span><span>Mostri sconfitti ${S.kills}</span><span>${ups.length?"Potenziamenti: "+ups.join(", "):"Nessun potenziamento"}</span></div>`;
+ if(S.rule!=="insieme")h+=`<h3>Classifica della partita</h3><div class="tags">${ranking().map((r,i)=>`<span>${i+1}° ${esc(r.name)} ${r.score} · volantino ${S.grp[r.g].frags}/6</span>`).join("")}</div>`;
  h+=`<h3>Negozi</h3><div class="tags">${[1,2,3,4,5].map(l=>`<span>${G.done[l]?"✓ ":""}${esc(LV[l].name)}</span>`).join("")}</div><h3>Adesso</h3><p>${esc(LV[S.lvl].name)}: ${esc(missionText())}</p>`;
  if($("stB").innerHTML!==h)$("stB").innerHTML=h}
 function openStat(){if(!S||S.phase!=="play")return;renderStat();$("ovStat").hidden=false;setSafe(true)}
@@ -2431,7 +2432,7 @@ function rankHTML(max,hl){const a=hsLoad().slice(0,max||10),H=new Set((hl||[]).m
 /* ---------- salvataggio alla fontana ---------- */
 let exitArm=false;
 function openSave(){const sv=loadSave(),G=myG();
- $("svW").innerHTML=[S.rule==="insieme"?`Vite ${G.lives}`:"",`Monete ${G.coins}`,`Negozi completati ${[1,2,3,4,10].filter(l=>G.done[l]).length}/5`,`Mostri sconfitti ${S.kills}`].filter(Boolean).map(s=>`<span>${s}</span>`).join("");$("svF").innerHTML=flyerHTML(G.frags);
+ $("svW").innerHTML=[S.rule==="insieme"?`Vite ${G.lives}`:"",`Monete ${G.coins}`,`Negozi completati ${[1,2,3,4,6,10].filter(l=>G.done[l]).length}/6`,`Mostri sconfitti ${S.kills}`].filter(Boolean).map(s=>`<span>${s}</span>`).join("");$("svF").innerHTML=flyerHTML(G.frags);
  $("bSave").disabled=false;$("bSave").textContent=inPlay().length>1?"Salva per tutti":"Salva la partita";exitArm=false;$("bQuit").textContent="Esci dal gioco";
  $("svR").innerHTML=rankHTML(5,inPlay().map(p=>p.name));
  $("svH").textContent=role==="guest"?"Salvando aggiorni la classifica di tutti; la partita si salva sul telefono di chi l'ha creata.":sv&&sv.when?`Ultimo salvataggio: ${new Date(sv.when).toLocaleString("it-IT",{dateStyle:"short",timeStyle:"short"})}`:"Nessun salvataggio precedente.";
@@ -2480,7 +2481,7 @@ function refreshMenu(){if(!USER)return;document.querySelectorAll("#modes button"
  const nm=names();
  $("menuSub").textContent=CFG.mode==="hot"?"Tu giochi con il tuo personaggio: tocca gli altri che giocano (da 2 a 4) e scrivete i loro nomi":`Giochi come ${USER.id}`;
  $("menuHint").textContent=CFG.mode==="coop"?`Fino a 4 telefoni sulla stessa Wi-Fi: ognuno sceglie il suo personaggio sul proprio telefono. Regola: ${RULEN[CFG.rule]}.`:CFG.mode==="hot"?`Giocano ${CFG.sel.map(i=>nm[i]).join(", ")}; ogni turno dura 75 secondi. Regola: ${RULEN[CFG.rule]}.`:"";
- if(CFG.mode!=="solo"&&CFG.rule!=="insieme")$("menuHint").textContent+=" Il Sushi apre solo quando "+(CFG.rule==="squadre"?"entrambe le squadre hanno":"tutti hanno")+" completato i 5 negozi.";
+ if(CFG.mode!=="solo"&&CFG.rule!=="insieme")$("menuHint").textContent+=" Il Sushi apre solo quando "+(CFG.rule==="squadre"?"entrambe le squadre hanno":"tutti hanno")+" completato i 6 negozi.";
  if(CFG.join){$("menuSub").textContent="Ti hanno invitato a una partita: giochi come "+USER.id;$("menuHint").textContent="Poi tocca «Unisciti» e fai inquadrare il QR di risposta a chi ti ha invitato."+(CFG.rule==="squadre"?" Tocca il cartellino per scegliere la squadra.":"")}
  if(CFG.reloaded)$("menuHint").textContent="La pagina si è ricaricata mentre vi stavate collegando: rifate lo scambio dei codici tenendo il gioco aperto.";
  $("bPlay").textContent=CFG.join&&CFG.mode==="coop"?"Unisciti":"Gioca!";
