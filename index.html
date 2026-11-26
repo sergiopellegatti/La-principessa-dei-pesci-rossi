@@ -307,7 +307,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
     <tr><td>2 · Pizzeria da Gennaro</td><td>Prendi le pizze dal forno e portale ai tavoli che le chiedono</td><td>Il pizzaiolo lancia pizze roteanti</td></tr>
     <tr><td>3 · Pasticceria Dolce Vita</td><td>Raccogli 20 pasticcini; occhio alle bucce di banana</td><td>La pasticcera lancia torte che rallentano</td></tr>
     <tr><td>4 · Zoo Planet</td><td>Libera le 10 coppie di animali dell'Arca di Noè: colpisci i commessi travestiti (criniera, orecchie da coniglio, guscio da tartaruga…) per farti dare la chiave dell'animale che ricordano e portala alla sua gabbia</td><td>I pappagalli volano e fanno la cacca: se ti colpisce o la calpesti l'acqua del pesce si sporca. I gatti non fanno male ma mangiano la pappa del pesce</td></tr>
-    <tr><td>5 · Strumenti Musicali</td><td>Il maestro Beethoven mostra una nota alla volta: fermati sul tasto giusto della tastiera sul pavimento (o toccalo con 🎹). Ripeti 5 melodie classiche; ogni nota sbagliata fa esplodere uno dei 5 bicchieri, se esplodono tutti devi uscire e riprovare dopo le pulizie</td><td>Nessuno: solo il maestro</td></tr>
+    <tr><td>5 · Strumenti Musicali</td><td>Il maestro Beethoven mostra una nota alla volta: fermati sul tasto giusto della tastiera sul pavimento (o toccalo con 🎹). Il tasto non è evidenziato e c'è un tempo limite (il cerchio sopra il maestro); il maestro lancia bacchette e pomodori che ti stordiscono. Ripeti 5 melodie classiche; ogni nota sbagliata o troppo lenta fa esplodere uno dei 5 bicchieri, se esplodono tutti devi uscire e riprovare dopo le pulizie</td><td>Nessuno: solo il maestro</td></tr>
     <tr><td>Finale · Sushi Samurai</td><td>Sconfiggi il Cuoco del Sushi e libera la principessa</td><td>Camerieri ninja e il cuoco coi coltelli</td></tr></table>
     <p>Finita la missione compare il <b>pezzo del volantino</b>: prendetelo e tornate nella hall. In ogni negozio ci sono anche <b>la guardia col manganello, la vecchietta col bastone e il bambino nel carrello</b>: colpiteli finché non finisce la loro energia.</p>
     <h3>Il Mondo dei Pesci (negozio di pesca)</h3>
@@ -365,7 +365,7 @@ const LV=[{name:"Hall del centro commerciale",kind:"hall",floor:["#efe9df","#e4d
 LV[6]={name:"Il Mondo dei Pesci",kind:"fishing",floor:["#bfe6f2","#acdcec"],wall:"#1f5a7a",top:"#3f8fb5",acc:"#3fa9f5",
  intro:"Pesca dalla grande boccia! Le frecce orientano la canna, l'asciugamano lancia l'amo. Evita murena (scossa), topo (mangia la pappa del pesce rosso), scarpone e lattina di pelati. La saponetta scaccia i gatti che rubano dal cesto, il chewing-gum ti fa uscire vendendo i pesci pescati."};
 LV[7]={name:"Parcheggio — Gara di carrelli",kind:"race",floor:["#4a4d57","#454852"],wall:"#2f7a45",top:"#3f8f55",acc:"#ff9a2e",intro:"Gara di carrelli nel parcheggio! Guidate con la levetta (l'acceleratore è automatico), raccogliete i ? per saponette razzo, gomma gigante, turbo e bolla scudo. Chi viene colpito gira su se stesso e rallenta. Il bambino, il poliziotto e la vecchietta sui carrelli corrono contro di voi ma non possono vincere. Con un solo telefono a turni vince il miglior tempo. Il tasto 🚪 abbandona la corsa. Chi vince guadagna 25 monete."};
-LV[10]={name:"Strumenti Musicali — Il maestro Beethoven",kind:"music",floor:["#f4ead6","#ece0c4"],wall:"#5a3a2a",top:"#8a5a3c",acc:"#e0a82e",intro:"Il maestro Beethoven mostra una nota alla volta: fermati sul tasto giusto della tastiera sul pavimento (o toccalo con 🎹). Ogni nota sbagliata fa esplodere un bicchiere sul bancone: se esplodono tutti e 5 devi uscire. Ripeti 5 melodie classiche, ognuna viene poi riascoltata al ritmo giusto. Alla fine il maestro ti dà il pezzo del volantino!"};
+LV[10]={name:"Strumenti Musicali — Il maestro Beethoven",kind:"music",floor:["#f4ead6","#ece0c4"],wall:"#5a3a2a",top:"#8a5a3c",acc:"#e0a82e",intro:"Il maestro Beethoven mostra una nota alla volta: fermati sul tasto giusto della tastiera sul pavimento (o toccalo con 🎹). Il tasto non è evidenziato: ricordi il nome della nota! Se non suoni in tempo (cerchio sopra il maestro) o sbagli, esplode un bicchiere sul bancone; se esplodono tutti e 5 devi uscire. Attento alle bacchette e ai pomodori che il maestro ti lancia! Ripeti 5 melodie classiche, ognuna viene poi riascoltata al ritmo giusto. Alla fine il maestro ti dà il pezzo del volantino!"};
 LV[9]={name:"Fast Food — Gara di panini e cola",kind:"fast",floor:["#f6e3c0","#f0d9ae"],wall:"#c8342b",top:"#ffcf5c",acc:"#ff5a36",intro:"Gara di panini e cola! Il cuoco manda panini, bevande e roba da buttare: mangia e bevi tutto prima che il tavolo si riempia. Tocca il centro della levetta per mangiare, tieni premuto l'asciugamano per bere, il cestino butta la roba puzzolente. ◀▶ per spostarti lungo il tavolo."};
 LV[8]={name:"Parcheggio — Liberiamo l'uscita",kind:"puzzle",floor:["#4a4d57","#454852"],wall:"#2f7a45",top:"#3f8f55",acc:"#ffd23c",intro:"Il Cuoco è sconfitto, ma il parcheggio è pieno di auto! Sposta le macchine per far passare quella rossa fino alla strada: 5 posti, ognuno con un puzzle diverso."};
 /* Enemy definitions (valori al livello 1) */
@@ -1462,27 +1462,34 @@ const MELO=[
  mkMel("Ah! vous dirai-je, maman","Mozart",112,"1 1 5 5 6 6 5:2 4 4 3 3 2 2 1:2"),
  mkMel("Canone","Pachelbel",92,"1:2 5:2 6:2 3:2 4:2 1:2 4:2 5:2"),
  mkMel("Sinfonia della sorpresa","Haydn",100,"1 1 3 3 5 5 3:2 4 4 2 2 7 7 5:2")];
-const MGX=i=>6.0+i*.95;
+const MTIME=[9,6.5,5];const MGX=i=>6.0+i*.95;
 function loadMusic(){loadRace();S.race=null;S.lvl=10;S.W=MW;S.H=MH;S.G=Array.from({length:MH},()=>Array(MW).fill("."));S.spawn=[5.5,11];S.gv++;S.mission.kind="music";S.mission.need=0;musicNew()}
-function musicNew(){if((S.muDone|0)>=5)S.muDone=0;S.mu={mel:Math.min(4,S.muDone|0),pos:0,gl:[1,1,1,1,1],ph:"play",t:0,lit:-1,litT:0,litOk:true,rep:null,end:0,win:false,msg:"",fxs:[],shake:0,hearT:0}}
+function musicNew(){if((S.muDone|0)>=5)S.muDone=0;S.mu={mel:Math.min(4,S.muDone|0),pos:0,gl:[1,1,1,1,1],ph:"play",nt:MTIME[S.diff|0],thr:3,pr:[],t:0,lit:-1,litT:0,litOk:true,rep:null,end:0,win:false,msg:"",fxs:[],shake:0,hearT:0}}
 function startMusic(){S.players.forEach((p,i)=>{p.x=3.6+i*1.3;p.y=11;p.mCur=musicKey(p.x);p.mDw=0;p.mLast=p.mCur;p.aP10=0;p.tpS=null;p.walk=0;p.face=1;p.watch=false;p.stun=0;p.inv=0});toast("Strumenti musicali: il maestro mostra la nota, fermati sul tasto del pavimento. Sbagli e un bicchiere esplode! Se esplodono tutti e 5 devi uscire.",7)}
 function musicKey(x){return cl(Math.floor(x/MKW),0,7)}
 function musicGlassLeft(M){return M.gl.reduce((a,b)=>a+b,0)}
 function playKey(p,M,key){if(M.ph!=="play"||M.end>0)return;const mel=MELO[M.mel],tg=mel.s[M.pos][0]-1;
  ev({k:"note",n:key,d:.6});M.lit=key;M.litT=.4;
- if(key===tg){M.litOk=true;M.pos++;p.score=(p.score|0)+10;ev({k:"burst",x:(key+.5)*MKW,y:p.y,col:"#ffd23c",n:8});float((key+.5)*MKW,p.y-1,MNAME[key],"#ffd23c");if(M.pos>=mel.s.length)musicReplay(M)}
- else{M.litOk=false;const i=M.gl.indexOf(1);if(i<0)return;M.gl[i]=0;M.fxs.push({i,t:0});M.shake=.5;ev({k:"sfx",s:"glass"});ev({k:"burst",x:MGX(i),y:3.7,col:"#bfe9ff",n:16});float(p.x,p.y-1,"Stonato!","#ff6b7a");
-  const left=musicGlassLeft(M);if(left<=0){M.end=2.8;M.win=false;M.msg="Tutti i bicchieri sono esplosi!";ev({k:"sfx",s:"alarm"});toast("🥂 Tutti i bicchieri sono esplosi! Il maestro chiude il negozio per pulizie",3.5)}else toast(`Nota sbagliata! Bicchieri rimasti: ${left}`,1.6)}}
+ if(key===tg){M.litOk=true;M.pos++;M.nt=MTIME[S.diff|0];p.score=(p.score|0)+10;ev({k:"burst",x:(key+.5)*MKW,y:p.y,col:"#ffd23c",n:8});float((key+.5)*MKW,p.y-1,MNAME[key],"#ffd23c");if(M.pos>=mel.s.length)musicReplay(M)}
+ else musicBad(M,p,"Stonato!")}
+function musicBad(M,p,why){M.litOk=false;M.nt=MTIME[S.diff|0];const i=M.gl.indexOf(1);if(i<0)return;M.gl[i]=0;M.fxs.push({i,t:0});M.shake=.5;ev({k:"sfx",s:"glass"});ev({k:"burst",x:MGX(i),y:3.7,col:"#bfe9ff",n:16});if(p)float(p.x,p.y-1,why,"#ff6b7a");
+  const left=musicGlassLeft(M);if(left<=0){M.end=2.8;M.win=false;M.msg="Tutti i bicchieri sono esplosi!";ev({k:"sfx",s:"alarm"});toast("🥂 Tutti i bicchieri sono esplosi! Il maestro chiude il negozio per pulizie",3.5)}else toast(`${p?"Nota sbagliata":"Tempo scaduto"}! Bicchieri rimasti: ${left}`,1.6)}
 function musicReplay(M){const mel=MELO[M.mel],bt=60/mel.bpm;let at=[],c=0;for(const[d,l]of mel.s){at.push(c*bt);c+=l}M.ph="replay";M.rep={i:0,t:-.9,at,tot:c*bt};toast(`🎼 Bravissimo! Ecco "${mel.n}" al ritmo giusto`,3);ev({k:"sfx",s:"deliver"})}
 function musicTick(dt){const M=S.mu;if(!M)return;M.t+=dt;M.shake=Math.max(0,M.shake-dt);M.hearT=Math.max(0,M.hearT-dt);if(M.litT>0){M.litT-=dt;if(M.litT<=0)M.lit=-1}
  for(let i=M.fxs.length-1;i>=0;i--){M.fxs[i].t+=dt;if(M.fxs[i].t>1.2)M.fxs.splice(i,1)}
  if(M.end>0){M.end-=dt;if(M.end<=0){leaveMusic(M.win);return}}
  if(M.ph==="replay"){const R=M.rep,mel=MELO[M.mel],bt=60/mel.bpm;R.t+=dt;
   while(R.i<mel.s.length&&R.t>=R.at[R.i]){const[d,l]=mel.s[R.i];ev({k:"note",n:d-1,d:l*bt});M.lit=d-1;M.litT=Math.min(.5,l*bt*.9);M.litOk=true;R.i++}
-  if(R.t>=R.tot+.8){M.rep=null;M.ph="play";S.muDone=Math.max(S.muDone|0,M.mel+1);S.players.forEach(p=>{if(!p.hidden&&!p.away)p.score=(p.score|0)+200});
+  if(R.t>=R.tot+.8){M.rep=null;M.ph="play";M.nt=MTIME[S.diff|0];S.muDone=Math.max(S.muDone|0,M.mel+1);S.players.forEach(p=>{if(!p.hidden&&!p.away)p.score=(p.score|0)+200});
    if(M.mel>=4){M.end=2.4;M.win=true;M.msg="Concerto finito!";M.ph="done";ev({k:"sfx",s:"mission"})}
    else{M.mel++;M.pos=0;if((S.diff|0)===0)M.gl=[1,1,1,1,1];ev({k:"sfx",s:"deliver"});toast(`Melodia ${M.mel+1}/5: ${MELO[M.mel].n}${M.gl.every(g=>g)?"":" · bicchieri rimasti "+musicGlassLeft(M)}`,3.5)}}}
+ if(M.ph==="play"&&M.end<=0){M.nt-=dt;if(M.nt<=0)musicBad(M,null);
+  M.thr-=dt;if(M.thr<=0){M.thr=([5,3.6,2.6][S.diff|0])*rnd(.8,1.2);const vp=S.players.filter(q=>!q.hidden&&!q.away);if(vp.length){const q=vp[ri(0,vp.length-1)],ox=2.7,oy=3.4,dx=q.x-ox,dy=q.y-oy,d=Math.hypot(dx,dy)||1;M.pr.push({k:Math.random()<.5?"stick":"tomato",x:ox,y:oy,vx:dx/d*7,vy:dy/d*7,t:0});ev({k:"sfx",s:"throw"})}}}
+ for(let i=M.pr.length-1;i>=0;i--){const q=M.pr[i];q.x+=q.vx*dt;q.y+=q.vy*dt;q.t+=dt;let gone=q.y>MH||q.x<0||q.x>MW||q.t>3;
+  for(const p of S.players){if(p.hidden||p.away||gone)continue;if(Math.hypot(p.x-q.x,p.y-q.y)<.6){p.stun9=1.3;gone=true;if(q.k==="tomato"){float(p.x,p.y-1,"Splash!","#ff5d4a");ev({k:"burst",x:q.x,y:q.y,col:"#e8321e",n:14});ev({k:"sfx",s:"slip"})}else{float(p.x,p.y-1,"Ahi!","#ffd23c");ev({k:"burst",x:q.x,y:q.y,col:"#e3b55c",n:8});ev({k:"sfx",s:"hit"})}}}
+  if(gone)M.pr.splice(i,1)}
  S.players.forEach((p,i)=>{if(p.hidden||p.away||S.lvl!==10||!S.mu)return;const inp=inputFor(i);
+  p.stun9=Math.max(0,(p.stun9||0)-dt);if(p.stun9>0){p.mDw=0;return}
   let mx=inp.mx||0,my=inp.my||0;const m=Math.hypot(mx,my);if(m>1){mx/=m;my/=m}
   const spd=4.2*(GR(p).up.shoes?1.22:1);
   if(m>.15){p.x=cl(p.x+mx*spd*dt,.45,MW-.45);p.y=cl(p.y+my*spd*dt,MY0+.3,MY1-.3);p.fx=mx/m;p.fy=my/m;p.walk=(p.walk||0)+dt*13*Math.min(1,m);if(Math.abs(mx)>.2)p.face=Math.sign(mx)}
@@ -2073,8 +2080,6 @@ function drawGlass(c,x,y,t){c.save();c.translate(x,y);c.fillStyle="rgba(210,235,
 function drawMusicObjs(c,t,list){const M=S.mu;if(!M)return;const mel=MELO[M.mel],W=S.W*TS,tg=M.ph==="play"&&M.end<=0?mel.s[M.pos][0]-1:-1;
  // tasto da premere / tasto suonato
  list.push({y:.2,f:()=>{const kx=MKW*TS,y0=MY0*TS,H=S.H*TS;
-  if(tg>=0){const x=tg*kx,a=.22+.18*Math.sin(t/160);c.fillStyle=lg(c,0,y0,0,H,"rgba(255,200,40,"+(a+.12)+")","rgba(255,170,0,"+(a+.3)+")");c.fillRect(x+1.5,y0,kx-3,H-y0-2);c.strokeStyle="rgba(255,190,40,.95)";c.lineWidth=4;c.strokeRect(x+3,y0+2,kx-6,H-y0-6);
-   c.fillStyle="#ffb300";c.font="700 30px Fredoka,system-ui";c.textAlign="center";c.textBaseline="middle";c.strokeStyle="rgba(60,30,0,.55)";c.lineWidth=4;const by=(14.2+Math.sin(t/180)*.25)*TS;c.strokeText("♪",x+kx/2,by);c.fillText("♪",x+kx/2,by);c.font="700 22px Fredoka,system-ui";c.strokeText(MNAME[tg],x+kx/2,by+.8*TS);c.fillText(MNAME[tg],x+kx/2,by+.8*TS)}
   if(M.lit>=0&&M.litT>0){const x=M.lit*kx,a=Math.min(1,M.litT/.25);c.fillStyle=M.litOk?"rgba(80,230,140,"+a*.55+")":"rgba(255,70,90,"+a*.6+")";c.fillRect(x+1.5,y0,kx-3,H-y0-2)}}});
  // maestro Beethoven
  list.push({y:3.2,f:()=>{c.save();c.beginPath();c.rect(0,0,W,3.52*TS);c.clip();const bx=2.7*TS,by=3.66*TS,sw=M.ph==="replay"?Math.sin(t/130)*8:Math.sin(t/480)*2.5;c.translate(bx,by);c.scale(1.5,1.5);
@@ -2085,6 +2090,9 @@ function drawMusicObjs(c,t,list){const M=S.mu;if(!M)return;const mel=MELO[M.mel]
   c.fillStyle="#3a2418";c.fillRect(-6.5,-15,4,1.6);c.fillRect(2.5,-15,4,1.6);
   c.strokeStyle="#4b2f6e";c.lineWidth=5.5;c.lineCap="round";const hx=15+sw,hy=-16-Math.abs(sw)*.4;c.beginPath();c.moveTo(-9,-3);c.lineTo(-16,-12);c.moveTo(9,-3);c.lineTo(hx,hy);c.stroke();el(c,-16,-12,3,3,"#f2c29b");el(c,hx,hy,3,3,"#f2c29b");
   c.strokeStyle="#fff";c.lineWidth=1.6;ln(c,hx,hy,hx+9+sw*.6,hy-13);c.restore()}});
+ // cerchio del tempo sopra il maestro
+ list.push({y:3.4,f:()=>{if(tg<0)return;const T=MTIME[S.diff|0],f=Math.max(0,M.nt/T),x=2.7*TS,y=1.35*TS;c.save();c.fillStyle="rgba(0,0,0,.45)";c.beginPath();c.arc(x,y,24,0,7);c.fill();c.lineWidth=7;c.lineCap="round";c.strokeStyle=f>.5?"#4fe3b5":f>.25?"#ffc93c":"#ff4f5e";if(f<.25&&Math.floor(t/150)%2)c.strokeStyle="#fff";c.beginPath();c.arc(x,y,18,-PI/2,-PI/2+PI*2*f);c.stroke();c.fillStyle="#fff";c.font="700 15px Fredoka,system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText(Math.ceil(Math.max(0,M.nt)),x,y+1);c.restore()}});
+ for(const q of M.pr)list.push({y:q.y,f:()=>{c.save();c.translate(q.x*TS,q.y*TS);c.rotate(q.t*14);if(q.k==="tomato"){c.fillStyle="#e8321e";c.beginPath();c.arc(0,0,9,0,7);c.fill();c.fillStyle="#2f9a3a";c.beginPath();c.moveTo(-5,-7);c.lineTo(0,-3);c.lineTo(5,-7);c.lineTo(0,-10);c.fill();el(c,-3,-2,2.5,1.6,"rgba(255,255,255,.5)")}else{c.strokeStyle="#e3b55c";c.lineWidth=4;c.lineCap="round";ln(c,-12,0,12,0);c.fillStyle="#8a5a2b";el(c,12,0,3.4,3.4,"#8a5a2b")}c.restore()}});
  // bubble con la nota
  list.push({y:3.3,f:()=>{const x=4.0*TS,y=.95*TS,w=2.7*TS,h=1.6*TS;c.save();c.fillStyle="rgba(0,0,0,.2)";rr(c,x+3,y+4,w,h,16);c.fill();c.fillStyle="#fffdf2";rr(c,x,y,w,h,16);c.fill();c.beginPath();c.moveTo(x+2,y+h*.55);c.lineTo(x-14,y+h*.9);c.lineTo(x+16,y+h*.78);c.closePath();c.fill();
   c.textAlign="center";c.textBaseline="middle";
@@ -2103,6 +2111,7 @@ function drawMusicObjs(c,t,list){const M=S.mu;if(!M)return;const mel=MELO[M.mel]
 function drawMusicKid(c,p,r,t){const M=S.mu;c.save();c.translate(r.x*TS,r.y*TS-4);
  if(M&&p.mDw>0&&M.ph==="play"){c.save();c.translate(0,14);c.scale(1,.42);c.strokeStyle="rgba(255,200,40,.95)";c.lineWidth=5;c.beginPath();c.arc(0,0,19,-PI/2,-PI/2+PI*2*Math.min(1,p.mDw/.45));c.stroke();c.restore()}
  c.scale(p.face<0?-1:1,1);drawKid(c,t,{hero:p.hero,look:p.look,walk:p.walk});c.restore();
+ if(p.stun9>0){c.save();c.font="16px system-ui";c.textAlign="center";for(let k=0;k<3;k++){const a=t/180+k*2.1;c.fillText("⭐",r.x*TS+Math.cos(a)*14,r.y*TS-36+Math.sin(a)*4)}c.restore()}
  if(S.players.length>1){c.save();c.fillStyle="#fff";c.font="700 11px Fredoka,system-ui";c.textAlign="center";c.strokeStyle="rgba(0,0,0,.6)";c.lineWidth=3;c.strokeText(p.name||"",r.x*TS,r.y*TS-40);c.fillText(p.name||"",r.x*TS,r.y*TS-40);c.restore()}}
 
 /* ---------- audio: musica chiptune anni '80 ed effetti ---------- */
@@ -2337,7 +2346,7 @@ function onPhase(ph){
   $("bEnd").textContent="Gioca ancora";$("bEnd").disabled=false;$("enH").textContent="I punteggi sono entrati nella classifica.";$("ovEnd").hidden=false}
 }
 function missionText(){const m=S.mission,p=meP(),G=myG();
- if(S.lvl===10&&S.mu){const M=S.mu,ml=MELO[M.mel];return`🎹 ${M.mel+1}/5 ${ml.n} · nota ${Math.min(M.pos+1,ml.s.length)}/${ml.s.length} · 🥂 ${musicGlassLeft(M)}/5 · fermati sul tasto mostrato dal maestro (o tocca la levetta)`}
+ if(S.lvl===10&&S.mu){const M=S.mu,ml=MELO[M.mel];return`🎹 ${M.mel+1}/5 ${ml.n} · nota ${Math.min(M.pos+1,ml.s.length)}/${ml.s.length} · 🥂 ${musicGlassLeft(M)}/5 · fermati sul tasto prima che scada il tempo · schiva bacchette e pomodori`}
  if(S.lvl===9&&S.fd){const F=S.fd;return`🍔 ${F.eaten}/${F.need} · tocca il centro della levetta (o ↓) per mangiare · tieni premuto l'asciugamano per bere · ◀▶ ti sposti`}
  if(S.lvl===8&&S.pz){const Z=S.pz;return`Posto ${Z.scr+1}/${PSCR} · mosse ${Z.moves} (record ${Z.best}) · ◀▶ cambia auto, levetta sposta, rossa verso la strada`}
  if(S.lvl===7&&S.race){const R=S.race;if(!p||p.watch)return"Gara in corso: tocca al compagno di turno";const pos=Math.max(1,R.top.indexOf(p.i)+1);return p.fin>0?`Traguardo! ${p.fin}° posto · ${fmtT(R.clock)}`:`⏱ ${fmtT(R.clock)} · Giro ${Math.min(RLAPS,p.wr)+(p.wr>=RLAPS?0:1)}/${RLAPS} · ${pos}° posto · ? = gadget`}
