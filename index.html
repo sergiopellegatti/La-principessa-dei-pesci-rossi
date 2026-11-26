@@ -39,6 +39,7 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 .toast.on{opacity:1}
 .joy{position:absolute;left:0;bottom:0;width:50%;height:62%}
 .ring{position:absolute;width:118px;height:118px;margin:-59px;border-radius:50%;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 2px rgba(255,255,255,.16);pointer-events:none}
+.fi{display:none;position:absolute;pointer-events:none;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}.joy.fast .fi{display:block}.fa{top:50%;margin-top:-13px;font-size:22px;opacity:.9}.fl{left:7px}.fr{right:7px}.fb{left:50%;top:50%;margin:-13px 0 0 -13px;font-size:24px;animation:fbp 1s infinite}@keyframes fbp{50%{transform:scale(1.2)}}
 .knob{position:absolute;left:50%;top:50%;width:50px;height:50px;margin:-25px;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.5),rgba(255,255,255,.2))}
 .wpn{position:absolute;right:0;bottom:0;width:190px;height:190px;pointer-events:none}
 .wb{position:absolute;width:66px;height:66px;min-height:0;padding:0;border-radius:50%;background:rgba(14,10,34,.45);box-shadow:inset 0 0 0 2px rgba(255,255,255,.28),0 4px 14px rgba(0,0,0,.35);pointer-events:auto;touch-action:none;display:grid;place-items:center}
@@ -145,7 +146,7 @@ kbd{font:600 12px var(--fd);background:rgba(255,255,255,.12);border-radius:6px;p
   </div>
   <div class="corner"><button class="ic" id="bAbandon" aria-label="Abbandona" hidden>🚪</button><button class="ic" id="bPause" aria-label="Pausa">❚❚</button><button class="ic" id="bMute" aria-label="Musica on/off"></button><button class="ic" id="bHelp" aria-label="Aiuto e pausa">?</button></div>
   <div class="toast" id="toast"></div>
-  <div class="joy" id="joy"><div class="ring" id="ring"><div class="knob" id="knob"></div></div></div>
+  <div class="joy" id="joy"><div class="ring" id="ring"><span class="fi fa fl">◀</span><span class="fi fa fr">▶</span><div class="knob" id="knob"><span class="fi fb">🍔</span></div></div></div>
   <div class="wpn" id="wpn">
     <button class="wb" data-w="0" aria-label="Asciugamano"><canvas width="88" height="88"></canvas><small>∞</small></button>
     <button class="wb" data-w="1" aria-label="Saponette"><canvas width="88" height="88"></canvas><small></small></button>
@@ -2111,7 +2112,7 @@ function syncUI(){
  const p=meP(),G=myG();
  $("lvl").textContent=`${S.lvl&&S.lvl<6?`Negozio ${S.lvl}/5 · `:""}${LV[S.lvl].name} — ${missionText()}${netLost?" · collegamento perso!":""}`;
  $("hud").innerHTML=hudHTML();
- const scene=S.lvl===6;const cI=!scene&&S.lvl<7&&!!p&&(p.carts|0)>0;const pzm=S.lvl>=8?S.lvl:0;const spk=!scene&&S.lvl<7&&p&&p.sp?(p.sp.chop>0?"c":"")+(p.sp.fish>0?"f":"")+(p.sp.cloud>0?"k":""):"";if(scene!==iconScene||cI!==cartIco||pzm!==pzIco||spk!==spKey){iconScene=scene;cartIco=cI;pzIco=pzm;spKey=spk;wIcons(scene)}
+ joy.classList.toggle("fast",S.lvl===9);const scene=S.lvl===6;const cI=!scene&&S.lvl<7&&!!p&&(p.carts|0)>0;const pzm=S.lvl>=8?S.lvl:0;const spk=!scene&&S.lvl<7&&p&&p.sp?(p.sp.chop>0?"c":"")+(p.sp.fish>0?"f":"")+(p.sp.cloud>0?"k":""):"";if(scene!==iconScene||cI!==cartIco||pzm!==pzIco||spk!==spKey){iconScene=scene;cartIco=cI;pzIco=pzm;spKey=spk;wIcons(scene)}
  {const ba=$("bAbandon");const show=!!p&&S.phase==="play"&&((S.lvl===7&&S.race&&!p.watch&&!p.fin)||S.lvl===8);if(ba.hidden===show)ba.hidden=!show}
  if(p)document.querySelectorAll(".wb").forEach(b=>{let i=+b.dataset.w,am=scene?-2:S.lvl===8?-3:S.lvl===9?-4:S.lvl===7?(i===1?p.up1|0:i===2?p.up2|0:-1):i===1?(cartIco?p.carts:G.ammo.soap):i===2?G.ammo.gum:-1;{const sa=!scene&&S.lvl<7&&p.sp?[p.sp.chop|0,p.sp.fish|0,p.sp.cloud|0][i]:0;if(sa>0)am=sa}b.classList.toggle("sel",!scene&&S.lvl!==8&&S.lvl!==9&&p.w===i);b.classList.toggle("empty",am===0&&S.lvl!==7);b.querySelector("small").textContent=scene?["Lancia","Sciò","Esci"][i]:am===-3?["Avanti","Indietro","Da capo"][i]:am===-4?["Bevi","Cestino","Esci"][i]:am<0?"∞":am});
  {const rb=$("raceBig");if(rb){const t=S.lvl===7&&S.race?S.race.big:"";if(rb.textContent!==t)rb.textContent=t;rb.hidden=!t}}
