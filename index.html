@@ -338,9 +338,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 <script>
 {
 const MAPS=[["##############################","#@...m......P....m......R....#","#.....1111.......2222........#","#..m.................m....m..#","#.....................c......#","#..R....###....###.......R...#","#.......#.......#...m........#","#..m....#.......#.....$......#","#.......#..f....#....3333....#","#..4444.#.......#............#","#.......####.####...m....m...#","#..m.....................b...#","#....v.........g.............#","#.......m..R.......m.....g...#","#..R.....................P...#","#....$........c.......$......#","#.......2222.....1111......m.#","#..K.......m.....3333...4444.#","#....$.................m....E#","##############################"],["##############################","#..............O.............#","#..............z.............#","#.....$......................#","#CCCCCC..CCCCCCCCCC..CCCCCCCC#","#............................#","#..TT.....TT.....TT.....TT...#","#..TT.....TT.....TT.....TT...#","#............................#","#.....P.........g.......P....#","#..TT.....TT.....TT.....TT...#","#..TT.....TT.....TT.....TT...#","#............................#","#............v...........$...#","#..$.....P..........P........#","#....TT.........TT......f....#","#....TT.........TT.....y.....#","#.@........K.................#","#.....................$.....E#","##############################"],["##############################","#@..p....x....p.....p....x...#","#.......CCCCCC....CCCCCC.....#","#..p.......t.........p.......#","#....x.........p.........p...#","#..CC....p.........x.....CC..#","#..CC.........P..........CC..#","#.......x.....P.....p....b...#","#..p.......CCCCCCCC......x...#","#.....b.................p....#","#..x....p......g.....x.......#","#.......CCCC.......CCCC..p...#","#..p.........v.........g.....#","#.....x.....p.......t....x...#","#..CC...........p.........CC.#","#..CC..p...x.........p....CC.#","#.......$.......f.....$......#","#..K....x...p........x...p...#","#....$......v...........$...E#","##############################"],["##############################","#.G...G...G...G...G.....AAAA.#","#............................#","#..w.....w..........w....k...#","#....P.........$.......P.....#","#..AA....###.....###....AA...#","#..AA....#.........#....AA...#","#........#....w....#.........#","#..w.....#....f....#.....w...#","#........###.....###.........#","#....g...................v...#","#..AA.......w....w.......AA..#","#..AA.....$........$.....AA..#","#.....b..........g...........#","#..k...........P.......w.....#","#.......CCCCC.......P........#","#.......CCKCC...........$....#","#..P.....w...................#","#.G...G...G...G...G.........E#","##############################"],["##############################","#@.....L.......L.......L.....#","#..........................n.#","#..======================....#","#............................#","#..n.......TT......TT........#","#..........TT......TT.....$..#","#....P.....................P.#","#............................#","####.#########..#########.####","#............................#","#..L......................L..#","#.......n............n.......#","#............................#","#.......CCCCCCCCCCCCC........#","#............B...............#","#..K.........................#","#.............F..............#","#.$......................$...#","##############################"]];
-const HALL=["##############################","#VVVVQVVVV#VVVVUVVVV#VVVVYVVV#","#............................#","#..h.....P..........P.....h..#","#............................#","#.....P..............P.......#","#.....g......................#","#............................#","#...h......WWWWWW......h.....#","#..........WWWWWW............#","M..........WWWWWW............N","#..........WWWWWW............#","#............................#","#.....P..............P.......#","#.............@.........b....#","#..h.....P..........P.....h..#","#..............JJJJJ.........#","#............................#","#VVVZVVVV#VVHVV#VVVVVVXVVVVVV#","##############################"];
+const HALL=["##############################","##VVQVV##VVUVV##VVYVV##VVZVV##","#............................#","#..h.....P..........P.....h..#","#............................#","#.....P..............P.......#","#.....g......................#","#............................#","#...h......WWWWWW......h.....#","%..........WWWWWW............#","D..........WWWWWW............N","%..........WWWWWW............#","#............................#","#.....P..............P.......#","#.............@.........b....#","#..h.....P..........P.....h..#","#..............JJJJJ.........#","#............................#","###VXV####VHV####VMV####%D%###","##############################"];
 
-const TS=40,PI=Math.PI,SOLID="#SRPCOTALK=F1234VWhGJ",DOORS={Q:1,U:2,Y:3,Z:4,X:5,H:6,N:7,M:9};
+const TS=40,PI=Math.PI,SOLID="#SRPCOTALK=F1234VWhGJD%",DOORS={Q:1,U:2,Y:3,Z:4,X:5,H:6,N:7,M:9};
 const $=id=>document.getElementById(id);
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const rnd=(a,b)=>a+Math.random()*(b-a);
@@ -630,6 +630,7 @@ function drawIcon(c,id,t){c.save();
  else if(id==="cloud"){c.fillStyle="#fff4e0";for(const[x,y,r]of[[-6,2,6],[1,-3,7],[7,2,6],[0,4,6]]){c.beginPath();c.arc(x,y,r,0,7);c.fill()}c.fillStyle="#f2a65a";for(const[x,y]of[[-5,1],[2,-3],[6,3],[-1,5]])el(c,x,y,1.8,1.2,"#f2a65a");c.strokeStyle="#ffc9a0";c.lineWidth=1.2;c.beginPath();c.arc(1,0,12,.4,2.6);c.stroke()}
  else if(id==="refill"){c.fillStyle="#e8c6ff";rr(c,-11,-3,13,9,4);c.fill();c.beginPath();c.arc(7,-3,6,0,7);c.fillStyle="#ff4f9a";c.fill();c.strokeStyle="#2fcf98";c.lineWidth=2.4;ln(c,-6,-9,-6,-5);ln(c,-8,-7,-4,-7)}
  else if(id==="cola"){c.fillStyle="#e63946";c.beginPath();c.moveTo(-8,-6);c.lineTo(8,-6);c.lineTo(6,12);c.lineTo(-6,12);c.closePath();c.fill();c.fillStyle="#fff";c.beginPath();c.moveTo(-7,1);c.quadraticCurveTo(-3,-2,0,1);c.quadraticCurveTo(3,4,7,1);c.lineTo(6,6);c.quadraticCurveTo(3,9,0,6);c.quadraticCurveTo(-3,3,-6.5,6);c.closePath();c.fill();c.fillStyle="#f4f4f6";rr(c,-9.5,-9,19,4,2);c.fill();c.strokeStyle="#ff4f9a";c.lineWidth=2;c.lineCap="round";c.beginPath();c.moveTo(3,-9);c.lineTo(7,-16);c.lineTo(11,-16);c.stroke()}
+ else if(id==="dogy"){c.fillStyle="#c89a5b";c.beginPath();c.moveTo(-9,-4);c.lineTo(9,-4);c.lineTo(10,12);c.lineTo(-10,12);c.closePath();c.fill();c.fillStyle="#a97c40";c.fillRect(-9,-8,18,5)}
  else if(id==="bin"){c.fillStyle="#7a8396";c.beginPath();c.moveTo(-9,-6);c.lineTo(9,-6);c.lineTo(7,12);c.lineTo(-7,12);c.closePath();c.fill();c.fillStyle="#5d6574";rr(c,-11,-10,22,5,2);c.fill();rr(c,-3,-13,6,4,1.5);c.fill();c.strokeStyle="#c7ccd6";c.lineWidth=1.4;for(const x of[-3.5,0,3.5])ln(c,x,-3,x*.85,9)}
  else if(id==="exit"){c.fillStyle="#ffcf5c";rr(c,-9,-11,14,22,2);c.fill();c.fillStyle="#7a4a22";c.fillRect(-9,-11,3,22);el(c,-1,0,1.4,1.4,"#7a4a22");c.strokeStyle="#ff5d6c";c.lineWidth=3;c.lineCap="round";ln(c,2,0,13,0);c.beginPath();c.moveTo(9,-5);c.lineTo(13,0);c.lineTo(9,5);c.stroke()}
  else if(id==="snack"){c.fillStyle="#ffc93c";rr(c,-11,-6,22,12,3);c.fill();c.fillStyle="#7a4a22";rr(c,-7,-3,14,6,2);c.fill()}
@@ -743,7 +744,7 @@ function newRun(cfg){
  toast(S.rule==="sfida"?"Sfida! Ognuno per sé: chi fa più punti vince":S.rule==="squadre"?"Foche contro Pinguini: vince la squadra con più punti":"Benvenuti nella hall! Entrate in un negozio dalla sua porta",4.5);
 }
 const vis=()=>S.players.filter(p=>!p.hidden&&!p.away);
-const AREA_KEYS=["fobj","scats","baskets","catT","cages","parrots","poops","critters","G","W","H","enemies","items","tables","ovens","kiosks","shelves","hidden","respawn","fragSpot","cage","exit","spawn","catSpawns","spawnT","mission","people","hallDoors","fount"];
+const AREA_KEYS=["fobj","scats","baskets","catT","cages","parrots","poops","critters","G","W","H","enemies","items","tables","ovens","kiosks","shelves","hidden","respawn","fragSpot","cage","exit","spawn","catSpawns","spawnT","mission","people","hallDoors","closedDoors","fount"];
 const MARK="@mpx$f";
 function baseGrid(L){if(L===7){const g=[];for(let y=0;y<RH;y++){const r=[];for(let x=0;x<RW;x++)r.push(rRoad(x+.5,y+.5)?".":"#");g.push(r)}return g}if(L===8)return Array.from({length:PH},()=>Array(PW).fill("."));return(L?MAPS[L-1]:HALL).map(r=>[...r].map(ch=>MARK.includes(ch)||EN[ch]?".":ch))}
 function addEnemy(t,x,y){const d=EN[t],L=Math.max(1,S.lvl),co=S.mode==="coop"?1+.3*Math.max(0,vis().length-1):1;let hp=d.hp;const DH=[.8,1,1.9][S.diff|0];
@@ -760,7 +761,7 @@ function loadLevel(L){
  if(L===8){loadPuzzle();return}
  if(L===9){loadFast();return}
  S.lvl=L;const rows=L?MAPS[L-1]:HALL;S.H=rows.length;S.W=rows[0].length;S.G=rows.map(r=>[...r]);S.gv++;
- Object.assign(S,{enemies:[],proj:[],items:[],tables:[],ovens:[],kiosks:[],shelves:[],hidden:{},respawn:[],exitOpen:true,fragSpot:null,cage:null,exit:null,spawn:[1.5,1.5],catSpawns:[],spawnT:0,people:[],hallDoors:[],fount:null,shelter:null,mom:null,cages:[],parrots:[],poops:[],critters:[],fobj:[],scats:[],baskets:[[],[],[],[]],catT:0});
+ Object.assign(S,{enemies:[],proj:[],items:[],tables:[],ovens:[],kiosks:[],shelves:[],hidden:{},respawn:[],exitOpen:true,fragSpot:null,cage:null,exit:null,spawn:[1.5,1.5],catSpawns:[],spawnT:0,people:[],hallDoors:[],closedDoors:[],fount:null,shelter:null,mom:null,cages:[],parrots:[],poops:[],critters:[],fobj:[],scats:[],baskets:[[],[],[],[]],catT:0});
  S.mission={kind:LV[L].kind,n:0,need:0,cats:0,catNeed:8,kit:false,done:false,boss:false,freed:false,sp:0};S.nclerk=0;
  let mc=0,hid=0,fx0=99,fy0=99,fx1=-1,fy1=-1;
  for(let y=0;y<S.H;y++)for(let x=0;x<S.W;x++){const ch=S.G[y][x],cx=x+.5,cy=y+.5;
@@ -777,7 +778,8 @@ function loadLevel(L){
   else if(ch==="K")S.kiosks.push([cx,cy]);
   else if(ch==="E")S.exit=[cx,cy];
   else if(ch==="F")S.cage=[cx,cy];
-  else if(DOORS[ch])S.hallDoors.push({x:cx,y:cy,to:DOORS[ch],front:ch==="N"?[cx-1,cy]:ch==="M"?[cx+1,cy]:[cx,y<S.H/2?cy+1:cy-1]});
+  else if(ch==="D")S.closedDoors.push({x:cx,y:cy});
+  else if(DOORS[ch])S.hallDoors.push({x:cx,y:cy,to:DOORS[ch],front:ch==="N"?[cx-1,cy]:[cx,y<S.H/2?cy+1:cy-1]});
   else if(ch==="J"){S.shelter=S.shelter||{x0:x,y0:y,x1:x+1,y1:y+1};S.shelter.x0=Math.min(S.shelter.x0,x);S.shelter.x1=Math.max(S.shelter.x1,x+1);S.shelter.y0=Math.min(S.shelter.y0,y);S.shelter.y1=Math.max(S.shelter.y1,y+1)}
   else if(ch==="W"){fx0=Math.min(fx0,x);fy0=Math.min(fy0,y);fx1=Math.max(fx1,x+1);fy1=Math.max(fy1,y+1)}
   if("PRAL=S1234V".includes(ch)&&hash(x+L*7,y*3+L)<.42&&hid<9){S.hidden[x+","+y]=1;hid++}}
@@ -818,7 +820,7 @@ function enterArea(L){const from=S.lvl;
 /* ---------- Il Mondo dei Pesci: pesca nella grande boccia ---------- */
 const FCOL=["#ff9a2e","#5ab8ff","#ffd23c","#ff6fae","#7bd389","#c77dff","#ff5a2a"],BOWL={x0:.7,x1:11.3,y0:5,y1:17.2},MAXJ={eel:2,mouse:1,boot:1,can:1};
 function loadFishShop(){S.lvl=6;S.W=12;S.H=19;S.G=Array.from({length:S.H},()=>Array(S.W).fill("."));S.gv++;
- Object.assign(S,{enemies:[],proj:[],items:[],tables:[],ovens:[],kiosks:[],shelves:[],hidden:{},respawn:[],exitOpen:true,fragSpot:null,cage:null,exit:null,spawn:[6,2.7],catSpawns:[],spawnT:0,people:[],hallDoors:[],fount:null,cages:[],parrots:[],poops:[],critters:[],
+ Object.assign(S,{enemies:[],proj:[],items:[],tables:[],ovens:[],kiosks:[],shelves:[],hidden:{},respawn:[],exitOpen:true,fragSpot:null,cage:null,exit:null,spawn:[6,2.7],catSpawns:[],spawnT:0,people:[],hallDoors:[],closedDoors:[],fount:null,cages:[],parrots:[],poops:[],critters:[],
   fobj:[],scats:[],baskets:[[],[],[],[]],catT:6});
  S.mission={kind:"fishing",n:0,need:0,done:false,boss:false,freed:false};
  for(let i=0;i<8;i++)spawnFObj("fish");for(const k in MAXJ)for(let i=0;i<MAXJ[k];i++)spawnFObj(k)}
@@ -1056,6 +1058,7 @@ function interact(p){
    let done=false;for(const tb of S.tables)if(tb.want&&tb.cust&&near(tb)){const q=S.people.find(o=>o.id===tb.cust);if(!q)continue;tb.want=false;q.cu="eat";q.et=6;p.carry=null;m.n++;p.score=(p.score|0)+100;ev({k:"sfx",s:"deliver"});ev({k:"burst",x:tb.cx,y:tb.cy,col:"#ffc93c",n:16});float(tb.cx,tb.cy,`Buon appetito! ${m.n}/${m.need}`,"#fff");done=true;break}
    if(!done)for(const tb of S.tables)if(tb.occ&&near(tb)){const e=S.enemies.find(o=>o.id===tb.occ);if(e&&e.sit){e.wake=true}break}}}
  p.nearK=S.kiosks.some(k=>dist(p.x,p.y,k[0],k[1])<1.35);
+ if(S.lvl===0&&S.closedDoors)for(const cd of S.closedDoors)if(dist(p.x,p.y,cd.x,cd.y)<1.4&&S.time-(p.clT||-9)>4){p.clT=S.time;toast("🚧 Negozio in allestimento: presto aprirà nuove avventure!",2.8);ev({k:"sfx",s:"empty"})}
  const doors=S.lvl===0?S.hallDoors:S.exit?[{x:S.exit[0],y:S.exit[1],to:0}]:[];let nearD=false;
  let inD=null;for(const d of doors){const dd=dist(p.x,p.y,d.x,d.y);if(dd<1.15)nearD=true;if(dd<.78&&!p.doorLock)inD=d}
  if(inD){p.dT=(p.dT||0)+1/30;if(p.dT>=.8){p.dT=0;useDoor(p,inD);return}}else p.dT=0;
@@ -1242,7 +1245,7 @@ function racePath(){const x0=3.5,y0=3.5,x1=40.5,y1=26.5,r=5.5,pts=[],P=(x,y)=>pt
 const RPATH=racePath(),RN=RPATH.length;
 const angD=(a,b)=>{let d=a-b;while(d>PI)d-=PI*2;while(d<-PI)d+=PI*2;return d};
 function loadRace(){S.lvl=7;S.W=RW;S.H=RH;S.G=[];for(let y=0;y<RH;y++){const r=[];for(let x=0;x<RW;x++)r.push(rRoad(x+.5,y+.5)?".":"#");S.G.push(r)}S.gv++;
- Object.assign(S,{enemies:[],proj:[],items:[],tables:[],ovens:[],kiosks:[],shelves:[],hidden:{},respawn:[],exitOpen:true,fragSpot:null,cage:null,exit:null,spawn:[24,26.5],catSpawns:[],spawnT:0,people:[],hallDoors:[],fount:null,shelter:null,mom:null,cages:[],parrots:[],poops:[],critters:[],fobj:[],scats:[],baskets:[[],[],[],[]],catT:0});
+ Object.assign(S,{enemies:[],proj:[],items:[],tables:[],ovens:[],kiosks:[],shelves:[],hidden:{},respawn:[],exitOpen:true,fragSpot:null,cage:null,exit:null,spawn:[24,26.5],catSpawns:[],spawnT:0,people:[],hallDoors:[],closedDoors:[],fount:null,shelter:null,mom:null,cages:[],parrots:[],poops:[],critters:[],fobj:[],scats:[],baskets:[[],[],[],[]],catT:0});
  S.mission={kind:"race",n:0,need:0,cats:0,catNeed:0,kit:false,done:false,boss:false,freed:false,sp:0};
  const boxes=[];for(let k=0;k<6;k++){const i=Math.floor(RN*(k+.5)/6),a=RPATH[i],b=RPATH[(i+1)%RN],tx=b[0]-a[0],ty=b[1]-a[1],n=Math.hypot(tx,ty)||1;for(const o of[-1.4,0,1.4])boxes.push({x:a[0]-ty/n*o,y:a[1]+tx/n*o,t:0})}
  S.race={st:"count",t:3.4,big:"",laps:RLAPS,boxes,gums:[],rp:[],placeN:0,winner:-1,endT:0,clock:0,top:[]}}
@@ -1392,25 +1395,25 @@ function pzAdvance(){const Z=S.pz,p=S.players.find(q=>q.i===Z.last)||S.players.f
 function leavePuzzle(msg){S.raceCool=RCOOL;S.pz=null;toast(msg+" · pulizie: porta chiusa 1 minuto",5);enterArea(0)}
 
 /* ---------- Fast food: gara di panini e cola (stile Tetris) ---------- */
-const FN=6,FR=7,FX0=1,FLANE=1.5,FTAB=14.4,FRH=1.3,FBITES=7,FW=11,FH=19,FEDIBLE={burger:1,cola:1},FJUNK={cheese:1,broc:1,fish:1},FGAD={denti:1,straw:1};
+const FN=6,FR=7,FX0=1,FLANE=1.5,FTAB=14.4,FRH=1.3,FBITES=7,FW=11,FH=19,FEDIBLE={burger:1,cola:1,fries:1},FJUNK={cheese:1,broc:1,fish:1},FGAD={denti:1,straw:1,dogy:1};
 const fxLane=c=>FX0+(c+.5)*FLANE,fyRow=r=>FTAB-(r+.5)*FRH;
 function loadFast(){loadRace();S.race=null;S.lvl=9;S.W=FW;S.H=FH;S.G=Array.from({length:FH},()=>Array(FW).fill("."));S.spawn=[5.5,17];S.gv++;S.mission.kind="fast";S.mission.need=0;fastNew()}
 function fastNew(){const need=[20,28,36][S.diff|0];S.fd={cols:Array.from({length:FN},()=>[]),fall:[],fx:[],t:0,nextT:2.4,gadT:rnd(16,22),gadN:0,eaten:0,need,end:0,win:false,msg:"",seq:1,cook:2,cookX:fxLane(2),throwT:0,tipC:0,tipB:0}}
-function startFast(){const st=[2,3,1,4];S.players.forEach((p,i)=>{p.col=st[i%4];p.x=fxLane(p.col);p.y=17;p.mv=0;p.aP9=0;p.tpS=null;p.ate=0;p.stun9=0;p.dent=0;p.straw=0;p.eatT=0;p.drink=0;p.lift=0;p.yuck=0;p.face=1;p.walk=0;p.watch=false});toast("Fast food: tocca il centro della levetta per mangiare i panini, tieni premuto l'asciugamano per bere la cola, usa il cestino per la roba puzzolente.",7)}
+function startFast(){const st=[2,3,1,4];S.players.forEach((p,i)=>{p.col=st[i%4];p.x=fxLane(p.col);p.y=17;p.mv=0;p.aP9=0;p.tpS=null;p.ate=0;p.stun9=0;p.dent=0;p.straw=0;p.dogy=0;p.eatT=0;p.drink=0;p.lift=0;p.yuck=0;p.face=1;p.walk=0;p.watch=false});toast("Fast food: tocca il centro della levetta per mangiare i panini, tieni premuto l'asciugamano per bere la cola, usa il cestino per la roba puzzolente.",7)}
 function spawnFast(forceK){const F=S.fd;const col=ri(0,FN-1),len=F.cols[col].length+F.fall.filter(f=>f.col===col).length;
  if(len>=FR){F.end=2.6;F.win=false;F.msg="Il tavolo è pieno!";toast("🍔 Il tavolo è pieno! Il cuoco chiude la gara",3);ev({k:"sfx",s:"alarm"});return}
- let k=forceK;if(!k){const r=Math.random(),jp=[.16,.2,.26][S.diff|0];k=r<jp?["cheese","broc","fish"][ri(0,2)]:r<jp+(1-jp)*.52?"burger":"cola"}
+ let k=forceK;if(!k){const r=Math.random(),jp=[.16,.2,.26][S.diff|0];const q=(r-jp)/(1-jp);k=r<jp?["cheese","broc","fish"][ri(0,2)]:q<.4?"burger":q<.72?"cola":"fries"}
  F.fall.push({k,col,r:FR+1.7,sp:6.5});F.cook=col;F.throwT=.35}
 function fastGain(p,F,col){const it=col.shift();for(const o of col)o.off=1;F.eaten++;p.ate=(p.ate|0)+1;p.score=(p.score|0)+20;ev({k:"burst",x:p.x,y:fyRow(0),col:it.k==="cola"?"#e63946":"#f6b44b",n:12});ev({k:"sfx",s:"deliver"});float(p.x,14.6,`${Math.min(F.eaten,F.need)}/${F.need}`,"#fff");
  if(F.eaten>=F.need&&!F.end){F.end=2.6;F.win=true;F.msg="Hai vinto la gara!";ev({k:"sfx",s:"mission"})}}
-function fastGadget(p,F,col){const it=col.shift();for(const o of col)o.off=1;if(it.k==="denti"){p.dent=10;float(p.x,14.6,"Dentiera della nonnetta! Mangi il doppio più in fretta","#ffb3d6")}else{p.straw=10;float(p.x,14.6,"Cannuccia! Bevi il doppio più in fretta","#ff7a8a")}ev({k:"sfx",s:"pick"});ev({k:"burst",x:p.x,y:fyRow(0),col:"#ffd23c",n:14})}
+function fastGadget(p,F,col){const it=col.shift();for(const o of col)o.off=1;if(it.k==="denti"){p.dent=10;float(p.x,14.6,"Dentiera della nonnetta! Mangi il doppio più in fretta","#ffb3d6")}else if(it.k==="dogy"){p.dogy=3;float(p.x,14.6,"Dogy bag! 3 panini spariscono con un solo colpo","#ffd23c")}else{p.straw=10;float(p.x,14.6,"Cannuccia! Bevi il doppio più in fretta","#ff7a8a")}ev({k:"sfx",s:"pick"});ev({k:"burst",x:p.x,y:fyRow(0),col:"#ffd23c",n:14})}
 function fastTick(dt){const F=S.fd;if(!F)return;F.t+=dt;F.throwT=Math.max(0,F.throwT-dt);F.cookX+=(fxLane(F.cook)-F.cookX)*Math.min(1,dt*8);
  for(const c of F.cols)for(const o of c)if(o.off>0)o.off=Math.max(0,o.off-dt*9);
  for(let i=F.fx.length-1;i>=0;i--){F.fx[i].t+=dt;if(F.fx[i].t>=.45)F.fx.splice(i,1)}
  if(F.end>0){F.end-=dt;if(F.end<=0){leaveFast(F.win);return}}
  else{const np=Math.max(1,S.players.filter(p=>!p.hidden&&!p.away).length);
   F.nextT-=dt;if(F.nextT<=0){F.nextT=([3.4,2.7,2.2][S.diff|0])*Math.max(.5,1-F.t/160)/Math.sqrt(np);spawnFast()}
-  F.gadT-=dt;if(F.gadT<=0){F.gadT=rnd(22,32);spawnFast(F.gadN++%2?"straw":"denti")}}
+  F.gadT-=dt;if(F.gadT<=0){F.gadT=rnd(22,32);spawnFast(["denti","straw","dogy"][F.gadN++%3])}}
  for(let i=F.fall.length-1;i>=0;i--){const f=F.fall[i];f.r-=dt*f.sp;const col=F.cols[f.col];if(f.r<=col.length){F.fall.splice(i,1);col.push({id:F.seq++,k:f.k,v:1,off:0});ev({k:"sfx",s:"plop",x:fxLane(f.col),y:FTAB})}}
  S.players.forEach((p,i)=>{if(p.hidden||p.away||S.lvl!==9||!S.fd)return;const inp=inputFor(i);
   p.mv=Math.max(0,(p.mv||0)-dt);p.stun9=Math.max(0,(p.stun9||0)-dt);p.dent=Math.max(0,(p.dent||0)-dt);p.straw=Math.max(0,(p.straw||0)-dt);p.eatT=Math.max(0,(p.eatT||0)-dt);p.yuck=Math.max(0,(p.yuck||0)-dt);
@@ -1425,13 +1428,14 @@ function fastTick(dt){const F=S.fd;if(!F)return;F.t+=dt;F.throwT=Math.max(0,F.th
   const tp=inp.tp|0;if(p.tpS==null)p.tpS=tp;const taps=tp!==p.tpS?(tp>p.tpS?Math.min(4,tp-p.tpS):1):0;p.tpS=tp;
   const cur=col[0];
   if(cur&&p.stun9<=0)for(let k=0;k<taps&&col[0]===cur;k++){
-   if(cur.k==="burger"){cur.v-=(1/FBITES)*(p.dent>0?2:1);p.eatT=.3;ev({k:"burst",x:p.x,y:fyRow(0)+.3,col:"#f6b44b",n:3});ev({k:"sfx",s:"bump",x:p.x,y:FTAB});if(cur.v<=.001){fastGain(p,F,col);break}}
+   if(cur.k==="burger"&&p.dogy>0){p.dogy--;F.fx.push({k:"burger",x:fxLane(p.col),t:0,bag:1,bx:p.x});p.eatT=.3;ev({k:"sfx",s:"pick"});ev({k:"burst",x:p.x,y:fyRow(0)+.3,col:"#ffd23c",n:8});fastGain(p,F,col);break}
+   if(cur.k==="burger"||cur.k==="fries"){cur.v-=(1/(cur.k==="fries"?3:FBITES))*(p.dent>0?2:1);p.eatT=.3;ev({k:"burst",x:p.x,y:fyRow(0)+.3,col:"#f6b44b",n:3});ev({k:"sfx",s:"bump",x:p.x,y:FTAB});if(cur.v<=.001){fastGain(p,F,col);break}}
    else if(cur.k==="cola"){if(!F.tipC||F.t-F.tipC>12){F.tipC=F.t;float(p.x,14.6,"La cola si beve: tieni premuto l'asciugamano","#8fe0ff")}}
    else if(FJUNK[cur.k]){p.stun9=1.1;p.yuck=1.1;float(p.x,14.6,"Bleah! Questa va nel cestino","#9acd32");ev({k:"sfx",s:"empty"});break}
    else if(FGAD[cur.k]){fastGadget(p,F,col);break}}
   const c2=col[0];
   if(atk&&inp.wsel===0&&c2&&p.stun9<=0){if(c2.k==="cola"){c2.v-=dt*(p.straw>0?1.1:.5);p.drink=.2;if(c2.v<=0){fastGain(p,F,col);p.drink=0}}
-   else if(c2.k==="burger"&&(!F.tipB||F.t-F.tipB>12)){F.tipB=F.t;float(p.x,14.6,"Il panino si mangia: tocca il centro della levetta","#ffd23c")}}
+   else if((c2.k==="burger"||c2.k==="fries")&&(!F.tipB||F.t-F.tipB>12)){F.tipB=F.t;float(p.x,14.6,"Il panino si mangia: tocca il centro della levetta","#ffd23c")}}
   else p.drink=Math.max(0,(p.drink||0)-dt);
   if(c2&&FGAD[c2.k]){p.gc=(p.gc||0)+dt;if(p.gc>.3){p.gc=0;fastGadget(p,F,col)}}else p.gc=0;
   p.lift=(p.lift||0)+(((p.eatT>0||p.drink>0)?1:0)-(p.lift||0))*Math.min(1,dt*12)})}
@@ -1479,8 +1483,9 @@ function buildStatic(){if(S.lvl===9){buildFastBG();return}if(S.lvl===7){buildRac
   if(isW(x-1,y)){c.fillStyle=lg(c,px,0,px+8,0,"rgba(0,0,0,.15)","rgba(0,0,0,0)");c.fillRect(px,py,8,TS)}
   decor(c,ch,px,py,x,y,L)}
  const sign=(sx,sy,sw,col,txt)=>{c.fillStyle=col;rr(c,sx-sw/2,sy-12,sw,24,10);c.fill();c.fillStyle="rgba(255,255,255,.25)";rr(c,sx-sw/2+3,sy-10,sw-6,8,6);c.fill();
-  c.font="700 16px Fredoka,system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillStyle="#fff";c.fillText(txt,sx,sy+1)};
- if(S.lvl===0)for(const d of S.hallDoors)if(d.to<7)sign(d.x*TS,d.y<H/2?18:(H-.55)*TS,Math.min(250,6.2*TS),LV[d.to].acc,LV[d.to].name);
+  let fs=16;c.font="700 16px Fredoka,system-ui,sans-serif";while(fs>8&&c.measureText(txt).width>sw-12){fs--;c.font="700 "+fs+"px Fredoka,system-ui,sans-serif"}c.textAlign="center";c.textBaseline="middle";c.fillStyle="#fff";c.fillText(txt,sx,sy+1)};
+ if(S.lvl===0){for(const d of S.hallDoors)if(d.to<7||d.to===9)sign(d.x*TS,d.y<H/2?18:(H-.55)*TS,(d.to<=4?4.7:2.8)*TS,LV[d.to].acc,LV[d.to].name.split(" — ")[0].replace(/^Negozio \d\/\d · /,""));
+  for(const cd of S.closedDoors||[])if(cd.x>1)sign(cd.x*TS,cd.y<H/2?18:(H-.55)*TS,2.8*TS,"#8a8fa3","In allestimento")}
  else sign(Math.floor(W/2)*TS,18,Math.min(300,W*TS*.4),L.acc,L.name);
  scKey=S.lvl+":"+S.gv}
 function shade(hex,k){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const f=v=>Math.round(k<0?v*(1+k):v+(255-v)*k);return`rgb(${f(r)},${f(g)},${f(b)})`}
@@ -1516,11 +1521,14 @@ function decor(c,ch,px,py,x,y,L){const cx=px+TS/2,cy=py+TS/2,h=hash(x*3,y*7);
  else if(ch==="K"){c.fillStyle="#d9dde6";rr(c,px+1,py+10,TS-2,TS-11,4);c.fill();c.fillStyle="#9aa3b8";c.fillRect(px+1,py+TS-10,TS-2,9);
   c.fillStyle="#3a3f52";rr(c,px+8,py+2,24,16,3);c.fill();c.fillStyle="#7dffb0";c.fillRect(px+11,py+5,18,6);c.fillStyle="#2a2f3c";for(let i=0;i<3;i++)c.fillRect(px+11+i*6,py+13,4,3);
   c.fillStyle="#ff4f9a";rr(c,px+4,py+TS-9,TS-8,7,3);c.fill();c.fillStyle="#fff";c.font="700 6.5px Fredoka,system-ui,sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText("CASSA",cx,py+TS-5.3)}
- else if(ch==="V"){const top=y<S.H/2,d=S.hallDoors.filter(d=>d.to<7&&(d.y<S.H/2)===top).sort((a,b)=>Math.abs(a.x-x)-Math.abs(b.x-x))[0],Lt=d?d.to:1,acc=LV[Lt].acc;
+ else if(ch==="V"){const top=y<S.H/2,d=S.hallDoors.filter(d=>(d.to<7||d.to===9)&&(d.y<S.H/2)===top).sort((a,b)=>Math.abs(a.x-x)-Math.abs(b.x-x))[0],Lt=d?d.to:1,acc=LV[Lt].acc;
   c.fillStyle="#3a3f55";c.fillRect(px,py,TS,TS);c.fillStyle=lg(c,0,py,0,py+TS,"#dff4ff","#9fd2ee");c.fillRect(px+2,py+3,TS-4,TS-6);
   c.fillStyle=acc;c.fillRect(px,top?py+TS-5:py,TS,5);c.save();c.translate(cx,cy+(top?-2:3));
-  if(Lt===1)drawItem(c,{k:"merch",c:1+((x+y)%4),x:0},0);else if(Lt===2){drawPizzaShape(c,9)}else if(Lt===3)drawItem(c,{k:"pastry",v:x%3,x:0},0);else if(Lt===4){c.scale(1.2,1.2);drawFishBody(c,x*300,null,1)}else{el(c,0,0,11,7,"#fff");el(c,0,-1,6,3.5,"#ff7a4a")}
+  if(Lt===1)drawItem(c,{k:"merch",c:1+((x+y)%4),x:0},0);else if(Lt===2){drawPizzaShape(c,9)}else if(Lt===3)drawItem(c,{k:"pastry",v:x%3,x:0},0);else if(Lt===4){c.scale(1.2,1.2);drawFishBody(c,x*300,null,1)}else if(Lt===9){c.scale(.5,.5);drawFood(c,"burger",0)}else if(Lt===6){c.fillStyle="rgba(120,200,255,.6)";c.beginPath();c.arc(0,0,11,0,7);c.fill();c.scale(.7,.7);drawFishBody(c,x*300,null,1)}else{el(c,0,0,11,7,"#fff");el(c,0,-1,6,3.5,"#ff7a4a")}
   c.restore();c.fillStyle="rgba(255,255,255,.4)";c.fillRect(px+5,py+5,3,TS-12)}
+ else if(ch==="%"){const top=y<S.H/2;c.fillStyle="#3a3f55";c.fillRect(px,py,TS,TS);c.fillStyle="#8d93a6";c.fillRect(px+2,py+3,TS-4,TS-6);c.fillStyle="#757b8f";for(let i=0;i<5;i++)c.fillRect(px+2,py+5+i*7,TS-4,2.5);
+  c.fillStyle="#ffd23c";c.save();c.beginPath();c.rect(px+2,py+3,TS-4,TS-6);c.clip();for(let i=-2;i<6;i++){c.beginPath();c.moveTo(px+i*12,py+TS);c.lineTo(px+i*12+6,py+TS);c.lineTo(px+i*12+TS+6,py);c.lineTo(px+i*12+TS,py);c.fill()}c.restore()}
+ else if(ch==="D"){c.fillStyle="#3a3f55";c.fillRect(px,py,TS,TS);c.fillStyle="#6b7185";rr(c,px+4,py+3,TS-8,TS-3,3);c.fill();c.fillStyle="#9aa0b4";c.fillRect(px+TS/2-1,py+3,2,TS-3);c.fillStyle="#ffd23c";c.save();c.beginPath();c.rect(px+4,py+3,TS-8,TS-3);c.clip();for(let i=-2;i<6;i++){c.beginPath();c.moveTo(px+i*12,py+TS);c.lineTo(px+i*12+6,py+TS);c.lineTo(px+i*12+TS+6,py);c.lineTo(px+i*12+TS,py);c.fill()}c.restore();c.font="18px system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText("🚧",cx,cy)}
  else if(ch==="h"){el(c,cx,py+TS-6,16,4,"rgba(0,0,0,.18)");c.fillStyle="#8a5a2b";for(let i=0;i<3;i++)rr(c,px+3,py+10+i*7,TS-6,5,2),c.fill();c.fillStyle="#4a4f5c";c.fillRect(px+5,py+30,3,8);c.fillRect(px+TS-8,py+30,3,8)}
  else if(ch==="E"||ch==="F"){}
 }
@@ -1551,7 +1559,7 @@ function frame(t){requestAnimationFrame(frame);const dt=Math.min(.1,(t-last)/100
  c.drawImage(SC,0,0,S.W*TS,S.H*TS);
  const x0=Math.max(0,Math.floor(camX)-1),x1=Math.min(S.W,Math.ceil(camX+VWt)+1),y0=Math.max(0,Math.floor(camY)-1),y1=Math.min(S.H,Math.ceil(camY+VHt)+1);
  for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){const ch=S.G[y][x],px=x*TS+TS/2,py=y*TS+TS/2;
-  if(ch==="N")drawParkDoor(c,px,py,t);else if(ch==="M")drawFastDoor(c,px,py,t);
+  if(ch==="N")drawParkDoor(c,px,py,t);else if(ch==="D"&&x===0)drawClosedSide(c,px,py);
   else if(ch==="E")drawDoor(c,px,py,LV[S.lvl].acc,"HALL","",t,y>S.H/2);
   else if(DOORS[ch]){const L=DOORS[ch];drawDoor(c,px,py,LV[L].acc,"",L===5&&!sushiOpen()?"lock":(m?GR(m):S.grp[0]).done[L]?"done":"",t,y>S.H/2)}
   else if(ch==="F"){c.save();c.translate(px,py);drawPrincess(c,t,S.mission.freed);c.restore()}
@@ -1892,6 +1900,10 @@ function drawFood(c,k,t){c.save();
   c.fillStyle="#fff";c.beginPath();c.moveTo(-12.5,-3);c.quadraticCurveTo(-6,-8,0,-3);c.quadraticCurveTo(6,2,12,-3);c.lineTo(11,8);c.quadraticCurveTo(5,13,0,8);c.quadraticCurveTo(-6,3,-11.5,8);c.closePath();c.fill();
   c.fillStyle="#f4f4f6";rr(c,-16,-19,32,6,3);c.fill();c.strokeStyle="#ff4f9a";c.lineWidth=3.2;c.lineCap="round";c.beginPath();c.moveTo(5,-19);c.lineTo(11,-32);c.lineTo(17,-32);c.stroke();
   c.strokeStyle="#fff";c.lineWidth=1.2;c.beginPath();c.moveTo(7,-24);c.lineTo(10,-30);c.stroke()}
+ else if(k==="fries"){c.fillStyle="#d9382c";c.beginPath();c.moveTo(-15,-2);c.lineTo(15,-2);c.lineTo(11,22);c.lineTo(-11,22);c.closePath();c.fill();c.fillStyle="#ffd23c";c.fillRect(-9,6,18,7);
+  for(const[x,h,a]of[[-11,26,-.25],[-6,32,-.1],[-1,28,.05],[4,34,.12],[9,27,.25]]){c.save();c.translate(x,-1);c.rotate(a);c.fillStyle="#ffcf3a";c.fillRect(-2.2,-h,4.4,h);c.fillStyle="#f0a81e";c.fillRect(1,-h,1.2,h);c.restore()}}
+ else if(k==="dogy"){c.fillStyle="#e8d2a6";c.beginPath();c.moveTo(-17,-12);c.lineTo(17,-12);c.lineTo(20,20);c.lineTo(-20,20);c.closePath();c.fill();c.fillStyle="#c9a96b";c.fillRect(-17,-12,34,6);c.fillStyle="#8a5a2b";c.beginPath();c.arc(0,6,6,0,7);c.fill();for(const[x,y]of[[-8,-1],[8,-1],[-10,11],[10,11]])el(c,x,y,2.6,3.4,"#8a5a2b");
+  c.fillStyle="#fff";c.font="700 8px Fredoka,system-ui";c.textAlign="center";c.fillText("DOGY",0,-14)}
  else if(k==="cheese"){c.fillStyle="#ffd23c";c.beginPath();c.moveTo(-22,12);c.lineTo(22,12);c.lineTo(22,-4);c.closePath();c.fill();c.fillStyle="#e7a91e";c.beginPath();c.moveTo(-22,12);c.lineTo(22,12);c.lineTo(22,17);c.lineTo(-22,17);c.closePath();c.fill();
   for(const[x,y,r]of[[8,3,3.2],[-4,8,2.6],[14,-1,2]])el(c,x,y,r,r,"#e7a91e");
   c.strokeStyle="#9acd32";c.lineWidth=2.2;c.lineCap="round";for(const x of[-10,0,10]){const w=Math.sin(t/200+x)*2;c.beginPath();c.moveTo(x,-2);c.quadraticCurveTo(x+6+w,-9,x,-14);c.quadraticCurveTo(x-6-w,-19,x+1,-24);c.stroke()}
@@ -1944,14 +1956,14 @@ function drawFastObjs(c,t,list){const F=S.fd;if(!F)return;
  F.cols.forEach((col,ci)=>{const x=fxLane(ci)*TS;col.forEach((it,ri_)=>{
    let lift=0;if(ri_===0)for(const p of S.players)if(p.col===ci&&(p.lift||0)>.02&&!p.hidden)lift=Math.max(lift,p.lift);
    const row=ri_+(it.off||0),y=fyRow(row)*TS+lift*2.3*TS;
-   list.push({y:14+ri_*.01-(lift>0?-4:0),f:()=>{c.save();c.translate(x,y);const s=.88*(lift>0?.62+.38*(it.k==="burger"||it.k==="cola"?it.v:1):1);
+   list.push({y:14+ri_*.01-(lift>0?-4:0),f:()=>{c.save();c.translate(x,y);const s=.88*(lift>0?.62+.38*(FEDIBLE[it.k]?it.v:1):1);
     el(c,0,22,19,3,"rgba(0,0,0,.18)");c.scale(s,s);drawFood(c,it.k,t);c.restore();
     if(FEDIBLE[it.k]){const w=40,hh=5,bx=x-w/2,by=fyRow(row)*TS-FRH*TS/2+2+lift*2.3*TS;c.fillStyle="rgba(0,0,0,.4)";rr(c,bx-1,by-1,w+2,hh+2,3);c.fill();c.fillStyle=it.v>.5?(it.k==="cola"?"#5ab8ff":"#ffb347"):it.v>.25?"#ffc93c":"#ff5d6c";if(it.v>0)rr(c,bx,by,w*it.v,hh,2.5),c.fill()}
     else if(FJUNK[it.k]){c.fillStyle="#9acd32";c.font="700 11px Fredoka,system-ui";c.textAlign="center";c.fillText("DA BUTTARE",x,fyRow(row)*TS-FRH*TS/2+8+lift*2.3*TS)}
-    else{c.fillStyle="#ffd23c";c.font="700 10px Fredoka,system-ui";c.textAlign="center";c.fillText(it.k==="denti"?"DENTIERA!":"CANNUCCIA!",x,fyRow(row)*TS-FRH*TS/2+8)}
+    else{c.fillStyle="#ffd23c";c.font="700 10px Fredoka,system-ui";c.textAlign="center";c.fillText(it.k==="denti"?"DENTIERA!":it.k==="dogy"?"DOGY BAG!":"CANNUCCIA!",x,fyRow(row)*TS-FRH*TS/2+8)}
     if(row>=FR-1&&ri_===col.length-1){c.strokeStyle="rgba(255,60,60,"+(.5+.4*Math.sin(t/100))+")";c.lineWidth=3;rr(c,x-FLANE*TS/2+3,fyRow(row)*TS-FRH*TS/2,FLANE*TS-6,FRH*TS,8);c.stroke()}}})})});
  for(const f2 of F.fall){const x=fxLane(f2.col)*TS,y=fyRow(f2.r)*TS;list.push({y:14.5,f:()=>{c.save();c.translate(x,y);c.rotate(Math.sin(t/140+f2.col)*.12);c.scale(.88,.88);drawFood(c,f2.k,t);c.restore()}})}
- for(const fx of F.fx){const p=fx.t/.45,x0=fx.x*TS,y0=fyRow(0)*TS,x1=10.5*TS,y1=(FTAB+.2)*TS,x=x0+(x1-x0)*p,y=y0+(y1-y0)*p-Math.sin(p*PI)*60;list.push({y:15,f:()=>{c.save();c.translate(x,y);c.rotate(p*9);c.scale(.7*(1-p*.3),.7*(1-p*.3));drawFood(c,fx.k,t);c.restore()}})}}
+ for(const fx of F.fx){const p=fx.t/.45,x0=fx.x*TS,y0=fyRow(0)*TS,x1=fx.bag?fx.bx*TS:10.5*TS,y1=(FTAB+.2)*TS,x=x0+(x1-x0)*p,y=y0+(y1-y0)*p-Math.sin(p*PI)*60;list.push({y:15,f:()=>{c.save();c.translate(x,y);c.rotate(p*9);c.scale(.7*(1-p*.3),.7*(1-p*.3));drawFood(c,fx.k,t);c.restore()}})}}
 function drawEater(c,p,r,t){const F=S.fd,L=LOOK[p.hero]||{hood:"#7a5cff",hood2:"#5a3fd0",skin:"#f2c29b",acc:"#fff"},eat=(p.eatT||0)>0,dr=(p.drink||0)>0,lift=p.lift||0;
  c.save();c.translate(r.x*TS,r.y*TS-4);
  c.fillStyle="rgba(0,0,0,.18)";el(c,0,14,22,4,"rgba(0,0,0,.18)");
@@ -1969,44 +1981,154 @@ function drawEater(c,p,r,t){const F=S.fd,L=LOOK[p.hero]||{hood:"#7a5cff",hood2:"
  // gadget attivi
  let gx=-14;if(p.dent>0){c.save();c.translate(gx,-72);c.scale(.5,.5);drawFood(c,"denti",t);c.restore();c.strokeStyle="#ffb3d6";c.lineWidth=3;c.beginPath();c.arc(gx,-72,12,-PI/2,-PI/2+PI*2*(p.dent/10));c.stroke();gx+=30}
  if(p.straw>0){c.save();c.translate(gx,-72);c.scale(.5,.5);drawFood(c,"straw",t);c.restore();c.strokeStyle="#ff7a8a";c.lineWidth=3;c.beginPath();c.arc(gx,-72,12,-PI/2,-PI/2+PI*2*(p.straw/10));c.stroke()}
+ if(p.dogy>0){c.save();c.translate(gx+6,-72);c.scale(.5,.5);drawFood(c,"dogy",t);c.restore();c.fillStyle="#fff";c.font="700 13px Fredoka,system-ui";c.textAlign="left";c.strokeStyle="rgba(0,0,0,.6)";c.lineWidth=3;c.strokeText("x"+p.dogy,gx+22,-67);c.fillText("x"+p.dogy,gx+22,-67)}
  c.fillStyle="#fff";c.font="700 11px Fredoka,system-ui";c.textAlign="center";c.strokeStyle="rgba(0,0,0,.5)";c.lineWidth=3;if(S.players.length>1){c.strokeText(p.name||"",0,26);c.fillText(p.name||"",0,26)}
  c.restore()}
+
+function drawClosedSide(c,px,py){c.save();const bx=px+TS*1.9,by=py;c.fillStyle="rgba(0,0,0,.25)";rr(c,bx-62,by-22,126,46,10);c.fill();c.fillStyle="#ffd23c";rr(c,bx-64,by-26,126,46,10);c.fill();c.strokeStyle="#1d2433";c.lineWidth=2;rr(c,bx-64,by-26,126,46,10);c.stroke();
+ c.fillStyle="#1d2433";c.font="700 12px Fredoka,system-ui";c.textAlign="center";c.textBaseline="middle";c.fillText("🚧 NEGOZIO IN",bx-1,by-13);c.fillText("ALLESTIMENTO",bx-1,by+3);c.restore()}
 
 /* ---------- audio: musica chiptune anni '80 ed effetti ---------- */
 const AU={ctx:null,on:true,song:null,timer:0,playing:-1,noise:null};
 try{AU.on=localStorage.getItem("ppr-audio")!=="off"}catch(e){}
 const mf=m=>440*Math.pow(2,(m-69)/12);
-function auInit(){if(AU.ctx){if(AU.ctx.state==="suspended")AU.ctx.resume();return}
- try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=AU.ctx=new C();
-  AU.master=c.createGain();AU.master.gain.value=AU.on?.55:0;AU.master.connect(c.destination);
+function auBuild(c){AU.master=c.createGain();AU.master.gain.value=AU.on?.55:0;AU.master.connect(c.destination);
   AU.mus=c.createGain();AU.mus.gain.value=.16;AU.mus.connect(AU.master);AU.fx=c.createGain();AU.fx.gain.value=.5;AU.fx.connect(AU.master);
-  const b=c.createBuffer(1,c.sampleRate,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;AU.noise=b}catch(e){AU.ctx=null}}
+  const sr=c.sampleRate,n=Math.floor(sr*1.9),ir=c.createBuffer(2,n,sr);for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2.6)}
+  AU.send=c.createGain();const cv=c.createConvolver();cv.buffer=ir;const rw=c.createGain();rw.gain.value=.8;AU.send.connect(cv);cv.connect(rw);rw.connect(AU.mus);
+  const b=c.createBuffer(1,sr,sr),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;AU.noise=b}
+function auInit(){if(AU.ctx){if(AU.ctx.state==="suspended")AU.ctx.resume();return}
+ try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=AU.ctx=new C();auBuild(c)}catch(e){AU.ctx=null}}
 function auToggle(){AU.on=!AU.on;try{localStorage.setItem("ppr-audio",AU.on?"on":"off")}catch(e){}if(AU.master)AU.master.gain.value=AU.on?.55:0;muteIcons()}
 function tone(f,dur,type,vol,dest,t0,slide){const c=AU.ctx,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t0);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(20,slide),t0+dur);
  g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.0008,t0+dur);o.connect(g);g.connect(dest);o.start(t0);o.stop(t0+dur+.03)}
 function nz(dur,vol,dest,t0,type,freq,q){const c=AU.ctx,s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=AU.noise;f.type=type||"highpass";f.frequency.value=freq||1000;f.Q.value=q||.7;
  g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.0008,t0+dur);s.connect(f);f.connect(g);g.connect(dest);s.start(t0,Math.random()*.5);s.stop(t0+dur+.03)}
-/* brani: lead/bassi in MIDI, null = pausa */
-const _=null;
-const SONGS={
- 6:{dt:.14,bar:16,be:8,lead:[69,_,73,76,_,73,81,_,78,_,76,_,73,_,_,_, 71,_,74,78,_,74,81,_,80,_,78,_,76,_,_,_, 73,_,76,81,_,76,85,_,83,_,81,_,78,_,76,_, 74,_,73,_,71,_,73,_,69,_,_,_,_,_,_,_],bass:[45,50,45,40],dr:"soft",wave:"triangle"},
- 0:{dt:.15,bar:16,be:8,lead:[74,_,73,_,71,_,69,_,71,_,_,_,66,_,_,_, 69,_,71,_,73,_,74,_,76,_,_,_,_,_,_,_, 74,_,73,_,71,_,69,_,66,_,_,_,64,_,_,_, 62,_,64,_,66,_,69,_,71,_,_,_,_,_,_,_],bass:[50,47,43,45],dr:"soft",wave:"triangle"},
- 1:{dt:.118,bar:16,be:4,lead:[72,_,76,_,79,_,76,_,77,_,76,_,74,_,72,_, 74,_,77,_,81,_,77,_,79,_,77,_,76,_,74,_, 72,_,76,_,79,_,84,_,83,_,79,_,81,_,79,_, 77,_,76,_,74,_,76,_,72,_,_,_,72,_,_,_],bass:[48,50,48,43],dr:"pop"},
- 2:{dt:.115,bar:12,be:6,lead:[69,72,76,_,76,74,72,71,69,_,69,_, 71,74,77,_,77,76,74,72,71,_,71,_, 72,76,79,_,79,77,76,74,72,_,76,_, 71,72,74,76,74,72,71,_,69,_,_,_],bass:[45,40,45,40],dr:"tar"},
- 3:{dt:.13,bar:16,be:8,lead:[77,_,_,81,84,_,81,_,79,_,_,77,76,_,77,_, 79,_,_,77,76,_,74,_,72,_,_,_,_,_,_,_, 74,_,_,77,81,_,79,_,77,_,_,76,74,_,76,_, 77,_,_,_,72,_,_,_,77,_,_,_,_,_,_,_],bass:[41,36,38,36],dr:"soft",wave:"triangle"},
- 4:{dt:.12,bar:16,be:4,lead:[67,_,71,74,_,71,79,_,78,_,74,_,71,_,_,_, 69,_,72,76,_,72,81,_,79,_,76,_,72,_,_,_, 71,_,74,79,_,74,83,_,81,_,79,_,78,_,76,_, 74,_,79,_,78,_,76,_,74,_,_,_,67,_,_,_],bass:[43,45,40,38],dr:"pop"},
- 5:{dt:.14,bar:16,be:8,lead:[74,_,_,75,74,_,72,_,69,_,_,_,67,_,69,_, 72,_,_,69,67,_,63,_,62,_,_,_,_,_,_,_, 74,_,75,_,79,_,_,75,74,_,72,_,69,_,_,_, 67,_,69,_,72,_,69,67,63,_,_,_,62,_,_,_],bass:[38,38,36,38],dr:"taiko"}};
-function musicStart(l){musicStop();if(!AU.ctx||!SONGS[l])return;AU.song={M:SONGS[l],step:0,next:AU.ctx.currentTime+.08};AU.playing=l;AU.timer=setInterval(musTick,40)}
-function musicStop(){clearInterval(AU.timer);AU.timer=0;AU.song=null;AU.playing=-1}
+
+/* ---------- strumenti sintetizzati (filtri, inviluppi, riverbero) ---------- */
+const NPC={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+function nm(n){const m=/^([A-G])([#b]?)(-?\d)$/.exec(n);if(!m)return null;return 12*(+m[3]+1)+NPC[m[1]]+(m[2]==="#"?1:m[2]==="b"?-1:0)}
+const QL={"":[0,4,7],m:[0,3,7],"7":[0,4,7,10],m7:[0,3,7,10],maj7:[0,4,7,11],m9:[0,3,7,10,14],maj9:[0,4,7,11,14],"9":[0,4,7,10,14],"13":[0,4,10,14,21],"6":[0,4,7,9,14],"5":[0,7],dim:[0,3,6]};
+function chordOf(nm_){const m=/^([A-G][#b]?)(.*)$/.exec(nm_),pc=NPC[m[1][0]]+(m[1][1]==="#"?1:m[1][1]==="b"?-1:0);return{pc:(pc+12)%12,iv:QL[m[2]]||QL[""]}}
+function wire(g,wet){g.connect(AU.mus);if(wet>0){const s=AU.ctx.createGain();s.gain.value=wet;g.connect(s);s.connect(AU.send)}}
+function osc(type,f,t,dur,det){const o=AU.ctx.createOscillator();o.type=type;o.frequency.setValueAtTime(f,t);if(det)o.detune.value=det;o.start(t);o.stop(t+dur+.05);return o}
+function vib(o,t,rate,cents,delay,dur){const c=AU.ctx,l=osc("sine",rate,t,dur),g=c.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(cents,t+delay+.25);l.connect(g);g.connect(o.detune)}
+function amp(t,a,pk,dur,rel){const g=AU.ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(pk,t+a);g.gain.setValueAtTime(pk,t+Math.max(a,dur-rel));g.gain.exponentialRampToValueAtTime(.0004,t+dur+rel);return g}
+function lp(f,q,type){const b=AU.ctx.createBiquadFilter();b.type=type||"lowpass";b.frequency.value=f;b.Q.value=q||.7;return b}
+function pluck(f,dur,v,t,o){o=o||{};const c=AU.ctx,x=osc(o.ty||"triangle",f,t,dur),fl=lp(Math.min(9000,f*(o.br||4)),o.q||.8);fl.frequency.setValueAtTime(Math.min(9000,f*(o.br||4)),t);fl.frequency.exponentialRampToValueAtTime(Math.max(120,f*1.4),t+dur*.7);
+ const g=c.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+(o.a||.004));g.gain.exponentialRampToValueAtTime(.0006,t+dur);
+ if(o.sc){x.frequency.setValueAtTime(f*1.035,t);x.frequency.exponentialRampToValueAtTime(f,t+.05)}x.connect(fl);fl.connect(g);if(o.two){const y=osc(o.ty||"triangle",f,t,dur,o.two);y.connect(fl)}wire(g,o.wet||0)}
+function epiano(f,dur,v,t){const c=AU.ctx,g=c.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.006);g.gain.exponentialRampToValueAtTime(.0006,t+dur);
+ const a=osc("sine",f,t,dur),b=osc("sine",f*2,t,dur),k=osc("sine",f*7.02,t,.25),gb=c.createGain(),gk=c.createGain();gb.gain.setValueAtTime(.28,t);gb.gain.exponentialRampToValueAtTime(.01,t+dur*.6);gk.gain.setValueAtTime(.1,t);gk.gain.exponentialRampToValueAtTime(.001,t+.2);
+ a.connect(g);b.connect(gb);gb.connect(g);k.connect(gk);gk.connect(g);const tr=osc("sine",4.6,t,dur),tg=c.createGain();tg.gain.value=v*.1;tr.connect(tg);tg.connect(g.gain);wire(g,.3)}
+function vibes(f,dur,v,t){const c=AU.ctx,g=c.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.004);g.gain.exponentialRampToValueAtTime(.0006,t+dur*1.6);const a=osc("sine",f,t,dur*1.6),b=osc("sine",f*4,t,.4),gb=c.createGain();gb.gain.setValueAtTime(.18,t);gb.gain.exponentialRampToValueAtTime(.001,t+.35);a.connect(g);b.connect(gb);gb.connect(g);
+ const tr=osc("sine",5,t,dur*1.6),tg=c.createGain();tg.gain.value=v*.35;tr.connect(tg);tg.connect(g.gain);wire(g,.5)}
+function pad(f,dur,v,t,o){o=o||{};const c=AU.ctx,g=amp(t,o.a||.5,v,dur,o.r||.6),fl=lp(o.lp||1500,.5);for(const d of[-9,0,9])osc("sawtooth",f,t,dur+(o.r||.6),d).connect(fl);fl.connect(g);wire(g,o.wet==null?.5:o.wet)}
+function voice(f,dur,v,t){const c=AU.ctx,g=amp(t,.12,v,dur,.28),o=osc("sawtooth",f,t,dur+.3);vib(o,t,5.3,26,.2,dur+.3);
+ for(const[fq,q,gn]of[[720,7,1],[1150,9,.6],[2700,10,.25],[3500,10,.12]]){const b=lp(fq,q,"bandpass"),gg=c.createGain();gg.gain.value=gn;o.connect(b);b.connect(gg);gg.connect(g)}
+ const s=c.createBufferSource(),nf=lp(3000,1,"highpass"),ng=c.createGain();s.buffer=AU.noise;ng.gain.value=.05;s.connect(nf);nf.connect(ng);ng.connect(g);s.start(t);s.stop(t+dur);wire(g,.75)}
+function flute(f,dur,v,t,breath){const c=AU.ctx,g=amp(t,.07,v,dur,.18),o=osc("sine",f,t,dur+.2),o2=osc("triangle",f*2,t,dur+.2),g2=c.createGain();g2.gain.value=.18;o.frequency.setValueAtTime(f*.96,t);o.frequency.linearRampToValueAtTime(f,t+.09);o2.frequency.setValueAtTime(f*1.92,t);o2.frequency.linearRampToValueAtTime(f*2,t+.09);vib(o,t,4.8,18,.25,dur+.2);
+ o.connect(g);o2.connect(g2);g2.connect(g);const s=c.createBufferSource(),b=lp(f*3,1.2,"bandpass"),ng=c.createGain();s.buffer=AU.noise;ng.gain.setValueAtTime(breath||.35,t);ng.gain.exponentialRampToValueAtTime((breath||.35)*.35,t+.2);s.connect(b);b.connect(ng);ng.connect(g);s.start(t);s.stop(t+dur+.2);wire(g,.5)}
+function fiddle(f,dur,v,t){const c=AU.ctx,g=amp(t,.05,v,dur,.1),o=osc("sawtooth",f,t,dur+.1),fl=lp(3200,.9);o.frequency.setValueAtTime(f*.985,t);o.frequency.linearRampToValueAtTime(f,t+.06);vib(o,t,5.6,16,.12,dur+.1);o.connect(fl);fl.connect(g);
+ const s=c.createBufferSource(),b=lp(2600,1,"bandpass"),ng=c.createGain();s.buffer=AU.noise;ng.gain.value=.05;s.connect(b);b.connect(ng);ng.connect(g);s.start(t);s.stop(t+dur);wire(g,.18)}
+function lead(f,dur,v,t){const c=AU.ctx,g=amp(t,.01,v,dur,.08),fl=lp(3800,1.2),a=osc("sawtooth",f,t,dur+.1),b=osc("square",f,t,dur+.1,6);vib(a,t,5.5,9,.18,dur+.1);const gb=c.createGain();gb.gain.value=.5;a.connect(fl);b.connect(gb);gb.connect(fl);fl.connect(g);wire(g,.15)}
+function distG(f,dur,v,t,mute){const c=AU.ctx,g=c.createGain(),ws=c.createWaveShaper(),cu=new Float32Array(257);for(let i=0;i<257;i++){const x=i/128-1;cu[i]=Math.tanh(x*7)}ws.curve=cu;const fl=lp(3300,.8),hp=lp(90,.7,"highpass");
+ for(const[r,d]of[[1,-5],[1.498,4],[2,0]])osc("sawtooth",f*r,t,dur,d).connect(ws);ws.connect(hp);hp.connect(fl);fl.connect(g);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.004);if(mute){g.gain.setValueAtTime(v,t+.03);g.gain.exponentialRampToValueAtTime(.0006,t+dur*.55)}else{g.gain.setValueAtTime(v,t+dur*.7);g.gain.exponentialRampToValueAtTime(.0006,t+dur)}wire(g,.1)}
+function bassI(kind,f,dur,v,t){const c=AU.ctx,g=c.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.0006,t+dur);
+ if(kind==="up"){const a=osc("sine",f,t,dur),b=osc("triangle",f,t,dur),fl=lp(520,.8),gb=c.createGain();gb.gain.value=.45;a.connect(fl);b.connect(gb);gb.connect(fl);fl.connect(g);const cl=osc("triangle",f*4,t,.05),gc=c.createGain();gc.gain.setValueAtTime(.15,t);gc.gain.exponentialRampToValueAtTime(.001,t+.05);cl.connect(gc);gc.connect(g)}
+ else if(kind==="syn"){const a=osc("sawtooth",f,t,dur),fl=lp(700,2);fl.frequency.setValueAtTime(1500,t);fl.frequency.exponentialRampToValueAtTime(260,t+dur*.8);a.connect(fl);fl.connect(g)}
+ else{const a=osc("sawtooth",f,t,dur),b=osc("square",f/2,t,dur),fl=lp(480,1);a.connect(fl);b.connect(fl);fl.connect(g)}wire(g,0)}
+function guitar(freqs,dur,v,t){freqs.forEach((f,i)=>pluck(f,dur,v,t+i*.011,{ty:"sawtooth",br:3.2,two:5,wet:.2}))}
+function banjo(f,dur,v,t){pluck(f,dur,v,t,{ty:"square",br:9,q:1.5,wet:.12})}
+function mandoRoll(f,dur,v,t){const n=Math.max(2,Math.floor(dur/.052));for(let k=0;k<n;k++)pluck(f,.14,v*(k===0?1:.72),t+k*.052,{ty:"triangle",br:7,two:7,wet:.22})}
+function glock(f,dur,v,t){const g=amp(t,.003,v,dur*.6,.25),a=osc("sine",f,t,dur+.3),b=osc("sine",f*3.98,t,.3),gb=AU.ctx.createGain();gb.gain.setValueAtTime(.3,t);gb.gain.exponentialRampToValueAtTime(.001,t+.25);a.connect(g);b.connect(gb);gb.connect(g);wire(g,.25)}
+/* percussioni */
+function kick(t,v,sw){const o=osc("sine",150,t,.3),g=AU.ctx.createGain();o.frequency.exponentialRampToValueAtTime(sw||42,t+.12);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0006,t+.22);o.connect(g);wire(g,0);nz(.02,v*.25,AU.mus,t,"highpass",2500)}
+function snare(t,v){nz(.16,v*.55,AU.mus,t,"bandpass",1900,.9);const o=osc("triangle",190,t,.1),g=AU.ctx.createGain();o.frequency.exponentialRampToValueAtTime(130,t+.08);g.gain.setValueAtTime(v*.5,t);g.gain.exponentialRampToValueAtTime(.0006,t+.1);o.connect(g);wire(g,.1)}
+function clap(t,v){for(let k=0;k<3;k++)nz(.05,v*.4,AU.mus,t+k*.011,"bandpass",1500,1.1);nz(.18,v*.3,AU.mus,t+.033,"bandpass",1400,1)}
+function hat(t,v,open){nz(open?.22:.04,v*.22,AU.mus,t,"highpass",7600)}
+function brush(t,v){nz(.14,v*.2,AU.mus,t,"bandpass",5200,.7)}
+function tamb(t,v){nz(.05,v*.3,AU.mus,t,"highpass",5500);nz(.16,v*.12,AU.mus,t,"bandpass",9000,3)}
+function taiko(t,v){const o=osc("sine",120,t,.5),g=AU.ctx.createGain();o.frequency.exponentialRampToValueAtTime(52,t+.3);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0006,t+.45);o.connect(g);wire(g,.25);nz(.1,v*.3,AU.mus,t,"lowpass",800)}
+function wood(t,v){const o=osc("square",900,t,.05),g=AU.ctx.createGain(),fl=lp(1400,3,"bandpass");g.gain.setValueAtTime(v*.5,t);g.gain.exponentialRampToValueAtTime(.0006,t+.05);o.connect(fl);fl.connect(g);wire(g,.1)}
+function shaker(t,v){nz(.05,v*.16,AU.mus,t,"highpass",6500)}
+function snareBrush(t,v){nz(.12,v*.25,AU.mus,t,"bandpass",3200,.8)}
+const DRUM={kick,snare,clap,hat:(t,v)=>hat(t,v),open:(t,v)=>hat(t,v,1),brush,tamb,taiko,wood,shaker,sb:snareBrush,crash:(t,v)=>nz(1.1,v*.28,AU.mus,t,"highpass",4500),dkick:(t,v)=>kick(t,v,38)};
+/* parser: "E5:2 r:1 ..." -> eventi */
+function parseNotes(str){const ev=[];let s=0;for(const tk of str.trim().split(/\s+/)){if(!tk||tk==="|")continue;const[n,l]=tk.split(":"),len=+l||1;if(n!=="r"){const m=nm(n);if(m!=null)ev.push({s,m,len})}s+=len}return{ev,total:s}}
+/* temi musicali: dt = durata di uno step, spb = step per battuta */
+const TH={};
+TH.lounge={dt:60/88/4,spb:16,swing:.24,g:1.1,chords:"Dm9 G13 Cmaj9 Cmaj9 Em7 A7 Dm9 G13".split(" "),tracks:[
+ {t:"c",i:"pad",pat:"x",l:16,v:.07,lo:1},
+ {t:"b",i:"up",pat:"r...t...f...s...",v:.55},
+ {t:"c",i:"epiano",pat:"x.....x...x.....",l:6,v:.15,skip:1},
+ {t:"n",i:"vibes",v:.2,s:"F5:3 r:1 A5:2 G5:2 r:2 F5:2 E5:4  D5:3 r:1 B4:2 D5:2 r:2 E5:2 F5:4  E5:4 G5:3 r:1 D5:2 C5:2 r:4  B4:2 C5:2 D5:4 r:8  G5:3 r:1 B5:2 A5:2 r:2 G5:2 F#5:4  E5:3 r:1 C#5:2 E5:2 r:2 G5:2 A5:4  F5:4 E5:2 D5:2 A4:4 r:4  B4:3 r:1 D5:2 F5:2 E5:6 r:2"},
+ {t:"d",d:"brush",pat:"x...x...x...x...",v:.7},{t:"d",d:"sb",pat:"..x...x...x...x.",v:.5},{t:"d",d:"kick",pat:"x.......x.......",v:.3}]};
+TH.pop={dt:60/120/4,spb:16,g:.95,chords:"C G Am F C G F G".split(" "),tracks:[
+ {t:"d",d:"kick",pat:"x...x...x...x...",v:.9},{t:"d",d:"clap",pat:"....x.......x...",v:.8},{t:"d",d:"hat",pat:"x.x.x.x.x.x.x.x.",v:.55},{t:"d",d:"open",pat:"..x...x...x...x.",v:.5},
+ {t:"b",i:"syn",pat:"r.r.o.r.r.r.o.r.",v:.5},{t:"c",i:"pad",pat:"x",l:16,v:.05,lo:0,lp:2300},
+ {t:"a",i:"arp",pat:"1.2.3.4.3.2.3.2.",v:.16},
+ {t:"n",i:"lead",v:.2,s:"E5:2 r:1 E5:1 G5:2 E5:2 D5:2 r:1 C5:1 D5:2 E5:2  D5:2 r:1 D5:1 G5:2 D5:2 B4:2 r:1 B4:1 D5:2 G4:2  C5:2 r:1 C5:1 E5:2 C5:2 A4:2 r:1 A4:1 C5:2 E5:2  A4:2 r:1 A4:1 C5:2 A4:2 F4:2 r:1 F4:1 A4:2 C5:2  G5:4 E5:2 G5:2 A5:4 G5:2 E5:2  D5:4 B4:2 D5:2 G5:4 D5:2 B4:2  A5:4 F5:2 A5:2 C6:4 A5:2 F5:2  G5:6 D5:2 B4:4 D5:4"}]};
+TH.tarantella={dt:.132,spb:12,g:1,chords:"Am Am E7 Am Am Dm E7 Am".split(" "),tracks:[
+ {t:"n",i:"mando",v:.3,s:"A5:2 C6:1 B5:2 A5:1 G#5:2 A5:1 E5:2 A5:1  C6:2 E6:1 D6:2 C6:1 B5:2 C6:1 A5:3  B5:2 D6:1 C6:2 B5:1 G#5:2 B5:1 E5:3  A5:2 B5:1 C6:2 B5:1 A5:2 G#5:1 A5:3  E6:3 E6:1 D6:1 C6:1 B5:3 C6:1 D6:2  D6:2 F6:1 E6:2 D6:1 C6:2 D6:1 A5:3  B5:2 C6:1 D6:2 B5:1 G#5:2 B5:1 E6:3  A5:2 C6:1 E6:2 C6:1 A5:2 E5:1 A5:3"},
+ {t:"c",i:"guitar",pat:"x.xx.xx.xx..",l:3,v:.16},{t:"b",i:"pluck",pat:"r.....f.....",v:.5},
+ {t:"d",d:"tamb",pat:"x.xx.xx.xx.x",v:.8},{t:"d",d:"taiko",pat:"x.....x.....",v:.45},{t:"d",d:"wood",pat:"..x..x..x..x",v:.2}]};
+TH.lirica={dt:60/72/4,spb:16,g:1.15,chords:"Dm Gm A7 Dm Bb Gm A7 Dm".split(" "),tracks:[
+ {t:"c",i:"pad",pat:"x",l:16,v:.09,lo:0,lp:1300,a:.9},
+ {t:"b",i:"padlow",pat:"r...............",v:.2},
+ {t:"a",i:"harp",pat:"1.2.3.4.3.2.3.2.",v:.15},
+ {t:"n",i:"voice",v:.3,s:"A4:4 D5:4 F5:6 E5:2  D5:6 G5:2 F5:4 D5:4  C#5:4 E5:4 A5:6 G5:2  F5:12 r:4  D5:4 F5:4 Bb5:6 A5:2  G5:4 Bb5:4 D6:6 C6:2  C#6:4 A5:4 E5:4 G5:4  D5:12 r:4"}]};
+TH.fattoria={dt:60/120/4,spb:16,g:1,chords:"G Em C G G D C G".split(" "),tracks:[
+ {t:"n",i:"glock",v:.27,s:"G4:4 G4:4 G4:4 D4:4  E4:4 E4:4 D4:8  B4:4 B4:4 A4:4 A4:4  G4:12 r:4  D4:2 D4:2 G4:4 G4:2 G4:2 G4:4  A4:4 A4:4 F#4:4 A4:4  B4:2 B4:2 C5:4 B4:4 A4:4  G4:8 D4:4 G4:4"},
+ {t:"b",i:"pluck",pat:"r...f...r...f...",v:.5},{t:"c",i:"guitar",pat:"..x...x...x...x.",l:2,v:.11},
+ {t:"d",d:"wood",pat:"x...x...x...x...",v:.4},{t:"d",d:"shaker",pat:"x.x.x.x.x.x.x.x.",v:.6},{t:"d",d:"kick",pat:"x.......x.......",v:.35}]};
+TH.sushi={dt:60/76/4,spb:16,g:1.1,chords:"D5 D5 D5 D5 D5 D5 D5 D5".split(" "),tracks:[
+ {t:"c",i:"padlow",pat:"x",l:16,v:.1},
+ {t:"n",i:"koto",v:.34,s:"D5:2 r:2 A4:2 r:2 Bb4:2 A4:2 G4:4  A4:2 r:2 G4:2 r:2 Eb4:2 G4:2 D4:4  D5:2 Eb5:2 D5:2 A4:2 Bb4:4 A4:4  G4:4 A4:4 D4:8  A5:2 r:2 G5:2 r:2 Eb5:2 D5:2 Eb5:4  D5:2 r:2 A4:2 Bb4:2 A4:2 G4:2 A4:4  Bb4:2 A4:2 G4:2 Eb4:2 G4:4 A4:4  D4:12 r:4"},
+ {t:"n",i:"shaku",v:.26,s:"r:4 A4:12  G4:8 A4:8  Bb4:8 A4:8  D5:16  r:4 Eb5:12  D5:8 Bb4:8  A4:8 G4:8  D4:16"},
+ {t:"d",d:"taiko",pat:"x.......x.......",v:.8,bm:"xx.."},{t:"d",d:"wood",pat:"....x..x........",v:.3},{t:"d",d:"taiko",pat:"........x.......",v:.5,bm:"..xx"}]};
+TH.country={dt:60/112/4,spb:16,g:1,chords:"G C G G C G D G".split(" "),tracks:[
+ {t:"b",i:"up",pat:"r...f...r...f...",v:.6},{t:"c",i:"guitar",pat:"....x.......x...",l:2,v:.14},
+ {t:"a",i:"banjo",pat:"1.2.3.2.1.2.3.2.",v:.17},
+ {t:"n",i:"fiddle",v:.26,s:"B4:2 D5:2 G5:4 E5:2 D5:2 B4:4  C5:2 E5:2 G5:4 E5:2 C5:2 E5:4  D5:2 B4:2 G4:4 A4:2 B4:2 D5:4  G4:8 r:4 D5:4  E5:2 G5:2 C6:4 B5:2 G5:2 E5:4  D5:2 G5:2 B5:4 A5:2 G5:2 D5:4  A4:2 C5:2 D5:4 F#5:2 A5:2 F#5:4  G5:4 D5:4 B4:4 G4:4"},
+ {t:"d",d:"kick",pat:"x...x...x...x...",v:.55},{t:"d",d:"snare",pat:"....x.......x...",v:.55},{t:"d",d:"shaker",pat:"x.x.x.x.x.x.x.x.",v:.6}]};
+TH.rock={dt:60/138/4,spb:16,g:.9,chords:"E5 E5 G5 A5 E5 E5 C5 D5".split(" "),tracks:[
+ {t:"c",i:"dist",pat:"X.x.x.x.X.x.x.x.",l:2,v:.2,lo:2},{t:"b",i:"ebass",pat:"r.r.r.r.r.r.r.r.",v:.5},
+ {t:"d",d:"kick",pat:"x.....x.x.....x.",v:.95},{t:"d",d:"snare",pat:"....x.......x...",v:.9},{t:"d",d:"hat",pat:"x.x.x.x.x.x.x.x.",v:.6},{t:"d",d:"crash",pat:"x...............",v:.6,bm:"x..."},
+ {t:"n",i:"dlead",v:.13,s:"E5:2 G5:2 A5:2 B5:2 A5:2 G5:2 E5:4  E5:2 G5:2 A5:2 B5:2 D6:6 B5:2  D5:2 G5:2 B5:2 D6:2 B5:2 G5:2 D5:4  E5:2 A5:2 C6:2 E6:2 C6:2 A5:2 E5:4  E5:2 G5:2 A5:2 B5:2 A5:2 G5:2 E5:4  E5:2 G5:2 A5:2 B5:2 G6:6 E6:2  G5:2 C6:2 E6:2 G6:2 E6:2 C6:2 G5:4  A5:2 D6:2 F#6:2 A6:2 F#6:2 D6:2 A5:4"}]};
+TH.pesca={dt:.25,spb:16,g:1.3,amb:1,chords:"Cmaj9 Am9 Fmaj9 G6 Cmaj9 Em7 Fmaj9 G6".split(" "),tracks:[
+ {t:"c",i:"pad",pat:"x",l:16,v:.07,lo:0,lp:1100,a:1.5},
+ {t:"a",i:"harp",pat:"1.2.3.4.5.4.3.2.",v:.2},
+ {t:"n",i:"flute",v:.11,s:"E5:8 G5:4 D5:4  C5:8 A4:8  A4:6 C5:2 E5:8  D5:8 B4:8  G5:8 E5:4 D5:4  B4:6 E5:2 G5:8  A5:8 C6:4 G5:4  E5:16"}]};
+const THEME_OF=["lounge","pop","tarantella","lirica","fattoria","sushi","pesca","rock","lounge","country"];
+function chordTones(ch,k){return ch.iv.map(i=>k+i)}
+function prep(th){if(th.ready)return th;th.total=th.chords.length*th.spb;
+ for(const tr of th.tracks)if(tr.t==="n"){const p=parseNotes(tr.s);tr.byStep={};for(const e of p.ev)(tr.byStep[e.s]=tr.byStep[e.s]||[]).push(e)}
+ th.ch=th.chords.map(chordOf);th.ready=1;return th}
+function playInst(i,m,dur,v,t,ch,tr){const f=mf(m);switch(i){
+ case"vibes":vibes(f,dur,v,t);break;case"lead":lead(f,dur,v,t);break;case"voice":voice(f,dur,v,t);break;case"flute":flute(f,dur,v,t,.3);break;case"shaku":flute(f,dur,v,t,.7);break;
+ case"fiddle":fiddle(f,dur,v,t);break;case"glock":glock(f,dur,v,t);break;case"koto":pluck(f,Math.max(.8,dur*1.3),v,t,{ty:"triangle",br:7,sc:1,two:4,wet:.3});break;
+ case"mando":mandoRoll(f,dur,v,t);break;case"harp":pluck(f,1.6,v,t,{ty:"sine",br:5,two:3,wet:.55,a:.006});break;case"arp":pluck(f,.22,v,t,{ty:"sawtooth",br:5,wet:.15});break;
+ case"banjo":banjo(f,.3,v,t);break;case"pluck":pluck(f,dur*.9,v,t,{ty:"triangle",br:3,wet:.1});break;case"epiano":epiano(f,dur,v,t);break;
+ case"dlead":pluck(f,dur*.95,v,t,{ty:"sawtooth",br:5,two:6,wet:.08,a:.006});break;
+ case"up":bassI("up",f,dur,v,t);break;case"syn":bassI("syn",f,dur,v,t);break;case"ebass":bassI("e",f,dur,v,t);break;
+ case"pad":pad(f,dur,v,t,{lp:tr&&tr.lp,a:tr&&tr.a});break;case"padlow":pad(f,dur,v,t,{lp:700,a:.8,wet:.4});break;case"dist":distG(f,dur,v,t,tr&&tr.mute)}}
+function schedStep(th,i,t){prep(th);i=i%th.total;const spb=th.spb,bar=Math.floor(i/spb),si=i%spb,dt=th.dt,ch=th.ch[bar],tt=t+(th.swing&&si%2?th.swing*dt:0);
+ for(const tr of th.tracks){if(tr.bm&&tr.bm[bar%tr.bm.length]==="."){continue}
+  if(tr.t==="n"){const evs=tr.byStep[i];if(evs)for(const e of evs)playInst(tr.i,e.m,e.len*dt*.96,tr.v*th.g,tt,ch,tr)}
+  else{const c=tr.pat[si%tr.pat.length];if(c==="."||c===" ")continue;const v=(c==="X"?1.2:c==="o"?.5:1)*(tr.v||.5)*th.g,len=(tr.l||2)*dt;
+   if(tr.t==="d"){DRUM[tr.d](tt,v)}
+   else if(tr.t==="b"){const base=36+ch.pc,iv=ch.iv,m={r:0,o:12,t:iv[1]||4,f:iv[2]||7,s:iv[3]||10}[c];if(m!=null)playInst(tr.i,base+m,dt*3.6,v,tt,ch,tr)}
+   else if(tr.t==="c"){if(tr.i==="dist"){const base=40+((ch.pc-4+12)%12),mute=c!=="X";distG(mf(base),len*(mute?.7:1.9),v,tt,mute)}
+    else if(tr.i==="guitar"){const k=ch.pc<7?55+ch.pc:43+ch.pc;guitar(chordTones(ch,k).slice(0,4).map(mf),len*1.2,v,tt)}
+    else{const k=ch.pc<7?60+ch.pc:48+ch.pc,low=tr.lo===1?-12:0,tones=chordTones(ch,k+low);if(tr.skip)tones.shift();tones.forEach((m,j)=>playInst(tr.i,m,len,v/Math.sqrt(tones.length),tt+j*.008,ch,tr))}}
+   else if(tr.t==="a"){const n=+c;if(n){const k=ch.pc<7?60+ch.pc:48+ch.pc,iv=ch.iv,m=k+iv[(n-1)%iv.length]+12*Math.floor((n-1)/iv.length);playInst(tr.i,m,dt*3,v,tt,ch,tr)}}}}}
+function musicStart(l){musicStop();if(!AU.ctx)return;const nm_=THEME_OF[l];if(!nm_||!TH[nm_])return;const th=prep(TH[nm_]);AU.song={th,step:0,next:AU.ctx.currentTime+.08};AU.playing=l;AU.timer=setInterval(musTick,40);if(th.amb)ambStart()}
+function musicStop(){clearInterval(AU.timer);AU.timer=0;AU.song=null;AU.playing=-1;if(AU.amb){for(const n of AU.amb)try{n.stop()}catch(e){}AU.amb=null}}
+function ambStart(){const c=AU.ctx,t=c.currentTime;AU.amb=[];
+ for(const[fq,base,rate,ph]of[[520,.05,.11,0],[1500,.018,.11,1.6],[300,.04,.07,2.4]]){const s=c.createBufferSource(),f=lp(fq,.7),g=c.createGain(),l=osc("sine",rate,t,1e5),lg=c.createGain();s.buffer=AU.noise;s.loop=true;g.gain.value=base;lg.gain.value=base*.95;l.connect(lg);lg.connect(g.gain);s.connect(f);f.connect(g);g.connect(AU.mus);s.start(t);AU.amb.push(s,l)}}
 function musTick(){const s=AU.song,c=AU.ctx;if(!s||!c)return;if(c.currentTime-s.next>.5)s.next=c.currentTime+.05;
- while(s.next<c.currentTime+.18){const M=s.M,i=s.step%M.lead.length,bi=i%M.bar,bar=Math.floor(i/M.bar),t=s.next;
-  const n=M.lead[i];if(n)tone(mf(n),M.dt*1.7,M.wave||"square",.11,AU.mus,t);
-  if(bi%M.be===0){const b=M.bass[bar%M.bass.length];tone(mf(b),M.dt*M.be*.85,"triangle",.32,AU.mus,t);if(M.be>=6)tone(mf(b+12),M.dt*1.5,"triangle",.15,AU.mus,t+M.dt*(M.be/2))}
-  if(M.dr==="pop"){if(bi%8===0)tone(120,.12,"sine",.5,AU.mus,t,45);if(bi%8===4)nz(.09,.25,AU.mus,t,"bandpass",1800,1);if(bi%2===1)nz(.03,.08,AU.mus,t,"highpass",7000)}
-  else if(M.dr==="tar"){if(bi%6===0)tone(110,.1,"sine",.45,AU.mus,t,45);if(bi%6===3)nz(.06,.18,AU.mus,t,"bandpass",2400,1.2);if(bi%3===2)nz(.025,.1,AU.mus,t,"highpass",8000)}
-  else if(M.dr==="soft"){if(bi%8===0)tone(100,.1,"sine",.35,AU.mus,t,50);if(bi%4===2)nz(.02,.06,AU.mus,t,"highpass",9000)}
-  else if(M.dr==="taiko"){if(bi===0||bi===6||bi===8)tone(90,.25,"sine",.6,AU.mus,t,40);if(bi===12)nz(.15,.3,AU.mus,t,"lowpass",500);if(bi%4===2)nz(.03,.07,AU.mus,t,"highpass",6000)}
-  s.next+=M.dt;s.step++}}
+ while(s.next<c.currentTime+.18){schedStep(s.th,s.step,s.next);s.next+=s.th.dt;s.step++}}
 function jingle(notes,dt,type){if(!AU.ctx)return;const t=AU.ctx.currentTime+.02;notes.forEach((n,i)=>n&&tone(mf(n),dt*1.6,type||"square",.18,AU.fx,t+i*dt))}
 let sfxLast={};
 function sfx(n,vol){if(!AU.ctx||!AU.on)return;const now=AU.ctx.currentTime;if(sfxLast[n]&&now-sfxLast[n]<.045)return;sfxLast[n]=now;const t=now+.005,v=vol==null?1:vol,F=AU.fx;
@@ -2026,7 +2148,7 @@ function sfx(n,vol){if(!AU.ctx||!AU.on)return;const now=AU.ctx.currentTime;if(sf
  case"stun":tone(1400,.18,"square",.07*v,F,t,700);tone(1800,.12,"square",.05*v,F,t+.08,900);break;
  case"slip":tone(700,.35,"sine",.3*v,F,t,140);break;
  case"crash":nz(.25,.35*v,F,t,"bandpass",600,.6);tone(180,.2,"square",.1*v,F,t,60);break;
- case"meow":tone(700,.12,"sawtooth",.08*v,F,t,1000);tone(1000,.2,"sawtooth",.07*v,F,t+.1,520);break;
+ case"meow":meow(t,v);break;
  case"empty":tone(160,.08,"square",.1*v,F,t);break;
  case"buy":tone(1046,.08,"square",.12*v,F,t);tone(1568,.16,"square",.12*v,F,t+.08);break;
  case"stepup":tone(523,.08,"square",.1*v,F,t);break;
@@ -2057,6 +2179,14 @@ function fxSound(e,m){if(!AU.ctx||!AU.on)return;let v=1;if(m&&e.x!=null)v=cl(1.1
 const SPK_ON='<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
  SPK_OFF='<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 9l6 6M22 9l-6 6" stroke="#ff8a95" stroke-width="2.2" stroke-linecap="round"/></svg>';
 function muteIcons(){$("bMute").innerHTML=AU.on?SPK_ON:SPK_OFF;$("bMute2").textContent=AU.on?"Spegni musica e suoni":"Accendi musica e suoni"}
+
+function meow(t,v){const c=AU.ctx,o=c.createOscillator(),g=c.createGain(),b1=c.createBiquadFilter(),b2=c.createBiquadFilter(),g2=c.createGain(),d=.6;
+ o.type="sawtooth";o.frequency.setValueAtTime(430,t);o.frequency.linearRampToValueAtTime(760,t+.17);o.frequency.linearRampToValueAtTime(640,t+.35);o.frequency.linearRampToValueAtTime(420,t+d);
+ const lf=c.createOscillator(),lg=c.createGain();lf.frequency.value=7;lg.gain.value=14;lf.connect(lg);lg.connect(o.frequency);lf.start(t);lf.stop(t+d+.1);
+ b1.type="bandpass";b1.Q.value=5;b1.frequency.setValueAtTime(380,t);b1.frequency.linearRampToValueAtTime(900,t+.2);b1.frequency.linearRampToValueAtTime(520,t+d);
+ b2.type="bandpass";b2.Q.value=6;b2.frequency.setValueAtTime(2300,t);b2.frequency.linearRampToValueAtTime(1500,t+.2);b2.frequency.linearRampToValueAtTime(900,t+d);g2.gain.value=.55;
+ g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.5*v,t+.05);g.gain.setValueAtTime(.5*v,t+.3);g.gain.exponentialRampToValueAtTime(.001,t+d);
+ o.connect(b1);o.connect(b2);b2.connect(g2);b1.connect(g);g2.connect(g);g.connect(AU.fx);o.start(t);o.stop(t+d+.05)}
 
 /* ---------- interfaccia ---------- */
 let tapN=0,jT0=0,jMax=0,pzIco=false,abT=0,abArm=0;
