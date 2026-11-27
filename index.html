@@ -2119,18 +2119,32 @@ function drawMusicKid(c,p,r,t){const M=S.mu;c.save();c.translate(r.x*TS,r.y*TS-4
 const AU={ctx:null,on:true,song:null,timer:0,playing:-1,noise:null};
 try{AU.on=localStorage.getItem("ppr-audio")!=="off"}catch(e){}
 const mf=m=>440*Math.pow(2,(m-69)/12);
-function auBuild(c){AU.master=c.createGain();AU.master.gain.value=AU.on?.55:0;AU.master.connect(c.destination);
-  AU.mus=c.createGain();AU.mus.gain.value=.16;AU.mus.connect(AU.master);AU.fx=c.createGain();AU.fx.gain.value=.5;AU.fx.connect(AU.master);
+function auBuild(c){AU.master=c.createGain();AU.master.gain.value=AU.on?.9:0;AU.master.connect(c.destination);
+  AU.mus=c.createGain();AU.mus.gain.value=.1;AU.mus.connect(AU.master);AU.fx=c.createGain();AU.fx.gain.value=.3;AU.fx.connect(AU.master);
   const sr=c.sampleRate,n=Math.floor(sr*1.9),ir=c.createBuffer(2,n,sr);for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2.6)}
   AU.send=c.createGain();const cv=c.createConvolver();cv.buffer=ir;const rw=c.createGain();rw.gain.value=.8;AU.send.connect(cv);cv.connect(rw);rw.connect(AU.mus);
-  const b=c.createBuffer(1,sr,sr),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;AU.noise=b}
+  const b=c.createBuffer(1,sr,sr),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;AU.noise=b;AU.smus=c.createGain();AU.smus.gain.value=.62;AU.smus.connect(AU.master);AU.sfxg=c.createGain();AU.sfxg.gain.value=.85;AU.sfxg.connect(AU.master)}
 function auInit(){if(AU.ctx){if(AU.ctx.state==="suspended")AU.ctx.resume();return}
- try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=AU.ctx=new C();auBuild(c)}catch(e){AU.ctx=null}}
-function auToggle(){AU.on=!AU.on;try{localStorage.setItem("ppr-audio",AU.on?"on":"off")}catch(e){}if(AU.master)AU.master.gain.value=AU.on?.55:0;muteIcons()}
+ try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;let c;try{c=new C({latencyHint:"interactive"})}catch(e){c=new C()}AU.ctx=c;auBuild(c);auLoad()}catch(e){AU.ctx=null}}
+function auToggle(){AU.on=!AU.on;try{localStorage.setItem("ppr-audio",AU.on?"on":"off")}catch(e){}if(AU.master)AU.master.gain.value=AU.on?.9:0;muteIcons()}
 function tone(f,dur,type,vol,dest,t0,slide){const c=AU.ctx,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t0);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(20,slide),t0+dur);
  g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.0008,t0+dur);o.connect(g);g.connect(dest);o.start(t0);o.stop(t0+dur+.03)}
 function nz(dur,vol,dest,t0,type,freq,q){const c=AU.ctx,s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=AU.noise;f.type=type||"highpass";f.frequency.value=freq||1000;f.Q.value=q||.7;
  g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(.0008,t0+dur);s.connect(f);f.connect(g);g.connect(dest);s.start(t0,Math.random()*.5);s.stop(t0+dur+.03)}
+
+
+/* ---------- audio campionato: musiche e suoni registrati (cartella audio/) ---------- */
+AU.bufs={};AU.meta=null;AU.sprite=null;AU.cur=null;AU.pend=-1;AU.failed=false;
+function auFetch(u){return fetch(u).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(a=>new Promise((ok,ko)=>{const p=AU.ctx.decodeAudioData(a,ok,ko);if(p&&p.catch)p.catch(ko)}))}
+function auLoad(){if(AU.loading)return;AU.loading=true;
+ const sp=auFetch("audio/sfx.mp3").then(b=>{AU.sprite=b}),mt=fetch("audio/sfx.json").then(r=>r.json()).then(j=>{AU.meta=j});
+ Promise.all([sp,mt]).catch(()=>{AU.sprite=null;AU.meta=null});
+ const order=["lounge","pop","tarantella","lirica","fattoria","sushi","pesca","rock","country"];
+ let chain=Promise.resolve();
+ order.forEach((n,i)=>{chain=chain.then(()=>auFetch("audio/"+n+".mp3").then(b=>{AU.bufs[n]=b;if(AU.pend>=0&&THEME_OF[AU.pend]===n)musicStart(AU.pend)}).catch(()=>{if(i===0)AU.failed=true}))})}
+function smStop(fade){const c=AU.cur;if(!c)return;AU.cur=null;const t=AU.ctx.currentTime;try{c.g.gain.cancelScheduledValues(t);c.g.gain.setValueAtTime(c.g.gain.value,t);c.g.gain.linearRampToValueAtTime(0,t+fade)}catch(e){}try{c.s.stop(t+fade+.05)}catch(e){}}
+function smPlay(name){const b=AU.bufs[name];if(!b)return false;const c=AU.ctx,t=c.currentTime,s=c.createBufferSource(),g=c.createGain();s.buffer=b;s.loop=true;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(1,t+.6);s.connect(g);g.connect(AU.smus);s.start(t);AU.cur={s,g,name};return true}
+function sfxSample(n,v){const m=AU.meta&&AU.meta[n];if(!m||!AU.sprite)return false;const c=AU.ctx,t=c.currentTime+.003,s=c.createBufferSource(),g=c.createGain();s.buffer=AU.sprite;g.gain.setValueAtTime(Math.max(.05,v),t);g.gain.setValueAtTime(Math.max(.05,v),t+m[1]-.02);g.gain.linearRampToValueAtTime(0,t+m[1]);s.connect(g);g.connect(AU.sfxg);s.start(t,m[0],m[1]+.01);return true}
 
 /* ---------- strumenti sintetizzati (filtri, inviluppi, riverbero) ---------- */
 const NPC={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
@@ -2250,15 +2264,15 @@ function schedStep(th,i,t){prep(th);i=i%th.total;const spb=th.spb,bar=Math.floor
     else if(tr.i==="guitar"){const k=ch.pc<7?55+ch.pc:43+ch.pc;guitar(chordTones(ch,k).slice(0,4).map(mf),len*1.2,v,tt)}
     else{const k=ch.pc<7?60+ch.pc:48+ch.pc,low=tr.lo===1?-12:0,tones=chordTones(ch,k+low);if(tr.skip)tones.shift();tones.forEach((m,j)=>playInst(tr.i,m,len,v/Math.sqrt(tones.length),tt+j*.008,ch,tr))}}
    else if(tr.t==="a"){const n=+c;if(n){const k=ch.pc<7?60+ch.pc:48+ch.pc,iv=ch.iv,m=k+iv[(n-1)%iv.length]+12*Math.floor((n-1)/iv.length);playInst(tr.i,m,dt*3,v,tt,ch,tr)}}}}}
-function musicStart(l){musicStop();if(!AU.ctx)return;const nm_=THEME_OF[l];if(!nm_||!TH[nm_])return;const th=prep(TH[nm_]);AU.song={th,step:0,next:AU.ctx.currentTime+.08};AU.playing=l;AU.timer=setInterval(musTick,40);if(th.amb)ambStart()}
-function musicStop(){clearInterval(AU.timer);AU.timer=0;AU.song=null;AU.playing=-1;if(AU.amb){for(const n of AU.amb)try{n.stop()}catch(e){}AU.amb=null}}
+function musicStart(l){musicStop();if(!AU.ctx)return;const nm_=THEME_OF[l];if(!nm_||!TH[nm_])return;AU.playing=l;if(AU.bufs[nm_]){AU.pend=-1;if(smPlay(nm_))return}if(!AU.failed){AU.pend=l;return}const th=prep(TH[nm_]);AU.song={th,step:0,next:AU.ctx.currentTime+.08};AU.playing=l;AU.timer=setInterval(musTick,40);if(th.amb)ambStart()}
+function musicStop(){smStop(.35);AU.pend=-1;clearInterval(AU.timer);AU.timer=0;AU.song=null;AU.playing=-1;if(AU.amb){for(const n of AU.amb)try{n.stop()}catch(e){}AU.amb=null}}
 function ambStart(){const c=AU.ctx,t=c.currentTime;AU.amb=[];
  for(const[fq,base,rate,ph]of[[520,.05,.11,0],[1500,.018,.11,1.6],[300,.04,.07,2.4]]){const s=c.createBufferSource(),f=lp(fq,.7),g=c.createGain(),l=osc("sine",rate,t,1e5),lg=c.createGain();s.buffer=AU.noise;s.loop=true;g.gain.value=base;lg.gain.value=base*.95;l.connect(lg);lg.connect(g.gain);s.connect(f);f.connect(g);g.connect(AU.mus);s.start(t);AU.amb.push(s,l)}}
 function musTick(){const s=AU.song,c=AU.ctx;if(!s||!c)return;if(c.currentTime-s.next>.5)s.next=c.currentTime+.05;
  while(s.next<c.currentTime+.18){schedStep(s.th,s.step,s.next);s.next+=s.th.dt;s.step++}}
 function jingle(notes,dt,type){if(!AU.ctx)return;const t=AU.ctx.currentTime+.02;notes.forEach((n,i)=>n&&tone(mf(n),dt*1.6,type||"square",.18,AU.fx,t+i*dt))}
 let sfxLast={};
-function sfx(n,vol){if(!AU.ctx||!AU.on)return;const now=AU.ctx.currentTime;if(sfxLast[n]&&now-sfxLast[n]<.045)return;sfxLast[n]=now;const t=now+.005,v=vol==null?1:vol,F=AU.fx;
+function sfx(n,vol){if(!AU.ctx||!AU.on)return;const now=AU.ctx.currentTime;if(sfxLast[n]&&now-sfxLast[n]<.045)return;sfxLast[n]=now;const t=now+.005,v=vol==null?1:vol,F=AU.fx;if(sfxSample(n,v))return;
  switch(n){
  case"towel":nz(.16,.35*v,F,t,"bandpass",900,.8);nz(.12,.2*v,F,t+.04,"bandpass",2200,1);break;
  case"soap":tone(900,.09,"square",.12*v,F,t,420);break;
@@ -2302,7 +2316,7 @@ function sfx(n,vol){if(!AU.ctx||!AU.on)return;const now=AU.ctx.currentTime;if(sf
  }}
 function fxSound(e,m){if(!AU.ctx||!AU.on)return;let v=1;if(m&&e.x!=null)v=cl(1.15-dist(m.x,m.y,e.x,e.y)/12,.15,1);
  const map={coin:"coin",hurt:"hurt",hitE:"hit",death:"death",boom:"boom",buy:"buy"};
- if(e.k==="note")pianoNote(AU.ctx.currentTime+.005,MMIDI[cl(e.n|0,0,7)],e.d||.6);else if(e.k==="sfx")sfx(e.s,v);else if(map[e.k])sfx(map[e.k],e.k==="hurt"?1:v)}
+ if(e.k==="note"){const ni=cl(e.n|0,0,7);if(!sfxSample("n"+ni,1))pianoNote(AU.ctx.currentTime+.005,MMIDI[ni],e.d||.6)}else if(e.k==="sfx")sfx(e.s,v);else if(map[e.k])sfx(map[e.k],e.k==="hurt"?1:v)}
 const SPK_ON='<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
  SPK_OFF='<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 9l6 6M22 9l-6 6" stroke="#ff8a95" stroke-width="2.2" stroke-linecap="round"/></svg>';
 function muteIcons(){$("bMute").innerHTML=AU.on?SPK_ON:SPK_OFF;$("bMute2").textContent=AU.on?"Spegni musica e suoni":"Accendi musica e suoni"}
